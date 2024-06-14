@@ -1,0 +1,100 @@
+@font-face {
+  font-family: 'ClashGrotesk';
+  font-weight: 700;
+  src: url('../public/fonts/ClashGrotesk-Bold.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'ClashGrotesk';
+  font-weight: 200;
+  src: url('../public/fonts/ClashGrotesk-Extralight.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'ClashGrotesk';
+  font-weight: 300;
+  src: url('../public/fonts/ClashGrotesk-Light.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'ClashGrotesk';
+  font-weight: 500;
+  src: url('../public/fonts/ClashGrotesk-Medium.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'ClashGrotesk';
+  font-weight: 400;
+  src: url('../public/fonts/ClashGrotesk-Regular.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'ClashGrotesk';
+  font-weight: 600;
+  src: url('../public/fonts/ClashGrotesk-Semibold.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  font-weight: 900;
+  src: url('../public/fonts/Satoshi-Black.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  font-weight: 900;
+  font-style: italic;
+  src: url('../public/fonts/Satoshi-BlackItalic.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  font-weight: 700;
+  src: url('../public/fonts/Satoshi-Bold.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  font-weight: 700;
+  font-style: italic;
+  src: url('../public/fonts/Satoshi-BoldItalic.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  font-weight: 400;
+  font-style: italic;
+  src: url('../public/fonts/Satoshi-Italic.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  font-weight: 300;
+  src: url('../public/fonts/Satoshi-Light.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  font-weight: 300;
+  font-style: italic;
+  src: url('../public/fonts/Satoshi-LightItalic.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  font-weight: 500;
+  src: url('../public/fonts/Satoshi-Medium.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  font-weight: 500;
+  font-style: italic;
+  src: url('../public/fonts/Satoshi-MediumItalic.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  font-weight: 400;
+  src: url('../public/fonts/Satoshi-Regular.otf') format('opentype');
+}
