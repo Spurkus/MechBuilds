@@ -6,7 +6,7 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import Link from "next/link";
 
-const Footer: React.FC = () => {
+const Footer = () => {
   return (
     <footer className="footer footer-center rounded bg-base-100 p-10 text-base-content">
       <nav className="grid grid-flow-col gap-4">

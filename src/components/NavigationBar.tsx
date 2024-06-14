@@ -2,7 +2,7 @@ import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 
-const NavigationBar: React.FC = () => {
+const NavigationBar = () => {
   return (
     <div className="navbar bg-base-100 px-6 min-[1360px]:px-36">
       <div className="navbar-start">
