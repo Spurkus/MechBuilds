@@ -30,11 +30,11 @@ const BrightnessIcon = () => (
 );
 
 const ThemeToggleButton = () => {
-  const { darkMode, toggleMode } = useGlobalThemeContext();
+  const { theme, toggleMode } = useGlobalThemeContext();
 
   return (
     <button onClick={toggleMode} className="btn btn-circle flex">
-      {darkMode ? (
+      {theme === "dark" ? (
         <BrightnessIcon />
       ) : (
         <FontAwesomeIcon icon={faMoon} className="h-5 w-5" />
