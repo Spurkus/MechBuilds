@@ -13,11 +13,7 @@ export interface GlobalThemeProps {
   children: React.ReactNode;
 }
 
-export const GlobalThemeContext = createContext<GlobalThemeType>({
-  theme: "",
-  setTheme: () => {},
-  toggleMode: () => {},
-});
+export const GlobalThemeContext = createContext<GlobalThemeType | null>(null);
 
 export const GlobalThemeContextProvider = ({
   children,
