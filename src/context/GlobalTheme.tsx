@@ -1,5 +1,6 @@
 "use client";
 import { createContext, useState, useContext } from "react";
+import { saveTheme } from "../helper/CookiesFunctions";
 
 export interface GlobalThemeType {
   theme: string;
@@ -8,6 +9,7 @@ export interface GlobalThemeType {
 }
 
 export interface ChildrenProps {
+  initialTheme: string;
   children: React.ReactNode;
 }
 
@@ -17,12 +19,16 @@ export const GlobalThemeContext = createContext<GlobalThemeType>({
   toggleMode: () => {},
 });
 
-export const GlobalThemeContextProvider = ({ children }: ChildrenProps) => {
-  const [theme, setTheme] = useState("dark");
+export const GlobalThemeContextProvider = ({
+  children,
+  initialTheme,
+}: ChildrenProps) => {
+  const [theme, setTheme] = useState(initialTheme);
 
   const toggleMode = () => {
-    if (theme === "dark") setTheme("light");
-    if (theme === "light") setTheme("dark");
+    let newTheme = theme === "dark" ? "light" : "dark";
+    setTheme(newTheme);
+    saveTheme(newTheme);
   };
 
   return (
