@@ -8,7 +8,7 @@ export interface GlobalThemeType {
   toggleMode: () => void;
 }
 
-export interface ChildrenProps {
+export interface GlobalThemeProps {
   initialTheme: string;
   children: React.ReactNode;
 }
@@ -22,7 +22,7 @@ export const GlobalThemeContext = createContext<GlobalThemeType>({
 export const GlobalThemeContextProvider = ({
   children,
   initialTheme,
-}: ChildrenProps) => {
+}: GlobalThemeProps) => {
   const [theme, setTheme] = useState(initialTheme);
 
   const toggleMode = () => {
