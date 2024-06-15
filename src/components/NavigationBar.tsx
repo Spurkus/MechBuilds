@@ -1,12 +1,13 @@
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
+import ThemeToggleButton from "./ThemeToggleButton";
 
 const NavigationBar = () => {
   return (
     <div className="navbar bg-base-100 px-6 min-[1360px]:px-36">
       <div className="navbar-start">
-        <ul className="menu menu-horizontal hidden space-x-8 px-4 font-satoshi text-base shadow-stone-900 text-shadow-lg min-[950px]:flex">
+        <ul className="shadow-nav-text-contour menu menu-horizontal hidden space-x-8 px-4 font-satoshi text-base text-shadow-lg min-[950px]:flex">
           <li>
             <Link href="/">Home</Link>
           </li>
@@ -38,10 +39,12 @@ const NavigationBar = () => {
         </div>
       </div>
       <div className="navbar-center">
-        <a className="font-clashgrotesk text-3xl font-medium">MechBuilds</a>
+        <a className="shadow-nav-text-contour font-clashgrotesk text-3xl font-medium text-shadow-lg">
+          MechBuilds
+        </a>
       </div>
       <div className="navbar-end">
-        <ul className="menu menu-horizontal hidden space-x-8 px-4 font-satoshi text-base shadow-stone-900 text-shadow-lg min-[950px]:flex">
+        <ul className="shadow-nav-text-contour menu menu-horizontal flex space-x-8 px-6 align-middle font-satoshi text-base text-shadow-lg">
           <li>
             <Link href="/profile#add">Add Keyboard</Link>
           </li>
@@ -49,6 +52,7 @@ const NavigationBar = () => {
             <Link href="/">Login / Register</Link>
           </li>
         </ul>
+        <ThemeToggleButton />
       </div>
     </div>
   );

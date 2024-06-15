@@ -9,11 +9,6 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-      },
       fontFamily: {
         clashgrotesk: ["ClashGrotesk", "sans-serif"],
         satoshi: ["Satoshi", "sans-serif"],
@@ -24,6 +19,9 @@ const config: Config = {
         md: "3px 3px 6px var(--tw-shadow-color)",
         lg: "4px 4px 8px var(--tw-shadow-color)",
         xl: "4px 4px 16px var(--tw-shadow-color)",
+      },
+      colors: {
+        "nav-text-contour": "var(--nav-text-contour)",
       },
     },
   },
@@ -46,6 +44,21 @@ const config: Config = {
     },
     require("daisyui"),
   ],
+  daisyui: {
+    themes: [
+      {
+        dark: {
+          ...require("daisyui/src/theming/themes")["dark"],
+          "base-content": "rgb(225, 225, 225)",
+        },
+        light: {
+          ...require("daisyui/src/theming/themes")["light"],
+          "--nav-text-contour": "rgba(28, 25, 23, 0.3)",
+          "base-content": "rgb(50, 50, 50)",
+        },
+      },
+    ],
+  },
 };
 
 export default config;

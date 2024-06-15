@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import "./fonts.css";
 
+import { GlobalThemeContextProvider } from "../context/GlobalTheme";
 import NavigationBar from "../components/NavigationBar";
 import Footer from "../components/Footer";
 
@@ -22,9 +23,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <NavigationBar />
-        <main>{children}</main>
-        <Footer />
+        <GlobalThemeContextProvider>
+          <div className="flex min-h-screen flex-col">
+            <NavigationBar />
+            <main className="flex flex-grow">{children}</main>
+            <Footer />
+          </div>
+        </GlobalThemeContextProvider>
       </body>
     </html>
   );
