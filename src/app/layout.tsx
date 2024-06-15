@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { cookies } from "next/headers";
 import "./globals.css";
 import "./fonts.css";
 
+import { getTheme } from "../helper/CookiesFunctions";
 import { GlobalThemeContextProvider } from "../context/GlobalTheme";
 import NavigationBar from "../components/NavigationBar";
 import Footer from "../components/Footer";
-import { getTheme } from "../helper/CookiesFunctions";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,12 +16,12 @@ export const metadata: Metadata = {
     "A keyboard management app for custom mechanical keyboard enthusiasts :3",
 };
 
-export default function RootLayout({
+const RootLayout = async ({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
-  const theme = getTheme();
+}>) => {
+  const theme = await getTheme();
   return (
     <html lang="en">
       <body className={inter.className}>
@@ -36,4 +35,6 @@ export default function RootLayout({
       </body>
     </html>
   );
-}
+};
+
+export default RootLayout;

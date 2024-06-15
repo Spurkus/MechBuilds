@@ -8,7 +8,7 @@ export const saveTheme = (theme: string) => {
   cookieStore.set("theme", theme);
 };
 
-export const getTheme = () => {
+export const getTheme = async () => {
   const cookieStore = cookies();
   const theme = cookieStore.get("theme")
     ? cookieStore.get("theme")!.value
