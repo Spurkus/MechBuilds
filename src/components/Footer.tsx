@@ -8,7 +8,7 @@ import Link from "next/link";
 
 const Footer = () => {
   return (
-    <footer className="footer footer-center rounded bg-base-100 p-10 text-base-content">
+    <footer className="footer footer-center rounded bg-base-100 p-6 text-base-content">
       <nav className="grid grid-flow-col gap-4">
         <Link className="link-hover link" href="/">
           Home
