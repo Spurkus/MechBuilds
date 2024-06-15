@@ -50,6 +50,14 @@ const config: Config = {
         dark: {
           ...require("daisyui/src/theming/themes")["dark"],
           "base-content": "rgb(225, 225, 225)",
+          ".btn-nav-link": {
+            "border-color": "transparent",
+            "background-color": "transparent",
+          },
+          ".btn-nav-link:hover": {
+            "border-color": "transparent",
+            "background-color": "transparent",
+          },
         },
         light: {
           ...require("daisyui/src/theming/themes")["light"],
