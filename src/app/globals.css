@@ -7,11 +7,3 @@
     text-wrap: balance;
   }
 }
-
-.btn-link.btn-active {
-    @apply border-transparent bg-transparent underline;
-}
-
-.btn-link {
-    @apply border-transparent bg-transparent underline;
-}
