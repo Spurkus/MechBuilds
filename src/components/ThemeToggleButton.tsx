@@ -7,8 +7,8 @@ import { faMoon } from "@fortawesome/free-solid-svg-icons";
 const BrightnessIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="22"
-    height="22"
+    width="20"
+    height="20"
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
@@ -33,12 +33,17 @@ const ThemeToggleButton = () => {
   const { theme, toggleMode } = useGlobalThemeContext();
 
   return (
-    <button onClick={toggleMode} className="btn btn-circle flex">
-      {theme === "dark" ? (
-        <BrightnessIcon />
-      ) : (
-        <FontAwesomeIcon icon={faMoon} className="h-5 w-5" />
-      )}
+    <button
+      onClick={toggleMode}
+      className="btn btn-circle btn-sm flex px-5 pb-10"
+    >
+      <div className="mt-2.5">
+        {theme === "dark" ? (
+          <BrightnessIcon />
+        ) : (
+          <FontAwesomeIcon icon={faMoon} className="h-5 w-5" />
+        )}
+      </div>
     </button>
   );
 };

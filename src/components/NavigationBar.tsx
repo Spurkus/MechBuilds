@@ -7,7 +7,7 @@ const NavigationBar = () => {
   return (
     <div className="navbar bg-base-100 px-6 min-[1360px]:px-36">
       <div className="navbar-start">
-        <ul className="shadow-nav-text-contour menu menu-horizontal hidden space-x-8 px-4 font-satoshi text-base text-shadow-lg min-[950px]:flex">
+        <ul className="menu menu-horizontal hidden space-x-8 px-4 font-satoshi text-base shadow-nav-text-contour text-shadow-lg min-[950px]:flex">
           <li>
             <Link href="/">Home</Link>
           </li>
@@ -39,20 +39,25 @@ const NavigationBar = () => {
         </div>
       </div>
       <div className="navbar-center">
-        <a className="shadow-nav-text-contour font-clashgrotesk text-3xl font-medium text-shadow-lg">
+        <a className="font-clashgrotesk text-3xl font-medium shadow-nav-text-contour text-shadow-lg">
           MechBuilds
         </a>
       </div>
-      <div className="navbar-end">
-        <ul className="shadow-nav-text-contour menu menu-horizontal flex space-x-8 px-6 align-middle font-satoshi text-base text-shadow-lg">
+      <div className="navbar-end flex">
+        <ul className="menu menu-horizontal flex align-middle font-satoshi text-base shadow-nav-text-contour text-shadow-lg">
           <li>
             <Link href="/profile#add">Add Keyboard</Link>
           </li>
-          <li>
-            <Link href="/">Login / Register</Link>
-          </li>
         </ul>
-        <ThemeToggleButton />
+        <div className="h-6 border-l border-gray-400 pr-6"></div>
+        <div className="flex flex-row items-center space-x-5">
+          <ThemeToggleButton />
+          <Link href="/">
+            <button className="btn btn-outline btn-info btn-sm pb-9">
+              <p className="mt-3">Login | Register</p>
+            </button>
+          </Link>
+        </div>
       </div>
     </div>
   );
