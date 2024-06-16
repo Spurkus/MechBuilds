@@ -1,4 +1,5 @@
 import { ModalButtonType, ModalThemeType } from "../context/GlobalModal";
+import classNames from "classnames";
 
 export interface ModalType {
   open: boolean;
@@ -24,7 +25,12 @@ const renderButton = (
     return (
       <button
         key={index}
-        className={`btn btn-${button.type}`}
+        className={classNames("btn", {
+          "btn-info": button.type === "info",
+          "btn-success": button.type === "success",
+          "btn-warning": button.type === "warning",
+          "btn-error": button.type === "error",
+        })}
         onClick={button.onClick}
       >
         {button.text}
@@ -47,7 +53,14 @@ const Modal = ({
       className={`modal modal-bottom sm:modal-middle`}
       open={open}
     >
-      <div className={`modal-${theme} modal-box flex flex-col items-center`}>
+      <div
+        className={classNames("modal-box", "flex", "flex-col", "items-center", {
+          "modal-base": theme === "base",
+          "modal-error": theme === "error",
+          "modal-success": theme === "success",
+          "modal-fail": theme === "fail",
+        })}
+      >
         <h3 className="text-4xl font-bold">{title}</h3>
         <p className="py-4">{message}</p>
         <div className="modal-action">
