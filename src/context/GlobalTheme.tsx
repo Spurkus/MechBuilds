@@ -36,7 +36,7 @@ export const GlobalThemeContextProvider = ({
 
 export const useGlobalThemeContext = () => {
   const context = useContext(GlobalThemeContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error(
       "useGlobalThemeContext must be used within a GlobalThemeContextProvider",
     );
