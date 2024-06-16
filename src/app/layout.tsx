@@ -5,7 +5,7 @@ import "./fonts.css";
 
 import { getTheme } from "../helper/CookiesFunctions";
 import { GlobalThemeContextProvider } from "../context/GlobalTheme";
-import NavigationBar from "../components/NavigationBar";
+import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { GlobalModalContextProvider } from "../context/GlobalModal";
 import { AuthContextProvider } from "../context/Authentication";
@@ -31,7 +31,7 @@ const RootLayout = async ({
           <GlobalModalContextProvider>
             <AuthContextProvider>
               <div className="flex min-h-screen flex-col">
-                <NavigationBar />
+                <Navbar />
                 <main className="flex flex-grow">{children}</main>
                 <Footer />
               </div>

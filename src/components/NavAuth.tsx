@@ -18,7 +18,7 @@ const LoginRegisterButton = () => {
   );
 };
 
-const NavigationProfileMenu = () => {
+const NavProfileMenu = () => {
   const { user, logout } = useAuthContext();
   const { setModalOpen, setModalTitle, setModalMessage, setModalTheme } =
     useGlobalModalContext();
@@ -63,9 +63,9 @@ const NavigationProfileMenu = () => {
   );
 };
 
-const NavigationToggleUser = () => {
+const NavAuth = () => {
   const { user } = useAuthContext();
-  return user ? <NavigationProfileMenu /> : <LoginRegisterButton />;
+  return user ? <NavProfileMenu /> : <LoginRegisterButton />;
 };
 
-export default NavigationToggleUser;
+export default NavAuth;

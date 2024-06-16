@@ -2,9 +2,9 @@ import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import ThemeToggleButton from "./ThemeToggleButton";
-import NavigationToggleUser from "./NavigationToggleUser";
+import NavAuth from "./NavAuth";
 
-const NavigationBar = () => {
+const Navbar = () => {
   return (
     <div className="navbar bg-base-100 px-6 min-[1360px]:px-36">
       <div className="navbar-start">
@@ -71,11 +71,11 @@ const NavigationBar = () => {
         <div className="h-6 border-l border-gray-400 pr-6"></div>
         <div className="flex flex-row items-center space-x-5">
           <ThemeToggleButton />
-          <NavigationToggleUser />
+          <NavAuth />
         </div>
       </div>
     </div>
   );
 };
 
-export default NavigationBar;
+export default Navbar;
