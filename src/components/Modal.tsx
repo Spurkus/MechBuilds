@@ -47,8 +47,8 @@ const Modal = ({
       className={`modal modal-bottom sm:modal-middle`}
       open={open}
     >
-      <div className={`modal-${theme} modal-box`}>
-        <h3 className="text-lg font-bold">{title}</h3>
+      <div className={`modal-${theme} modal-box flex flex-col items-center`}>
+        <h3 className="text-4xl font-bold">{title}</h3>
         <p className="py-4">{message}</p>
         <div className="modal-action">
           <form method="dialog">
