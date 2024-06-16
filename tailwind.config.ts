@@ -47,9 +47,7 @@ const config: Config = {
   daisyui: {
     themes: [
       {
-        dark: {
-          ...require("daisyui/src/theming/themes")["dark"],
-          "base-content": "rgb(225, 225, 225)",
+        custom: {
           ".btn-nav-link": {
             "border-color": "transparent",
             "background-color": "transparent",
@@ -58,6 +56,10 @@ const config: Config = {
             "border-color": "transparent",
             "background-color": "transparent",
           },
+        },
+        dark: {
+          ...require("daisyui/src/theming/themes")["dark"],
+          "base-content": "rgb(225, 225, 225)",
         },
         light: {
           ...require("daisyui/src/theming/themes")["light"],
