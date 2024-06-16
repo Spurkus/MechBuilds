@@ -2,6 +2,7 @@ import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import ThemeToggleButton from "./ThemeToggleButton";
+import NavigationToggleUser from "./NavigationToggleUser";
 
 const NavigationBar = () => {
   return (
@@ -60,21 +61,17 @@ const NavigationBar = () => {
       <div className="navbar-end flex">
         <ul className="menu menu-horizontal flex align-middle font-satoshi text-base shadow-nav-text-contour text-shadow-lg">
           <li>
-            <Link href="/profile#add" className="btn-nav-link btn shadow-none">
+            <button className="btn-nav-link btn shadow-none">
               <p className="text-base font-normal shadow-nav-text-contour text-shadow-lg">
                 Add Keyboard
               </p>
-            </Link>
+            </button>
           </li>
         </ul>
         <div className="h-6 border-l border-gray-400 pr-6"></div>
         <div className="flex flex-row items-center space-x-5">
           <ThemeToggleButton />
-          <Link href="/">
-            <button className="btn btn-outline btn-info btn-sm pb-9">
-              <p className="mt-3">Login | Register</p>
-            </button>
-          </Link>
+          <NavigationToggleUser />
         </div>
       </div>
     </div>

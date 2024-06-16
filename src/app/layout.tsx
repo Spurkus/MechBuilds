@@ -8,6 +8,7 @@ import { GlobalThemeContextProvider } from "../context/GlobalTheme";
 import NavigationBar from "../components/NavigationBar";
 import Footer from "../components/Footer";
 import { GlobalModalContextProvider } from "../context/GlobalModal";
+import { AuthContextProvider } from "../context/Authentication";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,11 +29,13 @@ const RootLayout = async ({
       <body className={inter.className}>
         <GlobalThemeContextProvider initialTheme={theme}>
           <GlobalModalContextProvider>
-            <div className="flex min-h-screen flex-col">
-              <NavigationBar />
-              <main className="flex flex-grow">{children}</main>
-              <Footer />
-            </div>
+            <AuthContextProvider>
+              <div className="flex min-h-screen flex-col">
+                <NavigationBar />
+                <main className="flex flex-grow">{children}</main>
+                <Footer />
+              </div>
+            </AuthContextProvider>
           </GlobalModalContextProvider>
         </GlobalThemeContextProvider>
       </body>
