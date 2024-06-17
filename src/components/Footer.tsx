@@ -12,13 +12,13 @@ const Footer = () => {
       <div className="space-y-4">
         <nav className="grid grid-flow-col gap-4">
           <Link href="/" className="btn-nav-link btn btn-sm shadow-none">
-            <p className="font-normal">Home</p>
+            <p className="font-satoshi text-base font-medium">Home</p>
           </Link>
           <Link href="/explore" className="btn-nav-link btn btn-sm shadow-none">
-            <p className="font-normal">Explore</p>
+            <p className="font-satoshi text-base font-medium">Explore</p>
           </Link>
           <Link href="/about" className="btn-nav-link btn btn-sm shadow-none">
-            <p className="font-normal">About</p>
+            <p className="font-satoshi text-base font-medium">About</p>
           </Link>
         </nav>
         <nav>
@@ -51,7 +51,7 @@ const Footer = () => {
         </nav>
       </div>
       <aside>
-        <p>
+        <p className="font-satoshi text-base">
           A keyboard management app for custom mechanical keyboard enthusiasts
           :3
         </p>
