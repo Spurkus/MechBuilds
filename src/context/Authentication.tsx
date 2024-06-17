@@ -8,23 +8,45 @@ import {
 } from "firebase/auth";
 import { auth, googleProvider } from "@/firebase";
 import { useGlobalModalContext } from "./GlobalModal";
+import {
+  saveProfilePicture,
+  saveAuthenticated,
+  saveUsername,
+} from "../helper/CookiesFunctions";
 
 interface AuthContextProps {
+  initialAuthenticated: boolean;
+  initialUsername: string | null;
+  initialProfilePicture: string | null;
   children: React.ReactNode;
 }
 
 interface AuthContextType {
   user: User | null;
   authLoading: boolean;
+  authenticated: boolean;
+  username: string | null;
+  profilePicture: string | null;
   signInWithGoogle: () => void;
   logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-export const AuthContextProvider = ({ children }: AuthContextProps) => {
+export const AuthContextProvider = ({
+  initialAuthenticated,
+  initialUsername,
+  initialProfilePicture,
+  children,
+}: AuthContextProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [authLoading, setAuthLoading] = useState<boolean>(true);
+  const [authenticated, setAuthenticated] =
+    useState<boolean>(initialAuthenticated);
+  const [username, setUsername] = useState<string | null>(initialUsername);
+  const [profilePicture, setProfilePicture] = useState<string | null>(
+    initialProfilePicture,
+  );
   const { setModalOpen, setModalTitle, setModalMessage, setModalTheme } =
     useGlobalModalContext();
 
@@ -32,6 +54,15 @@ export const AuthContextProvider = ({ children }: AuthContextProps) => {
     try {
       const currentUser = await signInWithPopup(auth, googleProvider);
       setUser(currentUser.user);
+      if (!currentUser.user.photoURL || !currentUser.user.displayName) {
+        throw new Error("User is not valid");
+      }
+      setAuthenticated(true);
+      saveAuthenticated(true);
+      setProfilePicture(currentUser.user.photoURL);
+      saveProfilePicture(currentUser.user.photoURL);
+      setUsername(currentUser.user.displayName);
+      saveUsername(currentUser.user.displayName);
     } catch (error: any) {
       setModalTitle("Error");
       setModalMessage(error.message);
@@ -43,6 +74,8 @@ export const AuthContextProvider = ({ children }: AuthContextProps) => {
   const logout = async () => {
     try {
       await signOut(auth);
+      setAuthenticated(false);
+      saveAuthenticated(false);
     } catch (error: any) {
       setModalTitle("Error");
       setModalMessage(error.message);
@@ -61,7 +94,15 @@ export const AuthContextProvider = ({ children }: AuthContextProps) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, authLoading, signInWithGoogle, logout }}
+      value={{
+        user,
+        authLoading,
+        authenticated,
+        username,
+        profilePicture,
+        signInWithGoogle,
+        logout,
+      }}
     >
       {children}
     </AuthContext.Provider>

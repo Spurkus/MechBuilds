@@ -3,7 +3,12 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import "./fonts.css";
 
-import { getTheme } from "../helper/CookiesFunctions";
+import {
+  getAuthenticated,
+  getProfilePicture,
+  getTheme,
+  getUsername,
+} from "../helper/CookiesFunctions";
 import { GlobalThemeContextProvider } from "../context/GlobalTheme";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -24,12 +29,19 @@ const RootLayout = async ({
   children: React.ReactNode;
 }>) => {
   const theme = await getTheme();
+  const authenticated = await getAuthenticated();
+  const username = await getUsername();
+  const profilePicture = await getProfilePicture();
   return (
     <html lang="en">
       <body className={inter.className}>
         <GlobalThemeContextProvider initialTheme={theme}>
           <GlobalModalContextProvider>
-            <AuthContextProvider>
+            <AuthContextProvider
+              initialAuthenticated={authenticated}
+              initialUsername={username}
+              initialProfilePicture={profilePicture}
+            >
               <div className="flex min-h-screen flex-col">
                 <Navbar />
                 <main className="flex flex-grow">{children}</main>

@@ -6,16 +6,11 @@ import { useGlobalModalContext } from "../context/GlobalModal";
 import { faCaretDown, faCaretUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const AuthLoadingButton = () => {
-  return (
-    <button className="btn btn-sm rounded-xl px-3 pb-9 text-base">
-      <div className="mt-1.5 flex">
-        <span className="loading loading-spinner"></span>
-        <p className="pl-2 font-satoshi">Loading...</p>
-      </div>
-    </button>
-  );
-};
+interface NavProfileMenuType {
+  displayName?: string | null;
+  profilePicture?: string | null;
+}
+
 const LoginRegisterButton = () => {
   const { signInWithGoogle } = useAuthContext();
   return (
@@ -28,35 +23,47 @@ const LoginRegisterButton = () => {
   );
 };
 
-const NavProfileMenu = () => {
+const NavProfileMenu = ({
+  profilePicture = null,
+  displayName = null,
+}: NavProfileMenuType) => {
   const { user, logout } = useAuthContext();
   const { setModalOpen, setModalTitle, setModalMessage, setModalTheme } =
     useGlobalModalContext();
 
-  if (!user || !user.photoURL) {
-    setModalTitle("Error");
-    setModalMessage("User cannot be found");
-    setModalTheme("error");
-    setModalOpen(true);
-    return;
+  let profile, name;
+
+  if (profilePicture) {
+    profile = profilePicture;
+  } else {
+    if (!user || !user.photoURL) {
+      setModalTitle("Error");
+      setModalMessage("User is invalid");
+      setModalTheme("error");
+      setModalOpen(true);
+      return;
+    }
+    profile = user.photoURL;
+  }
+
+  if (displayName) {
+    name = displayName;
+  } else {
+    name = user?.displayName;
   }
 
   return (
     <div className="dropdown dropdown-end">
       <div tabIndex={0} role="button" className="btn rounded-xl px-3 text-base">
         <Image
-          src={user.photoURL}
+          src={profile}
           alt="profile picture"
           width={34}
           height={34}
           className="square rounded-xl"
         />
-        <p className="font-satoshi">{user.displayName}</p>
-        <div className="swap swap-rotate">
-          <input type="checkbox" />
-          <FontAwesomeIcon icon={faCaretDown} className="swap-off" />
-          <FontAwesomeIcon icon={faCaretUp} className="swap-on" />
-        </div>
+        <p className="font-satoshi">{name}</p>
+        <FontAwesomeIcon icon={faCaretDown} className="h-4 w-4" />
       </div>
       <ul
         tabIndex={0}
@@ -78,9 +85,12 @@ const NavProfileMenu = () => {
 };
 
 const NavAuth = () => {
-  const { user, authLoading } = useAuthContext();
-  if (authLoading) return <AuthLoadingButton />;
-  return user ? <NavProfileMenu /> : <LoginRegisterButton />;
+  const { authenticated, username, profilePicture } = useAuthContext();
+  return authenticated ? (
+    <NavProfileMenu displayName={username} profilePicture={profilePicture} />
+  ) : (
+    <LoginRegisterButton />
+  );
 };
 
 export default NavAuth;
