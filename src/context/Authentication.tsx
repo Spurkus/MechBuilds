@@ -15,6 +15,7 @@ interface AuthContextProps {
 
 interface AuthContextType {
   user: User | null;
+  authLoading: boolean;
   signInWithGoogle: () => void;
   logout: () => void;
 }
@@ -23,6 +24,7 @@ const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthContextProvider = ({ children }: AuthContextProps) => {
   const [user, setUser] = useState<User | null>(null);
+  const [authLoading, setAuthLoading] = useState<boolean>(true);
   const { setModalOpen, setModalTitle, setModalMessage, setModalTheme } =
     useGlobalModalContext();
 
@@ -52,12 +54,15 @@ export const AuthContextProvider = ({ children }: AuthContextProps) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser: User | null) => {
       setUser(currentUser);
+      setAuthLoading(false);
     });
     return () => unsubscribe();
   }, [user]);
 
   return (
-    <AuthContext.Provider value={{ user, signInWithGoogle, logout }}>
+    <AuthContext.Provider
+      value={{ user, authLoading, signInWithGoogle, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );
