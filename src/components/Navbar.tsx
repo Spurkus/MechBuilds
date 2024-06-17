@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import ThemeToggleButton from "./ThemeToggleButton";
 import NavAuth from "./NavAuth";
+import NavAddKeyboardButton from "./NavAddKeyboardButton";
 
 const Navbar = () => {
   return (
@@ -61,11 +62,7 @@ const Navbar = () => {
       <div className="navbar-end flex">
         <ul className="menu menu-horizontal flex align-middle font-satoshi text-base shadow-nav-text-contour text-shadow-lg">
           <li>
-            <button className="btn-nav-link btn shadow-none">
-              <p className="text-base font-normal shadow-nav-text-contour text-shadow-lg">
-                Add Keyboard
-              </p>
-            </button>
+            <NavAddKeyboardButton />
           </li>
         </ul>
         <div className="h-6 border-l border-gray-400 pr-6"></div>
