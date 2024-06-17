@@ -5,6 +5,7 @@ import { useAuthContext } from "../context/Authentication";
 import { useGlobalModalContext } from "../context/GlobalModal";
 import { faCaretDown, faCaretUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useState } from "react";
 
 const LoginRegisterButton = () => {
   const { signInWithGoogle } = useAuthContext();
