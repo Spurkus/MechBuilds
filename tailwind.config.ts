@@ -29,8 +29,8 @@ const addCustomStyles = (theme: DaisyUITheme) => {
       color: "#155724",
     },
     ".modal-fail": {
-      "background-color": "#f5c6cb",
-      color: "#721c24",
+      "background-color": "#fff3cd",
+      color: "#856404",
     },
   };
 };
