@@ -26,18 +26,24 @@ const Footer = () => {
             <Link
               href="https://www.linkedin.com/in/oscartangdev/"
               className="btn-nav-xs btn btn-circle"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               <FontAwesomeIcon icon={faLinkedin} className="h-7 w-7" />
             </Link>
             <Link
               href="https://github.com/Spurkus/MechBuilds"
               className="btn-nav-xs btn btn-circle"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               <FontAwesomeIcon icon={faGithub} className="h-7 w-7" />
             </Link>
             <Link
               href="https://www.youtube.com/watch?v=HMTKMWHLbdQ"
               className="btn-nav-xs btn btn-circle"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               <FontAwesomeIcon icon={faYoutube} className="h-7 w-7" />
             </Link>
