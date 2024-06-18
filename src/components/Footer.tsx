@@ -50,11 +50,11 @@ const Footer = () => {
           </div>
         </nav>
       </div>
-      <aside>
+      <aside className="flex">
         <p className="font-satoshi text-base">
           A keyboard management app for custom mechanical keyboard enthusiasts
-          :3
         </p>
+        <p className="text-base">:3</p>
       </aside>
     </footer>
   );
