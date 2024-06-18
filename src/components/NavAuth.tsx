@@ -3,13 +3,24 @@ import Link from "next/link";
 import Image from "next/image";
 import { useAuthContext } from "../context/Authentication";
 import { useGlobalModalContext } from "../context/GlobalModal";
-import { faCaretDown, faCaretUp } from "@fortawesome/free-solid-svg-icons";
+import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface NavProfileMenuType {
   displayName?: string | null;
   profilePicture?: string | null;
 }
+
+const AuthLoadingButton = () => {
+  return (
+    <button className="btn btn-sm rounded-xl px-3 pb-9 text-base">
+      <div className="mt-1.5 flex">
+        <span className="loading loading-spinner"></span>
+        <p className="pl-2 font-satoshi">Loading...</p>
+      </div>
+    </button>
+  );
+};
 
 const LoginRegisterButton = () => {
   const { signInWithGoogle } = useAuthContext();
@@ -28,28 +39,14 @@ const NavProfileMenu = ({
   displayName = null,
 }: NavProfileMenuType) => {
   const { user, logout } = useAuthContext();
-  const { setModalOpen, setModalTitle, setModalMessage, setModalTheme } =
-    useGlobalModalContext();
+  const { handleModalError } = useGlobalModalContext();
 
-  let profile, name;
+  const profile = profilePicture || user?.photoURL;
+  const name = displayName || user?.displayName;
 
-  if (profilePicture) {
-    profile = profilePicture;
-  } else {
-    if (!user || !user.photoURL) {
-      setModalTitle("Error");
-      setModalMessage("User is invalid");
-      setModalTheme("error");
-      setModalOpen(true);
-      return;
-    }
-    profile = user.photoURL;
-  }
-
-  if (displayName) {
-    name = displayName;
-  } else {
-    name = user?.displayName;
+  if (!profile) {
+    handleModalError("User is invalid");
+    return <AuthLoadingButton />;
   }
 
   return (

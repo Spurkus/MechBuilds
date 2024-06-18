@@ -47,8 +47,25 @@ export const AuthContextProvider = ({
   const [profilePicture, setProfilePicture] = useState<string | null>(
     initialProfilePicture,
   );
-  const { setModalOpen, setModalTitle, setModalMessage, setModalTheme } =
-    useGlobalModalContext();
+  const { handleModalError } = useGlobalModalContext();
+
+  const updateUserState = async (
+    newUser: User | null,
+    newAuthenticated: boolean,
+    newUsername: string | null = null,
+    newProfilePicture: string | null = null,
+  ) => {
+    // Update state
+    setUser(newUser);
+    setAuthenticated(newAuthenticated);
+    setUsername(newUsername);
+    setProfilePicture(newProfilePicture);
+
+    // Save to cookies
+    saveAuthenticated(newAuthenticated);
+    if (newUsername !== null) saveUsername(newUsername);
+    if (newProfilePicture !== null) saveProfilePicture(newProfilePicture);
+  };
 
   const signInWithGoogle = async () => {
     try {
@@ -57,30 +74,23 @@ export const AuthContextProvider = ({
       if (!currentUser.user.photoURL || !currentUser.user.displayName) {
         throw new Error("User is not valid");
       }
-      setAuthenticated(true);
-      saveAuthenticated(true);
-      setProfilePicture(currentUser.user.photoURL);
-      saveProfilePicture(currentUser.user.photoURL);
-      setUsername(currentUser.user.displayName);
-      saveUsername(currentUser.user.displayName);
+      await updateUserState(
+        currentUser.user,
+        true,
+        currentUser.user.displayName,
+        currentUser.user.photoURL,
+      );
     } catch (error: any) {
-      setModalTitle("Error");
-      setModalMessage(error.message);
-      setModalTheme("error");
-      setModalOpen(true);
+      handleModalError(error);
     }
   };
 
   const logout = async () => {
     try {
       await signOut(auth);
-      setAuthenticated(false);
-      saveAuthenticated(false);
+      await updateUserState(null, false);
     } catch (error: any) {
-      setModalTitle("Error");
-      setModalMessage(error.message);
-      setModalTheme("error");
-      setModalOpen(true);
+      handleModalError(error);
     }
   };
 
