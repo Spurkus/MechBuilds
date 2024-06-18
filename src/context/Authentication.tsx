@@ -14,6 +14,19 @@ import {
   saveUsername,
 } from "../helper/CookiesFunctions";
 
+type userStatus = "active" | "suspended" | "banned";
+
+interface UserProfileType {
+  uid: string;
+  email: string;
+  username: string;
+  profilePicture: string;
+  status: userStatus;
+  joinedDate: Date;
+  lastActive: Date;
+  bio: string;
+}
+
 interface AuthContextProps {
   initialAuthenticated: boolean;
   initialUsername: string | null;
