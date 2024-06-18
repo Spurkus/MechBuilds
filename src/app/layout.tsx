@@ -44,7 +44,11 @@ const RootLayout = async ({
             >
               <div className="flex min-h-screen flex-col">
                 <Navbar />
-                <main className="flex flex-grow">{children}</main>
+                <main className="flex flex-grow">
+                  <div className="w-1/6 flex-none"></div>
+                  <div className="flex flex-grow">{children}</div>
+                  <div className="w-1/6 flex-none"></div>
+                </main>
                 <Footer />
               </div>
             </AuthContextProvider>
