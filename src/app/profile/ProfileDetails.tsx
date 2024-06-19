@@ -32,7 +32,7 @@ const ProfileDetails = () => {
     <div className="flex flex-grow flex-col space-y-3 rounded-[3rem] bg-base-300 p-6">
       <div className="avatar mask self-center">
         <Image
-          src={adjustImageUrl(profile, 350)}
+          src={adjustImageUrl(profile, 1000)}
           alt="Profile"
           className="rounded-[3rem]"
           width={350}
