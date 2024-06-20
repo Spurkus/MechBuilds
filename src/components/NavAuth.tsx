@@ -25,19 +25,13 @@ const AuthLoadingButton = () => {
 const LoginRegisterButton = () => {
   const { signInWithGoogle } = useAuthContext();
   return (
-    <button
-      onClick={signInWithGoogle}
-      className="btn btn-outline btn-info btn-sm pb-9"
-    >
+    <button onClick={signInWithGoogle} className="btn btn-outline btn-info btn-sm pb-9">
       <p className="mt-3 font-satoshi">Login | Register</p>
     </button>
   );
 };
 
-const NavProfileMenu = ({
-  profilePicture = null,
-  displayName = null,
-}: NavProfileMenuType) => {
+const NavProfileMenu = ({ profilePicture = null, displayName = null }: NavProfileMenuType) => {
   const { user, logout } = useAuthContext();
   const { handleModalError } = useGlobalModalContext();
 
@@ -82,9 +76,9 @@ const NavProfileMenu = ({
 };
 
 const NavAuth = () => {
-  const { authenticated, username, profilePicture } = useAuthContext();
+  const { authenticated, displayName, profilePicture } = useAuthContext();
   return authenticated ? (
-    <NavProfileMenu displayName={username} profilePicture={profilePicture} />
+    <NavProfileMenu displayName={displayName} profilePicture={profilePicture} />
   ) : (
     <LoginRegisterButton />
   );

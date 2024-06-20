@@ -2,12 +2,13 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import "./fonts.css";
-
 import {
   getAuthenticated,
   getProfilePicture,
   getTheme,
   getUsername,
+  getDisplayName,
+  getPronouns,
 } from "../helper/cookiesFunctions";
 import { GlobalThemeContextProvider } from "../context/GlobalTheme";
 import Navbar from "../components/Navbar";
@@ -19,8 +20,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "MechBuilds",
-  description:
-    "A keyboard management app for custom mechanical keyboard enthusiasts :3",
+  description: "A keyboard management app for custom mechanical keyboard enthusiasts :3",
 };
 
 const RootLayout = async ({
@@ -31,6 +31,8 @@ const RootLayout = async ({
   const theme = await getTheme();
   const authenticated = await getAuthenticated();
   const username = await getUsername();
+  const displayName = await getDisplayName();
+  const pronouns = await getPronouns();
   const profilePicture = await getProfilePicture();
   return (
     <html lang="en">
@@ -40,14 +42,16 @@ const RootLayout = async ({
             <AuthContextProvider
               initialAuthenticated={authenticated}
               initialUsername={username}
+              initialDisplayName={displayName}
+              initialPronouns={pronouns}
               initialProfilePicture={profilePicture}
             >
               <div className="flex min-h-screen flex-col">
                 <Navbar />
                 <main className="flex flex-grow">
-                  <div className="flex w-[10%] xl:w-1/6"></div>
+                  <div className="flex w-[6%] xl:w-1/6"></div>
                   <div className="flex flex-grow">{children}</div>
-                  <div className="flex w-[10%] xl:w-1/6"></div>
+                  <div className="flex w-[6%] xl:w-1/6"></div>
                 </main>
                 <Footer />
               </div>

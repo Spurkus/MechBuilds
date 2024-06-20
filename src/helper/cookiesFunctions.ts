@@ -44,6 +44,34 @@ export const getUsername = async () => {
   return name;
 };
 
+export const saveDisplayName = (name: string) => {
+  const cookieStore = cookies();
+  cookieStore.set("displayName", name);
+};
+
+export const getDisplayName = async () => {
+  const cookieStore = cookies();
+  const name = cookieStore.get("displayName")
+    ? cookieStore.get("displayName")!.value
+    : DEFAULT_USERNAME;
+
+  return name;
+};
+
+export const savePronouns = (pronouns: [string, string]) => {
+  const cookieStore = cookies();
+  const pronounsJoined = pronouns.join("/");
+  cookieStore.set("pronouns", pronounsJoined);
+};
+
+export const getPronouns = async (): Promise<[string, string]> => {
+  const cookieStore = cookies();
+  const pronouns = cookieStore.get("pronouns") ? cookieStore.get("pronouns")!.value : "''/''";
+  const pronounsArray = pronouns.split("/") as [string, string];
+
+  return pronounsArray;
+};
+
 export const saveProfilePicture = (profilePicture: string) => {
   const cookieStore = cookies();
   cookieStore.set("profilePicture", profilePicture);
