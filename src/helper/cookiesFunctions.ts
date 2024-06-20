@@ -11,9 +11,7 @@ export const saveTheme = (theme: string) => {
 
 export const getTheme = async () => {
   const cookieStore = cookies();
-  const theme = cookieStore.get("theme")
-    ? cookieStore.get("theme")!.value
-    : DEFAULT_THEME;
+  const theme = cookieStore.get("theme") ? cookieStore.get("theme")!.value : DEFAULT_THEME;
 
   return theme;
 };
@@ -41,9 +39,7 @@ export const saveUsername = (name: string) => {
 
 export const getUsername = async () => {
   const cookieStore = cookies();
-  const name = cookieStore.get("username")
-    ? cookieStore.get("username")!.value
-    : DEFAULT_USERNAME;
+  const name = cookieStore.get("username") ? cookieStore.get("username")!.value : DEFAULT_USERNAME;
 
   return name;
 };
