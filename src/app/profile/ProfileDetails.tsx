@@ -4,6 +4,7 @@ import { useGlobalModalContext } from "@/src/context/GlobalModal";
 import { adjustImageUrl } from "@/src/helper/helperFunctions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLink } from "@fortawesome/free-solid-svg-icons";
+import Loading from "@/src/components/Loading";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -13,23 +14,13 @@ const displaySocialLink = (link: string) => {
   return link.replace(/^(https?:\/\/)?(www\.)?/, "");
 };
 
-const ProfileLoading = () => {
-  return (
-    <div className="items-center self-center rounded-xl text-base">
-      <div className="flex">
-        <span className="loading loading-spinner h-12 w-12"></span>
-      </div>
-    </div>
-  );
-};
-
 const ProfileBaseDetails = () => {
   const { username, displayName, pronouns, profilePicture } = useAuthContext();
   const { handleModalError } = useGlobalModalContext();
 
   if (!profilePicture) {
     handleModalError("User is invalid");
-    return <ProfileLoading />;
+    return <Loading />;
   }
 
   // Check if pronouns == ["", ""]
@@ -66,7 +57,7 @@ const ProfileBaseDetails = () => {
 const ProfileExtraDetails = () => {
   const { userProfile } = useAuthContext();
 
-  if (!userProfile) return <ProfileLoading />;
+  if (!userProfile) return <Loading />;
 
   return (
     <div className="flex flex-col space-y-2">
