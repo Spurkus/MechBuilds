@@ -10,11 +10,7 @@ export interface ModalType {
   toggleModal: () => void;
 }
 
-const renderButton = (
-  button: ModalButtonType,
-  index: number,
-  toggleModal: () => void,
-) => {
+const renderButton = (button: ModalButtonType, index: number, toggleModal: () => void) => {
   if (typeof button === "string") {
     return (
       <button key={index} className="btn" onClick={toggleModal}>
@@ -39,20 +35,9 @@ const renderButton = (
   }
 };
 
-const Modal = ({
-  open,
-  title,
-  message,
-  theme,
-  buttons,
-  toggleModal,
-}: ModalType) => {
+const Modal = ({ open, title, message, theme, buttons, toggleModal }: ModalType) => {
   return (
-    <dialog
-      id="global_modal"
-      className={`modal modal-bottom sm:modal-middle`}
-      open={open}
-    >
+    <dialog id="global_modal" className="modal modal-bottom sm:modal-middle" open={open}>
       <div
         className={classNames("modal-box", "flex", "flex-col", "items-center", {
           "modal-base": theme === "base",
@@ -65,9 +50,7 @@ const Modal = ({
         <p className="py-4">{message}</p>
         <div className="modal-action">
           <form method="dialog">
-            {buttons.map((button, index) =>
-              renderButton(button, index, toggleModal),
-            )}
+            {buttons.map((button, index) => renderButton(button, index, toggleModal))}
           </form>
         </div>
       </div>
