@@ -8,7 +8,7 @@ import {
   getProfilePicture,
   getTheme,
   getUsername,
-} from "../helper/CookiesFunctions";
+} from "../helper/cookiesFunctions";
 import { GlobalThemeContextProvider } from "../context/GlobalTheme";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";

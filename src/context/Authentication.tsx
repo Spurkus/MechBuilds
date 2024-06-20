@@ -12,29 +12,33 @@ import {
   saveProfilePicture,
   saveAuthenticated,
   saveUsername,
-} from "../helper/CookiesFunctions";
+} from "../helper/cookiesFunctions";
 
-type userStatus = "active" | "suspended" | "banned";
+export type userStatus = "active" | "suspended" | "banned";
+export type userRole = "user" | "mod" | "admin";
 
-interface UserProfileType {
+export interface UserProfileType {
   uid: string;
   email: string;
   username: string;
   profilePicture: string;
+  premium: boolean;
   status: userStatus;
   joinedDate: Date;
   lastActive: Date;
   bio: string;
+  socialLinks: string[];
+  pronouns: string[2];
 }
 
-interface AuthContextProps {
+export interface AuthContextProps {
   initialAuthenticated: boolean;
   initialUsername: string | null;
   initialProfilePicture: string | null;
   children: React.ReactNode;
 }
 
-interface AuthContextType {
+export interface AuthContextType {
   user: User | null;
   authLoading: boolean;
   authenticated: boolean;
@@ -44,7 +48,7 @@ interface AuthContextType {
   logout: () => void;
 }
 
-const AuthContext = createContext<AuthContextType | null>(null);
+export const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthContextProvider = ({
   initialAuthenticated,
