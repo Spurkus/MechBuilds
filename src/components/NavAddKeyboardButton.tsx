@@ -5,14 +5,14 @@ import { useGlobalModalContext } from "../context/GlobalModal";
 
 const NavAddKeyboardButton = () => {
   const { authenticated } = useAuthContext();
-  const { setModalOpen, setModalTitle, setModalMessage, setModalTheme } =
-    useGlobalModalContext();
+  const { handleModal } = useGlobalModalContext();
 
   const addKeyboardBeforeAuth = () => {
-    setModalTitle("Authentication Required");
-    setModalMessage("You need to login first before you can add a keyboard!!");
-    setModalTheme("fail");
-    setModalOpen(true);
+    handleModal(
+      "Authentication Required",
+      "You need to login first before you can add a keyboard!!",
+      "fail",
+    );
   };
 
   if (authenticated) {

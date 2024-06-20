@@ -30,6 +30,12 @@ export interface GlobalModalType {
   setModalButtons: React.Dispatch<React.SetStateAction<ModalButtonType[]>>;
   toggleModal: () => void;
   handleModalError: (error: Error | string) => void;
+  handleModal: (
+    title: string,
+    message: string,
+    theme?: ModalThemeType,
+    buttons?: ModalButtonType[],
+  ) => void;
 }
 
 export interface GlobalModalProps {
@@ -64,6 +70,19 @@ export const GlobalModalContextProvider = ({ children }: GlobalModalProps) => {
     setModalOpen(true);
   };
 
+  const handleModal = (
+    title: string,
+    message: string,
+    theme: ModalThemeType = DEFAULT_MODAL_THEME,
+    buttons: ModalButtonType[] = DEFAULT_MODAL_BUTTONS,
+  ) => {
+    setModalTitle(title);
+    setModalMessage(message);
+    setModalTheme(theme);
+    setModalButtons(buttons);
+    setModalOpen(true);
+  };
+
   return (
     <GlobalModalContext.Provider
       value={{
@@ -79,6 +98,7 @@ export const GlobalModalContextProvider = ({ children }: GlobalModalProps) => {
         setModalButtons,
         toggleModal,
         handleModalError,
+        handleModal,
       }}
     >
       {children}
