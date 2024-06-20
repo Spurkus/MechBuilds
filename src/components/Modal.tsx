@@ -37,7 +37,7 @@ const renderButton = (button: ModalButtonType, index: number, toggleModal: () =>
 
 const Modal = ({ open, title, message, theme, buttons, toggleModal }: ModalType) => {
   return (
-    <dialog id="global_modal" className="modal modal-bottom sm:modal-middle" open={open}>
+    <dialog id="globalmodal" className="modal modal-bottom sm:modal-middle" open={open}>
       <div
         className={classNames("modal-box", "flex", "flex-col", "items-center", {
           "modal-base": theme === "base",
