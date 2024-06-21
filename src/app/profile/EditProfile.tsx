@@ -11,6 +11,7 @@ import { useGlobalModalContext } from "@/src/context/GlobalModal";
 
 const DEFAULT_IMAGE_SIZE = 1000;
 const DEFAULT_PRONOUNS: [string, string][] = [
+  ["", ""],
   ["he", "him"],
   ["she", "her"],
   ["they", "them"],
