@@ -3,8 +3,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { useAuthContext } from "../context/Authentication";
 import { useGlobalModalContext } from "../context/GlobalModal";
-import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
+import { closeDropdown } from "../helper/helperFunctions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 
 interface NavProfileMenuType {
   displayName?: string | null;
@@ -60,12 +61,12 @@ const NavProfileMenu = ({ profilePicture = null, displayName = null }: NavProfil
         tabIndex={0}
         className="menu dropdown-content z-[1] mt-2 w-52 rounded-box bg-base-200 p-2 shadow"
       >
-        <li>
+        <li onClick={closeDropdown}>
           <Link href="/profile" className="font-satoshi">
             Profile
           </Link>
         </li>
-        <li>
+        <li onClick={closeDropdown}>
           <button onClick={logout} className="font-satoshi">
             Sign Out
           </button>
