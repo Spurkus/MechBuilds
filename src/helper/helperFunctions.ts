@@ -1,3 +1,8 @@
+export const closeDropdown = () => {
+  const elem = document.activeElement as HTMLElement;
+  elem?.blur();
+};
+
 export const adjustImageUrl = (url: string, desiredSize: number) => {
   return url.replace(/=s\d+-c/, `=s${desiredSize}-c`);
 };

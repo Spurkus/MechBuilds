@@ -1,7 +1,7 @@
 import Loading from "@/src/components/Loading";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { adjustImageUrl, formatSocialLink } from "@/src/helper/helperFunctions";
+import { adjustImageUrl, formatSocialLink, closeDropdown } from "@/src/helper/helperFunctions";
 import { UserProfileType } from "@/src/context/Authentication";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown, faLink } from "@fortawesome/free-solid-svg-icons";
@@ -173,11 +173,6 @@ const PronounsField = ({
   const setCustomPronounDefault = () => {
     setCustomOne("");
     setCustomTwo("");
-  };
-
-  const closeDropdown = () => {
-    const elem = document.activeElement as HTMLElement;
-    elem?.blur();
   };
 
   return (
