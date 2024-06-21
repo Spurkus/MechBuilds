@@ -56,6 +56,7 @@ const config: Config = {
       },
       colors: {
         "nav-text-contour": "var(--nav-text-contour)",
+        "input-error": "var(--input-error)",
       },
     },
   },
@@ -84,11 +85,13 @@ const config: Config = {
         dark: addCustomStyles({
           ...require("daisyui/src/theming/themes")["dark"],
           "base-content": "rgb(225, 225, 225)",
+          "--input-error": "#E8828C",
         }),
         light: addCustomStyles({
           ...require("daisyui/src/theming/themes")["light"],
           "--nav-text-contour": "rgba(28, 25, 23, 0.3)",
           "base-content": "rgb(50, 50, 50)",
+          "--input-error": "#FFCDD2",
         }),
       },
     ],

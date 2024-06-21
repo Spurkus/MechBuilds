@@ -1,0 +1,397 @@
+import Loading from "@/src/components/Loading";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { adjustImageUrl, formatSocialLink } from "@/src/helper/helperFunctions";
+import { UserProfileType } from "@/src/context/Authentication";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCaretDown, faLink } from "@fortawesome/free-solid-svg-icons";
+import { formatPronouns } from "@/src/helper/helperFunctions";
+
+const DEFAULT_IMAGE_SIZE = 1000;
+const DEFAULT_PRONOUNS: [string, string][] = [
+  ["he", "him"],
+  ["she", "her"],
+  ["they", "them"],
+];
+
+const DISPLAY_NAME_REGEX = /^[A-Za-z0-9À-ÖØ-öø-ÿ'-. @&#:]{2,20}$/;
+const BIO_REGEX = /^[A-Za-z0-9À-ÖØ-öø-ÿ'-.?!@#$%^&*()_+=\[\]{}|\\;:"<>,/ \n]{0,150}$/;
+const PRONOUNS_REGEX = /^[A-Za-zÀ-ÖØ-öø-ÿ'-. ]{1,6}$/;
+const SOCIAL_LINK_REGEX =
+  /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/;
+
+interface EditProfileProps {
+  open: boolean;
+  toggleEditProfile: () => void;
+  userProfile: UserProfileType | null;
+}
+
+interface EditProfileComponentProps {
+  toggleEditProfile: () => void;
+  userProfile: UserProfileType;
+}
+
+interface PronounsFieldProps {
+  pronouns: [string, string];
+  setPronouns: (pronouns: [string, string]) => void;
+  validPronouns: boolean;
+  setValidPronouns: (validPronouns: boolean) => void;
+}
+
+interface SocialLinksFieldProps {
+  socialLinks: string[];
+  setSocialLink: (socialLinks: string[]) => void;
+  setValidSocialLinks: (validSocialLinks: boolean) => void;
+}
+
+const SocialLinksField = ({
+  socialLinks,
+  setSocialLink,
+  setValidSocialLinks,
+}: SocialLinksFieldProps) => {
+  const [socialLinkOne, setSocialLinkOne] = useState(socialLinks[0] || "");
+  const [socialLinkTwo, setSocialLinkTwo] = useState(socialLinks[1] || "");
+  const [socialLinkThree, setSocialLinkThree] = useState(socialLinks[2] || "");
+  const [validSocialLinkOne, setValidSocialLinkOne] = useState(true);
+  const [validSocialLinkTwo, setValidSocialLinkTwo] = useState(true);
+  const [validSocialLinkThree, setValidSocialLinkThree] = useState(true);
+  const [isSocialLinkOneFocused, setSocialLinkOneFocused] = useState(false);
+  const [isSocialLinkTwoFocused, setSocialLinkTwoFocused] = useState(false);
+  const [isSocialLinkThreeFocused, setSocialLinkThreeFocused] = useState(false);
+
+  // Test validity of social links
+  useEffect(() => {
+    setValidSocialLinkOne(!socialLinkOne || SOCIAL_LINK_REGEX.test(socialLinkOne));
+  }, [socialLinkOne]);
+  useEffect(() => {
+    setValidSocialLinkTwo(!socialLinkTwo || SOCIAL_LINK_REGEX.test(socialLinkTwo));
+  }, [socialLinkTwo]);
+  useEffect(() => {
+    setValidSocialLinkThree(!socialLinkThree || SOCIAL_LINK_REGEX.test(socialLinkThree));
+  }, [socialLinkThree]);
+  useEffect(() => {
+    setValidSocialLinks(validSocialLinkOne && validSocialLinkTwo && validSocialLinkThree);
+  }, [validSocialLinkOne, validSocialLinkTwo, validSocialLinkThree, setValidSocialLinks]);
+
+  // Create social link list
+  useEffect(() => {
+    const links = [socialLinkOne, socialLinkTwo, socialLinkThree].filter((link) => link !== "");
+    setSocialLink(links);
+  }, [socialLinkOne, socialLinkTwo, socialLinkThree, setSocialLink]);
+
+  return (
+    <div className="flex flex-col">
+      <label className="label pb-0 font-satoshi font-bold">Social Links</label>
+      <div className="flex flex-col space-y-2">
+        <div className="flex flex-row space-x-1.5">
+          <FontAwesomeIcon icon={faLink} className="self-center text-gray-400" />
+          <input
+            type="text"
+            placeholder="www.example.com"
+            id="sociallinkone"
+            maxLength={100}
+            className={`grow truncate rounded-lg border border-gray-400 p-1 pl-2 text-sm focus:border-white ${
+              validSocialLinkOne || !socialLinkOne ? "bg-base-200" : "bg-input-error"
+            }`}
+            autoComplete="off"
+            onFocus={() => setSocialLinkOneFocused(true)}
+            onBlur={() => setSocialLinkOneFocused(false)}
+            onChange={(e) => setSocialLinkOne(e.target.value)}
+            value={isSocialLinkOneFocused ? socialLinkOne : formatSocialLink(socialLinkOne)}
+          />
+        </div>
+        <div className="flex flex-row space-x-1.5">
+          <FontAwesomeIcon icon={faLink} className="self-center text-gray-400" />
+          <input
+            type="text"
+            placeholder="www.example.com"
+            id="sociallinktwo"
+            maxLength={100}
+            className={`grow truncate rounded-lg border border-gray-400 p-1 pl-2 text-sm focus:border-white ${
+              validSocialLinkTwo || !socialLinkTwo ? "bg-base-200" : "bg-input-error"
+            }`}
+            autoComplete="off"
+            onFocus={() => setSocialLinkTwoFocused(true)}
+            onBlur={() => setSocialLinkTwoFocused(false)}
+            onChange={(e) => setSocialLinkTwo(e.target.value)}
+            value={isSocialLinkTwoFocused ? socialLinkTwo : formatSocialLink(socialLinkTwo)}
+          />
+        </div>
+        <div className="flex flex-row space-x-1.5">
+          <FontAwesomeIcon icon={faLink} className="self-center text-gray-400" />
+          <input
+            type="text"
+            placeholder="www.example.com"
+            id="sociallinkthree"
+            maxLength={100}
+            className={`grow truncate rounded-lg border border-gray-400 p-1 pl-2 text-sm focus:border-white ${
+              validSocialLinkThree || !socialLinkThree ? "bg-base-200" : "bg-input-error"
+            }`}
+            autoComplete="off"
+            onFocus={() => setSocialLinkThreeFocused(true)}
+            onBlur={() => setSocialLinkThreeFocused(false)}
+            onChange={(e) => setSocialLinkThree(e.target.value)}
+            value={isSocialLinkThreeFocused ? socialLinkThree : formatSocialLink(socialLinkThree)}
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const PronounsField = ({
+  pronouns,
+  setPronouns,
+  validPronouns,
+  setValidPronouns,
+}: PronounsFieldProps) => {
+  // Check if user's pronouns are custom
+  const isPronounsDefault = DEFAULT_PRONOUNS.some(
+    (defaultPronoun) => defaultPronoun[0] === pronouns[0] && defaultPronoun[1] === pronouns[1],
+  );
+  const [isCustomSelected, setIsCustomSelected] = useState(!isPronounsDefault);
+  const [customOne, setCustomOne] = useState(isPronounsDefault ? "" : pronouns[0]);
+  const [customTwo, setCustomTwo] = useState(isPronounsDefault ? "" : pronouns[1]);
+
+  // Test validity of custom pronouns
+  useEffect(() => {
+    setValidPronouns(
+      isCustomSelected ? PRONOUNS_REGEX.test(customOne) && PRONOUNS_REGEX.test(customTwo) : true,
+    );
+  }, [customOne, customTwo, setValidPronouns, isCustomSelected]);
+
+  useEffect(() => {
+    if (isCustomSelected) {
+      setPronouns([customOne, customTwo]);
+    }
+  }, [customOne, customTwo, isCustomSelected, setPronouns]);
+
+  const setCustomPronounDefault = () => {
+    setCustomOne("");
+    setCustomTwo("");
+  };
+
+  const closeDropdown = () => {
+    const elem = document.activeElement as HTMLElement;
+    elem?.blur();
+  };
+
+  return (
+    <div className="flex flex-col">
+      <label className="label pb-0 font-satoshi font-bold">Pronouns</label>
+      <div className="dropdown dropdown-end">
+        <div
+          tabIndex={0}
+          role="button"
+          className="btn btn-sm flex w-full grow flex-col items-center rounded-lg border border-gray-400 pl-2.5 text-sm hover:border-white focus:border-white"
+        >
+          <p className="self-start">
+            {isCustomSelected ? "custom" : formatPronouns(pronouns) || "Select Pronouns"}
+          </p>
+          <FontAwesomeIcon icon={faCaretDown} className="h-4 w-4 self-end" />
+        </div>
+        <ul
+          tabIndex={0}
+          className="menu dropdown-content menu-sm z-[3] mt-2 w-full rounded-xl border border-white bg-base-100 p-[0.3rem] shadow"
+        >
+          <li
+            onClick={() => {
+              setPronouns(["", ""]);
+              setCustomPronounDefault();
+              setIsCustomSelected(false);
+              closeDropdown();
+            }}
+          >
+            <a>don&apos;t specify</a>
+          </li>
+          {DEFAULT_PRONOUNS.map((pronoun, index) => (
+            <li
+              key={index}
+              onClick={() => {
+                setPronouns(pronoun);
+                setCustomPronounDefault();
+                setIsCustomSelected(false);
+                closeDropdown();
+              }}
+            >
+              <a>{formatPronouns(pronoun)}</a>
+            </li>
+          ))}
+          <li
+            onClick={() => {
+              closeDropdown();
+              setIsCustomSelected(true);
+            }}
+          >
+            <a>custom</a>
+          </li>
+        </ul>
+      </div>
+      {isCustomSelected && (
+        <div className="mt-2 flex items-center space-x-1">
+          <input
+            type="text"
+            placeholder="they"
+            maxLength={6}
+            className={`min-w-0 flex-1 rounded-lg border border-gray-400 p-1 pl-2.5 text-sm focus:border-white ${
+              validPronouns || (!customOne && !customTwo) ? "bg-base-200" : "bg-input-error"
+            }`}
+            id="custompronounone"
+            autoComplete="off"
+            onChange={(e) => setCustomOne(e.target.value)}
+            value={customOne}
+          />
+          <a className="font-satoshi text-gray-500">/</a>
+          <input
+            type="text"
+            placeholder="them"
+            maxLength={6}
+            className={`min-w-0 flex-1 rounded-lg border border-gray-400 p-1 pl-2.5 text-sm focus:border-white ${
+              validPronouns || (!customOne && !customTwo) ? "bg-base-200" : "bg-input-error"
+            }`}
+            id="custompronountwo"
+            autoComplete="off"
+            onChange={(e) => setCustomTwo(e.target.value)}
+            value={customTwo}
+          />
+        </div>
+      )}
+    </div>
+  );
+};
+
+const EditProfileForm = ({ toggleEditProfile, userProfile }: EditProfileComponentProps) => {
+  const [displayName, setDisplayName] = useState(userProfile.displayName);
+  const [validDisplayName, setValidDisplayName] = useState(true);
+  const [pronouns, setPronouns] = useState(userProfile.pronouns);
+  const [validPronouns, setValidPronouns] = useState(true);
+  const [bio, setBio] = useState(userProfile.bio);
+  const [validBio, setValidBio] = useState(true);
+  const [socialLinks, setSocialLinks] = useState(userProfile.socialLinks);
+  const [validSocialLinks, setValidSocialLinks] = useState(true);
+  const [isSavable, setIsSavable] = useState(false);
+
+  // Check validity of form fields
+  useEffect(() => {
+    setValidDisplayName(DISPLAY_NAME_REGEX.test(displayName));
+  }, [displayName]);
+  useEffect(() => {
+    setValidBio(BIO_REGEX.test(bio));
+  }, [bio]);
+  useEffect(() => {
+    setIsSavable(validDisplayName && validPronouns && validBio && validSocialLinks);
+  }, [validDisplayName, validPronouns, validBio, validSocialLinks]);
+
+  const setDefault = () => {
+    setDisplayName(userProfile.displayName);
+    setValidDisplayName(true);
+    setPronouns(userProfile.pronouns);
+    setValidPronouns(true);
+    setBio(userProfile.bio);
+    setValidBio(true);
+    setSocialLinks(userProfile.socialLinks);
+    setValidSocialLinks(true);
+  };
+
+  const closeModal = () => {
+    const element = document.getElementById("editprofilemodal");
+    if (element instanceof HTMLDialogElement) {
+      element.close();
+      toggleEditProfile();
+    }
+  };
+
+  const handleCancel = () => {
+    setDefault();
+    closeModal();
+  };
+
+  const handleSave = () => {
+    if (!isSavable) return;
+    setDefault();
+    closeModal();
+  };
+
+  return (
+    <div className="flex w-full flex-grow flex-col">
+      <h2 className="text-center font-clashgrotesk text-2xl font-medium">Edit Profile</h2>
+      <div className="avatar mask self-center">
+        <Image
+          src={adjustImageUrl(userProfile.profilePicture, DEFAULT_IMAGE_SIZE)}
+          alt="Profile"
+          className="rounded-[2.5rem]"
+          width={DEFAULT_IMAGE_SIZE}
+          height={DEFAULT_IMAGE_SIZE}
+          quality={100}
+        />
+      </div>
+      <div className="form-control">
+        <label className="label pb-0 font-satoshi font-bold">Display Name</label>
+        <input
+          type="text"
+          placeholder="Display Name"
+          maxLength={20}
+          className={`grow rounded-lg border border-gray-400 p-1 pl-2.5 text-sm focus:border-white ${
+            validDisplayName || !displayName ? "bg-base-200" : "bg-input-error"
+          }`}
+          id="displayname"
+          autoComplete="off"
+          onChange={(e) => setDisplayName(e.target.value)}
+          value={displayName}
+        />
+        <PronounsField
+          pronouns={pronouns}
+          setPronouns={setPronouns}
+          validPronouns={validPronouns}
+          setValidPronouns={setValidPronouns}
+        />
+        <label className="label pb-0 font-satoshi font-bold">Bio</label>
+        <textarea
+          placeholder="Bio"
+          maxLength={150}
+          className={`h-20 grow rounded-lg border border-gray-400 p-1 pl-2.5 text-sm focus:border-white ${
+            validBio || !bio ? "bg-base-200" : "bg-input-error"
+          }`}
+          id="bio"
+          autoComplete="off"
+          onChange={(e) => setBio(e.target.value)}
+          value={bio}
+        />
+        <SocialLinksField
+          socialLinks={socialLinks}
+          setSocialLink={setSocialLinks}
+          setValidSocialLinks={setValidSocialLinks}
+        />
+      </div>
+      <div className="mt-4">
+        <form method="dialog" className="flex grow flex-row justify-center space-x-8">
+          <button className="btn btn-neutral btn-sm" onClick={handleCancel}>
+            cancel
+          </button>
+          <button
+            className={`btn btn-success btn-sm ${isSavable ? "" : "btn-disabled"}`}
+            onClick={handleSave}
+          >
+            save profile
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+const EditProfile = ({ open, toggleEditProfile, userProfile }: EditProfileProps) => {
+  return (
+    <dialog id="editprofilemodal" className="modal modal-middle" open={open}>
+      <div className="modal-box flex w-80 flex-col bg-base-200 pb-4 pt-4">
+        {userProfile ? (
+          <EditProfileForm toggleEditProfile={toggleEditProfile} userProfile={userProfile} />
+        ) : (
+          <Loading />
+        )}
+      </div>
+    </dialog>
+  );
+};
+
+export default EditProfile;
