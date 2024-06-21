@@ -19,7 +19,7 @@ const DEFAULT_PRONOUNS: [string, string][] = [
 
 const DISPLAY_NAME_REGEX = /^[A-Za-z0-9À-ÖØ-öø-ÿ'-. @&#:]{2,20}$/;
 const BIO_REGEX = /^[A-Za-z0-9À-ÖØ-öø-ÿ'-.?!@#$%^&*()_+=\[\]{}|\\;:"<>,/ \n]{0,150}$/;
-const PRONOUNS_REGEX = /^[A-Za-zÀ-ÖØ-öø-ÿ'-. ]{1,6}$/;
+const PRONOUNS_REGEX = /^[A-Za-zÀ-ÖØ-öø-ÿ]{1,6}$/;
 const SOCIAL_LINK_REGEX =
   /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/;
 
@@ -43,7 +43,6 @@ interface PronounsFieldProps {
   setValidPronouns: (validPronouns: boolean) => void;
   isCustomSelected: boolean;
   setIsCustomSelected: (isCustomSelected: boolean) => void;
-  isPronounsDefault: boolean;
 }
 
 interface SocialLinksFieldProps {
@@ -154,10 +153,9 @@ const PronounsField = ({
   setValidPronouns,
   isCustomSelected,
   setIsCustomSelected,
-  isPronounsDefault,
 }: PronounsFieldProps) => {
-  const [customOne, setCustomOne] = useState(isPronounsDefault ? "" : pronouns[0]);
-  const [customTwo, setCustomTwo] = useState(isPronounsDefault ? "" : pronouns[1]);
+  const [customOne, setCustomOne] = useState(!isCustomSelected ? "" : pronouns[0]);
+  const [customTwo, setCustomTwo] = useState(!isCustomSelected ? "" : pronouns[1]);
 
   // Test validity of custom pronouns
   useEffect(() => {
@@ -263,7 +261,7 @@ const EditProfileForm = ({
   userProfile,
   editUserProfile,
 }: EditProfileComponentProps) => {
-  const { handleModal } = useGlobalModalContext();
+  const { handleModalError } = useGlobalModalContext();
   const [displayName, setDisplayName] = useState(userProfile.displayName);
   const [validDisplayName, setValidDisplayName] = useState(true);
   const [pronouns, setPronouns] = useState(userProfile.pronouns);
@@ -273,12 +271,13 @@ const EditProfileForm = ({
   const [socialLinks, setSocialLinks] = useState(userProfile.socialLinks);
   const [validSocialLinks, setValidSocialLinks] = useState(true);
   const [isSavable, setIsSavable] = useState(false);
-
-  // Check if user's pronouns are custom
-  const isPronounsDefault = DEFAULT_PRONOUNS.some(
-    (defaultPronoun) => defaultPronoun[0] === pronouns[0] && defaultPronoun[1] === pronouns[1],
+  const [isCustomSelected, setIsCustomSelected] = useState(
+    !DEFAULT_PRONOUNS.some(
+      (defaultPronoun) =>
+        defaultPronoun[0] === userProfile.pronouns[0] &&
+        defaultPronoun[1] === userProfile.pronouns[1],
+    ),
   );
-  const [isCustomSelected, setIsCustomSelected] = useState(!isPronounsDefault);
 
   // Check validity of form fields
   useEffect(() => {
@@ -300,7 +299,13 @@ const EditProfileForm = ({
     setValidBio(true);
     setSocialLinks(userProfile.socialLinks);
     setValidSocialLinks(true);
-    setIsCustomSelected(!isPronounsDefault);
+    setIsCustomSelected(
+      !DEFAULT_PRONOUNS.some(
+        (defaultPronoun) =>
+          defaultPronoun[0] === userProfile.pronouns[0] &&
+          defaultPronoun[1] === userProfile.pronouns[1],
+      ),
+    );
   };
 
   const closeModal = () => {
@@ -335,10 +340,10 @@ const EditProfileForm = ({
       };
       await updateUserProfile(newUserProfile);
       editUserProfile(newUserProfile);
-      setDefault();
+    } catch (error: any) {
+      handleModalError(error);
+    } finally {
       closeModal();
-    } catch {
-      handleModal("User Edit Failed", "User's edited profile cannot be saved", "error");
     }
   };
 
@@ -376,7 +381,6 @@ const EditProfileForm = ({
           setValidPronouns={setValidPronouns}
           isCustomSelected={isCustomSelected}
           setIsCustomSelected={setIsCustomSelected}
-          isPronounsDefault={isPronounsDefault}
         />
         <label className="label pb-0 font-satoshi font-bold">Bio</label>
         <textarea

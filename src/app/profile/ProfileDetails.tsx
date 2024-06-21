@@ -2,7 +2,12 @@
 import { useState } from "react";
 import { useAuthContext } from "@/src/context/Authentication";
 import { useGlobalModalContext } from "@/src/context/GlobalModal";
-import { adjustImageUrl, formatPronouns, formatSocialLink } from "@/src/helper/helperFunctions";
+import {
+  adjustImageUrl,
+  ensureHttpsLink,
+  formatPronouns,
+  formatSocialLink,
+} from "@/src/helper/helperFunctions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLink } from "@fortawesome/free-solid-svg-icons";
 import Loading from "@/src/components/Loading";
@@ -78,7 +83,7 @@ const ProfileExtraDetails = () => {
 
   return (
     <>
-      {userProfile.bio && userProfile.socialLinks.length !== 0 && (
+      {(userProfile.bio || userProfile.socialLinks.length !== 0) && (
         <hr className="my-4 border-t border-gray-400" />
       )}
       <div className="flex flex-col space-y-2">
@@ -90,7 +95,7 @@ const ProfileExtraDetails = () => {
               {userProfile.socialLinks.map((link, index) => (
                 <Link
                   key={index}
-                  href={link}
+                  href={ensureHttpsLink(link)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn btn-outline btn-sm justify-start rounded-xl"
