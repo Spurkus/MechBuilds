@@ -200,16 +200,6 @@ const PronounsField = ({
           tabIndex={0}
           className="menu dropdown-content menu-sm z-[3] mt-2 w-full rounded-xl border border-white bg-base-100 p-[0.3rem] shadow"
         >
-          <li
-            onClick={() => {
-              setPronouns(["", ""]);
-              setCustomPronounDefault();
-              setIsCustomSelected(false);
-              closeDropdown();
-            }}
-          >
-            <a>don&apos;t specify</a>
-          </li>
           {DEFAULT_PRONOUNS.map((pronoun, index) => (
             <li
               key={index}
@@ -220,7 +210,9 @@ const PronounsField = ({
                 closeDropdown();
               }}
             >
-              <a>{formatPronouns(pronoun)}</a>
+              <a>
+                {pronoun[0] === "" && pronoun[1] === "" ? "don't specify" : formatPronouns(pronoun)}
+              </a>
             </li>
           ))}
           <li
@@ -308,7 +300,7 @@ const EditProfileForm = ({
     setValidBio(true);
     setSocialLinks(userProfile.socialLinks);
     setValidSocialLinks(true);
-    setIsCustomSelected(isPronounsDefault);
+    setIsCustomSelected(!isPronounsDefault);
   };
 
   const closeModal = () => {
