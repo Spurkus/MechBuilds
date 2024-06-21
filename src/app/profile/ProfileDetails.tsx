@@ -36,7 +36,7 @@ const ProfileBaseDetails = () => {
   };
 
   return (
-    <div className="flex flex-grow flex-col space-y-2">
+    <div className="flex flex-col space-y-2">
       <div className="avatar mask self-center">
         <Image
           src={adjustImageUrl(profilePicture, DEFAULT_IMAGE_SIZE)}
@@ -69,36 +69,45 @@ const ProfileBaseDetails = () => {
 
 const ProfileExtraDetails = () => {
   const { userProfile } = useAuthContext();
-
-  if (!userProfile) return <Loading />;
+  if (!userProfile)
+    return (
+      <div className="mt-6 flex grow flex-col items-center">
+        <Loading />
+      </div>
+    );
 
   return (
-    <div className="flex flex-col space-y-2">
-      {userProfile.bio && <p className="font-satoshi font-light leading-5">{userProfile.bio}</p>}
-      {userProfile.socialLinks && (
-        <div className="flex flex-col space-y-1 font-light">
-          <h3 className="font-satoshi font-bold">Social Links</h3>
-          <div className="flex flex-col space-y-2">
-            {userProfile.socialLinks.map((link, index) => (
-              <Link
-                key={index}
-                href={link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn btn-outline btn-sm justify-start rounded-xl"
-              >
-                <div className="flex flex-row space-x-1">
-                  <FontAwesomeIcon icon={faLink} className="mt-2" />
-                  <p className="max-w-[11rem] truncate py-2 font-satoshi">
-                    {formatSocialLink(link)}
-                  </p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
+    <>
+      {userProfile.bio && userProfile.socialLinks.length !== 0 && (
+        <hr className="my-4 border-t border-gray-400" />
       )}
-    </div>
+      <div className="flex flex-col space-y-2">
+        {userProfile.bio && <p className="font-satoshi font-light leading-5">{userProfile.bio}</p>}
+        {userProfile.socialLinks.length !== 0 && (
+          <div className="flex flex-col space-y-1 font-light">
+            <h3 className="font-satoshi font-bold">Social Links</h3>
+            <div className="flex flex-col space-y-2">
+              {userProfile.socialLinks.map((link, index) => (
+                <Link
+                  key={index}
+                  href={link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-outline btn-sm justify-start rounded-xl"
+                >
+                  <div className="flex flex-row space-x-1">
+                    <FontAwesomeIcon icon={faLink} className="mt-2" />
+                    <p className="max-w-[11rem] truncate py-2 font-satoshi">
+                      {formatSocialLink(link)}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 
@@ -106,7 +115,6 @@ const ProfileDetails = () => {
   return (
     <div className="flex flex-grow flex-col rounded-[3rem] bg-base-300 p-6">
       <ProfileBaseDetails />
-      <hr className="my-4 border-t border-gray-400" />
       <ProfileExtraDetails />
     </div>
   );
