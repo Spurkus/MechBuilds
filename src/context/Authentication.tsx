@@ -49,6 +49,7 @@ export interface AuthContextType {
   displayName: string | null;
   pronouns: [string, string] | null;
   profilePicture: string | null;
+  editUserProfile: (newUserProfile: UserProfileType) => void;
   signInWithGoogle: () => void;
   logout: () => void;
 }
@@ -97,6 +98,14 @@ export const AuthContextProvider = ({
     if (newProfilePicture !== null) saveProfilePicture(newProfilePicture);
     if (newDisplayName !== null) saveDisplayName(newDisplayName);
     if (newPronouns !== null) savePronouns(newPronouns);
+  };
+
+  const editUserProfile = async (newUserProfile: UserProfileType) => {
+    setUserProfile(newUserProfile);
+    setDisplayName(newUserProfile.displayName);
+    saveDisplayName(newUserProfile.displayName);
+    setPronouns(newUserProfile.pronouns);
+    savePronouns(newUserProfile.pronouns);
   };
 
   const signInWithGoogle = async () => {
@@ -191,6 +200,7 @@ export const AuthContextProvider = ({
         displayName,
         pronouns,
         profilePicture,
+        editUserProfile,
         signInWithGoogle,
         logout,
       }}

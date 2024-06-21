@@ -13,7 +13,8 @@ import EditProfile from "./EditProfile";
 export const DEFAULT_IMAGE_SIZE = 1000;
 
 const ProfileBaseDetails = () => {
-  const { username, displayName, pronouns, profilePicture, userProfile } = useAuthContext();
+  const { username, displayName, pronouns, profilePicture, userProfile, editUserProfile } =
+    useAuthContext();
   const { handleModalError } = useGlobalModalContext();
   const [editProfile, setEditProfile] = useState(false);
 
@@ -60,6 +61,7 @@ const ProfileBaseDetails = () => {
         open={editProfile}
         toggleEditProfile={toggleEditProfile}
         userProfile={userProfile}
+        editUserProfile={editUserProfile}
       />
     </div>
   );

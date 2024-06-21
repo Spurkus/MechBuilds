@@ -6,6 +6,8 @@ import { UserProfileType } from "@/src/context/Authentication";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown, faLink } from "@fortawesome/free-solid-svg-icons";
 import { formatPronouns } from "@/src/helper/helperFunctions";
+import { updateUserProfile } from "@/src/helper/firestoreFunctions";
+import { useGlobalModalContext } from "@/src/context/GlobalModal";
 
 const DEFAULT_IMAGE_SIZE = 1000;
 const DEFAULT_PRONOUNS: [string, string][] = [
@@ -24,11 +26,13 @@ interface EditProfileProps {
   open: boolean;
   toggleEditProfile: () => void;
   userProfile: UserProfileType | null;
+  editUserProfile: (newUserProfile: UserProfileType) => void;
 }
 
 interface EditProfileComponentProps {
   toggleEditProfile: () => void;
   userProfile: UserProfileType;
+  editUserProfile: (newUserProfile: UserProfileType) => void;
 }
 
 interface PronounsFieldProps {
@@ -260,7 +264,12 @@ const PronounsField = ({
   );
 };
 
-const EditProfileForm = ({ toggleEditProfile, userProfile }: EditProfileComponentProps) => {
+const EditProfileForm = ({
+  toggleEditProfile,
+  userProfile,
+  editUserProfile,
+}: EditProfileComponentProps) => {
+  const { handleModal } = useGlobalModalContext();
   const [displayName, setDisplayName] = useState(userProfile.displayName);
   const [validDisplayName, setValidDisplayName] = useState(true);
   const [pronouns, setPronouns] = useState(userProfile.pronouns);
@@ -306,10 +315,30 @@ const EditProfileForm = ({ toggleEditProfile, userProfile }: EditProfileComponen
     closeModal();
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!isSavable) return;
-    setDefault();
-    closeModal();
+    try {
+      const newUserProfile: UserProfileType = {
+        uid: userProfile.uid,
+        email: userProfile.email,
+        username: userProfile.username,
+        displayName: displayName,
+        profilePicture: userProfile.profilePicture,
+        premium: userProfile.premium,
+        status: userProfile.status,
+        joinedDate: userProfile.joinedDate,
+        lastActive: new Date(),
+        bio: bio,
+        socialLinks: socialLinks,
+        pronouns: pronouns,
+      };
+      await updateUserProfile(newUserProfile);
+      editUserProfile(newUserProfile);
+      setDefault();
+      closeModal();
+    } catch {
+      handleModal("User Edit Failed", "User's edited profile cannot be saved", "error");
+    }
   };
 
   return (
@@ -380,12 +409,21 @@ const EditProfileForm = ({ toggleEditProfile, userProfile }: EditProfileComponen
   );
 };
 
-const EditProfile = ({ open, toggleEditProfile, userProfile }: EditProfileProps) => {
+const EditProfile = ({
+  open,
+  toggleEditProfile,
+  userProfile,
+  editUserProfile,
+}: EditProfileProps) => {
   return (
     <dialog id="editprofilemodal" className="modal modal-middle" open={open}>
       <div className="modal-box flex w-80 flex-col bg-base-200 pb-4 pt-4">
         {userProfile ? (
-          <EditProfileForm toggleEditProfile={toggleEditProfile} userProfile={userProfile} />
+          <EditProfileForm
+            toggleEditProfile={toggleEditProfile}
+            userProfile={userProfile}
+            editUserProfile={editUserProfile}
+          />
         ) : (
           <Loading />
         )}
