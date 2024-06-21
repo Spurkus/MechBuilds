@@ -74,11 +74,7 @@ const ProfileExtraDetails = () => {
 
   return (
     <div className="flex flex-col space-y-2">
-      {userProfile.bio && (
-        <div className="flex flex-col space-y-1 font-light">
-          <p>{userProfile.bio}</p>
-        </div>
-      )}
+      {userProfile.bio && <p className="font-satoshi font-light leading-5">{userProfile.bio}</p>}
       {userProfile.socialLinks && (
         <div className="flex flex-col space-y-1 font-light">
           <h3 className="font-satoshi font-bold">Social Links</h3>
