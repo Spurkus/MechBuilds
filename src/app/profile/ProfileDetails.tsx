@@ -113,7 +113,7 @@ const ProfileExtraDetails = () => {
 
 const ProfileDetails = () => {
   return (
-    <div className="flex flex-grow flex-col rounded-[3rem] bg-base-300 p-6">
+    <div className="flex w-full flex-col rounded-[3rem] bg-base-300 p-6">
       <ProfileBaseDetails />
       <ProfileExtraDetails />
     </div>

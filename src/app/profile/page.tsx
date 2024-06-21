@@ -22,7 +22,7 @@ const Profile = () => {
   } else {
     return (
       <div className="flex w-full space-x-6">
-        <div className="flex w-[28%] p-2">
+        <div className="w-[28%] p-2">
           <ProfileDetails />
         </div>
         <div className="flex w-[72%] items-center justify-center text-center">
