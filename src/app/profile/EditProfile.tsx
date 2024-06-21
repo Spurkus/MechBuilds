@@ -40,6 +40,9 @@ interface PronounsFieldProps {
   setPronouns: (pronouns: [string, string]) => void;
   validPronouns: boolean;
   setValidPronouns: (validPronouns: boolean) => void;
+  isCustomSelected: boolean;
+  setIsCustomSelected: (isCustomSelected: boolean) => void;
+  isPronounsDefault: boolean;
 }
 
 interface SocialLinksFieldProps {
@@ -148,12 +151,10 @@ const PronounsField = ({
   setPronouns,
   validPronouns,
   setValidPronouns,
+  isCustomSelected,
+  setIsCustomSelected,
+  isPronounsDefault,
 }: PronounsFieldProps) => {
-  // Check if user's pronouns are custom
-  const isPronounsDefault = DEFAULT_PRONOUNS.some(
-    (defaultPronoun) => defaultPronoun[0] === pronouns[0] && defaultPronoun[1] === pronouns[1],
-  );
-  const [isCustomSelected, setIsCustomSelected] = useState(!isPronounsDefault);
   const [customOne, setCustomOne] = useState(isPronounsDefault ? "" : pronouns[0]);
   const [customTwo, setCustomTwo] = useState(isPronounsDefault ? "" : pronouns[1]);
 
@@ -280,6 +281,12 @@ const EditProfileForm = ({
   const [validSocialLinks, setValidSocialLinks] = useState(true);
   const [isSavable, setIsSavable] = useState(false);
 
+  // Check if user's pronouns are custom
+  const isPronounsDefault = DEFAULT_PRONOUNS.some(
+    (defaultPronoun) => defaultPronoun[0] === pronouns[0] && defaultPronoun[1] === pronouns[1],
+  );
+  const [isCustomSelected, setIsCustomSelected] = useState(!isPronounsDefault);
+
   // Check validity of form fields
   useEffect(() => {
     setValidDisplayName(DISPLAY_NAME_REGEX.test(displayName));
@@ -300,6 +307,7 @@ const EditProfileForm = ({
     setValidBio(true);
     setSocialLinks(userProfile.socialLinks);
     setValidSocialLinks(true);
+    setIsCustomSelected(isPronounsDefault);
   };
 
   const closeModal = () => {
@@ -373,6 +381,9 @@ const EditProfileForm = ({
           setPronouns={setPronouns}
           validPronouns={validPronouns}
           setValidPronouns={setValidPronouns}
+          isCustomSelected={isCustomSelected}
+          setIsCustomSelected={setIsCustomSelected}
+          isPronounsDefault={isPronounsDefault}
         />
         <label className="label pb-0 font-satoshi font-bold">Bio</label>
         <textarea
