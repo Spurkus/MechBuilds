@@ -323,6 +323,7 @@ const EditProfileForm = ({
   );
   const [selectedProfilePicture, setSelectedProfilePicture] = useState<File | null>(null);
   const [isSavable, setIsSavable] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   // Check validity of form fields
   useEffect(() => {
@@ -362,7 +363,8 @@ const EditProfileForm = ({
   };
 
   const handleSave = async () => {
-    if (!isSavable) return;
+    if (!isSavable || loading) return;
+    setLoading(true);
     try {
       const profilePictureURL = await uploadProfilePicture(selectedProfilePicture, userProfile);
       const newUserProfile: UserProfileType = {
@@ -380,13 +382,25 @@ const EditProfileForm = ({
         pronouns: pronouns,
       };
       await updateUserProfile(newUserProfile);
-      editUserProfile(newUserProfile);
+      await editUserProfile(newUserProfile);
     } catch (error: any) {
       handleModalError(error);
     } finally {
-      closeModal();
+      setTimeout(() => {
+        setLoading(false);
+        closeModal();
+      }, 1500);
     }
   };
+
+  // Saving profile loading state
+  if (loading)
+    return (
+      <div className="flex w-full flex-grow flex-col space-y-2">
+        <h2 className="text-center font-clashgrotesk text-2xl font-medium">Saving Profile</h2>
+        <Loading />
+      </div>
+    );
 
   return (
     <div className="flex w-full flex-grow flex-col">
