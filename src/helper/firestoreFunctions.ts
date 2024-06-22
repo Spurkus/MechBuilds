@@ -22,7 +22,7 @@ export const updateUserProfile = async (userProfile: UserProfileType) => {
 };
 
 export const uploadProfilePicture = async (file: File | null, userProfile: UserProfileType) => {
-  if (!file) return userProfile.uid;
+  if (!file) return userProfile.profilePicture;
   const storage = getStorage();
   const storageRef = ref(storage, `profilePictures/${userProfile.uid}`);
   const snapshot = await uploadBytes(storageRef, file);
