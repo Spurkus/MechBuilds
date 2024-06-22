@@ -372,7 +372,7 @@ const EditProfileForm = ({
         email: userProfile.email,
         username: userProfile.username,
         displayName: displayName,
-        profilePicture: profilePictureURL,
+        profilePicture: profilePictureURL ? profilePictureURL : userProfile.profilePicture,
         premium: userProfile.premium,
         status: userProfile.status,
         joinedDate: userProfile.joinedDate,
