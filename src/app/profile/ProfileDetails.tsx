@@ -46,7 +46,7 @@ const ProfileBaseDetails = () => {
         <Image
           src={adjustImageUrl(profilePicture, DEFAULT_IMAGE_SIZE)}
           alt="Profile"
-          className="rounded-[2.5rem]"
+          className="aspect-square rounded-[2.5rem]"
           width={DEFAULT_IMAGE_SIZE}
           height={DEFAULT_IMAGE_SIZE}
           quality={100}
