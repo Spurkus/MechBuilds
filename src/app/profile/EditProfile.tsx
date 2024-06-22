@@ -6,7 +6,7 @@ import { UserProfileType } from "@/src/context/Authentication";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown, faLink } from "@fortawesome/free-solid-svg-icons";
 import { formatPronouns } from "@/src/helper/helperFunctions";
-import { updateUserProfile } from "@/src/helper/firestoreFunctions";
+import { updateUserProfile, uploadProfilePicture } from "@/src/helper/firestoreFunctions";
 import { useGlobalModalContext } from "@/src/context/GlobalModal";
 
 const DEFAULT_IMAGE_SIZE = 1000;
@@ -50,6 +50,53 @@ interface SocialLinksFieldProps {
   setSocialLink: (socialLinks: string[]) => void;
   setValidSocialLinks: (validSocialLinks: boolean) => void;
 }
+
+interface ProfilePictureFieldProps {
+  selectedProfilePicture: File | null;
+  setSelectedProfilePicture: (selectedProfilePicture: File | null) => void;
+  defaultProfilePicture: string;
+}
+
+const ProfilePictureField = ({
+  selectedProfilePicture,
+  setSelectedProfilePicture,
+  defaultProfilePicture,
+}: ProfilePictureFieldProps) => {
+  const [isHovering, setIsHovering] = useState(false);
+  return (
+    <div
+      className="avatar mask flex w-full grow self-center"
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
+    >
+      <label className="relative w-full grow cursor-pointer">
+        <input
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={(e) => setSelectedProfilePicture(e.target.files?.[0] || null)}
+        />
+        <div
+          className={`${isHovering ? "flex" : "hidden"} absolute inset-0 items-center justify-center rounded-[2.5rem] bg-black bg-opacity-60`}
+        >
+          <span className="text font-satoshi font-bold text-white">Change Profile Picture</span>
+        </div>
+        <Image
+          src={
+            selectedProfilePicture
+              ? URL.createObjectURL(selectedProfilePicture)
+              : adjustImageUrl(defaultProfilePicture, DEFAULT_IMAGE_SIZE)
+          }
+          alt="Profile"
+          className="aspect-square rounded-[2.5rem]"
+          width={DEFAULT_IMAGE_SIZE}
+          height={DEFAULT_IMAGE_SIZE}
+          quality={100}
+        />
+      </label>
+    </div>
+  );
+};
 
 const SocialLinksField = ({
   socialLinks,
@@ -251,6 +298,12 @@ const PronounsField = ({
   );
 };
 
+const checkDefaultPronouns = (pronouns: [string, string]) => {
+  return DEFAULT_PRONOUNS.some(
+    (defaultPronoun) => defaultPronoun[0] === pronouns[0] && defaultPronoun[1] === pronouns[1],
+  );
+};
+
 const EditProfileForm = ({
   toggleEditProfile,
   userProfile,
@@ -265,14 +318,11 @@ const EditProfileForm = ({
   const [validBio, setValidBio] = useState(true);
   const [socialLinks, setSocialLinks] = useState(userProfile.socialLinks);
   const [validSocialLinks, setValidSocialLinks] = useState(true);
-  const [isSavable, setIsSavable] = useState(false);
   const [isCustomSelected, setIsCustomSelected] = useState(
-    !DEFAULT_PRONOUNS.some(
-      (defaultPronoun) =>
-        defaultPronoun[0] === userProfile.pronouns[0] &&
-        defaultPronoun[1] === userProfile.pronouns[1],
-    ),
+    !checkDefaultPronouns(userProfile.pronouns),
   );
+  const [selectedProfilePicture, setSelectedProfilePicture] = useState<File | null>(null);
+  const [isSavable, setIsSavable] = useState(false);
 
   // Check validity of form fields
   useEffect(() => {
@@ -294,13 +344,8 @@ const EditProfileForm = ({
     setValidBio(true);
     setSocialLinks(userProfile.socialLinks);
     setValidSocialLinks(true);
-    setIsCustomSelected(
-      !DEFAULT_PRONOUNS.some(
-        (defaultPronoun) =>
-          defaultPronoun[0] === userProfile.pronouns[0] &&
-          defaultPronoun[1] === userProfile.pronouns[1],
-      ),
-    );
+    setSelectedProfilePicture(null);
+    setIsCustomSelected(!checkDefaultPronouns(userProfile.pronouns));
   };
 
   const closeModal = () => {
@@ -319,12 +364,13 @@ const EditProfileForm = ({
   const handleSave = async () => {
     if (!isSavable) return;
     try {
+      const profilePictureURL = await uploadProfilePicture(selectedProfilePicture, userProfile);
       const newUserProfile: UserProfileType = {
         uid: userProfile.uid,
         email: userProfile.email,
         username: userProfile.username,
         displayName: displayName,
-        profilePicture: userProfile.profilePicture,
+        profilePicture: profilePictureURL,
         premium: userProfile.premium,
         status: userProfile.status,
         joinedDate: userProfile.joinedDate,
@@ -345,16 +391,11 @@ const EditProfileForm = ({
   return (
     <div className="flex w-full flex-grow flex-col">
       <h2 className="text-center font-clashgrotesk text-2xl font-medium">Edit Profile</h2>
-      <div className="avatar mask self-center">
-        <Image
-          src={adjustImageUrl(userProfile.profilePicture, DEFAULT_IMAGE_SIZE)}
-          alt="Profile"
-          className="rounded-[2.5rem]"
-          width={DEFAULT_IMAGE_SIZE}
-          height={DEFAULT_IMAGE_SIZE}
-          quality={100}
-        />
-      </div>
+      <ProfilePictureField
+        selectedProfilePicture={selectedProfilePicture}
+        setSelectedProfilePicture={setSelectedProfilePicture}
+        defaultProfilePicture={userProfile.profilePicture}
+      />
       <div className="form-control">
         <label className="label pb-0 font-satoshi font-bold">Display Name</label>
         <input

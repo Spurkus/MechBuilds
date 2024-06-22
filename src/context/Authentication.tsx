@@ -31,6 +31,15 @@ export interface UserProfileType {
   pronouns: [string, string];
 }
 
+export interface EditUserProfileType {
+  displayName: string;
+  profilePicture: string;
+  lastActive: Date;
+  bio: string;
+  socialLinks: string[];
+  pronouns: [string, string];
+}
+
 export interface AuthContextProps {
   initialAuthenticated: boolean;
   initialUsername: string | null;
@@ -104,6 +113,8 @@ export const AuthContextProvider = ({
     setUserProfile(newUserProfile);
     setDisplayName(newUserProfile.displayName);
     saveDisplayName(newUserProfile.displayName);
+    setProfilePicture(newUserProfile.profilePicture);
+    saveProfilePicture(newUserProfile.profilePicture);
     setPronouns(newUserProfile.pronouns);
     savePronouns(newUserProfile.pronouns);
   };

@@ -42,7 +42,7 @@ const ProfileBaseDetails = () => {
 
   return (
     <div className="flex flex-col space-y-2">
-      <div className="avatar mask self-center">
+      <div className="avatar mask flex w-full grow self-center">
         <Image
           src={adjustImageUrl(profilePicture, DEFAULT_IMAGE_SIZE)}
           alt="Profile"
