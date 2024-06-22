@@ -43,6 +43,10 @@ interface PronounsFieldProps {
   setValidPronouns: (validPronouns: boolean) => void;
   isCustomSelected: boolean;
   setIsCustomSelected: (isCustomSelected: boolean) => void;
+  customOne: string;
+  setCustomOne: (customOne: string) => void;
+  customTwo: string;
+  setCustomTwo: (customTwo: string) => void;
 }
 
 interface SocialLinksFieldProps {
@@ -200,10 +204,11 @@ const PronounsField = ({
   setValidPronouns,
   isCustomSelected,
   setIsCustomSelected,
+  customOne,
+  setCustomOne,
+  customTwo,
+  setCustomTwo,
 }: PronounsFieldProps) => {
-  const [customOne, setCustomOne] = useState(!isCustomSelected ? "" : pronouns[0]);
-  const [customTwo, setCustomTwo] = useState(!isCustomSelected ? "" : pronouns[1]);
-
   // Test validity of custom pronouns
   useEffect(() => {
     setValidPronouns(
@@ -322,8 +327,10 @@ const EditProfileForm = ({
     !checkDefaultPronouns(userProfile.pronouns),
   );
   const [selectedProfilePicture, setSelectedProfilePicture] = useState<File | null>(null);
-  const [isSavable, setIsSavable] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [customOne, setCustomOne] = useState(!isCustomSelected ? "" : pronouns[0]);
+  const [customTwo, setCustomTwo] = useState(!isCustomSelected ? "" : pronouns[1]);
+  const [isSavable, setIsSavable] = useState(false);
 
   // Check validity of form fields
   useEffect(() => {
@@ -347,6 +354,9 @@ const EditProfileForm = ({
     setValidSocialLinks(true);
     setSelectedProfilePicture(null);
     setIsCustomSelected(!checkDefaultPronouns(userProfile.pronouns));
+    setCustomOne(checkDefaultPronouns(userProfile.pronouns) ? "" : pronouns[0]);
+    setCustomTwo(checkDefaultPronouns(userProfile.pronouns) ? "" : pronouns[1]);
+    setIsSavable(false);
   };
 
   const closeModal = () => {
@@ -431,6 +441,10 @@ const EditProfileForm = ({
           setValidPronouns={setValidPronouns}
           isCustomSelected={isCustomSelected}
           setIsCustomSelected={setIsCustomSelected}
+          customOne={customOne}
+          setCustomOne={setCustomOne}
+          customTwo={customTwo}
+          setCustomTwo={setCustomTwo}
         />
         <label className="label pb-0 font-satoshi font-bold">Bio</label>
         <textarea

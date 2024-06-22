@@ -41,6 +41,7 @@ const NavProfileMenu = ({ profilePicture = null, displayName = null }: NavProfil
 
   if (!profile) {
     handleModalError("User is invalid");
+    logout();
     return <AuthLoadingButton />;
   }
 
