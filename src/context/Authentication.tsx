@@ -13,6 +13,9 @@ import {
 } from "../helper/cookiesFunctions";
 import { createUserProfile } from "../helper/firestoreFunctions";
 
+export const DISPLAY_NAME_REGEX = /^[A-Za-z0-9À-ÖØ-öø-ÿ'-. @&#:]{2,15}$/;
+export const USERNAME_REGEX = /^[A-Za-z0-9_-]{2,15}$/;
+
 export type userStatus = "active" | "suspended" | "banned";
 export type userRole = "user" | "mod" | "admin";
 

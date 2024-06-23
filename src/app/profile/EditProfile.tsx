@@ -2,7 +2,12 @@ import Loading from "@/src/components/Loading";
 import Image from "next/image";
 import { useEffect, useState, useMemo } from "react";
 import { adjustImageUrl, formatSocialLink, closeDropdown } from "@/src/helper/helperFunctions";
-import { UserProfileType, EditUserProfileType, useAuthContext } from "@/src/context/Authentication";
+import {
+  UserProfileType,
+  EditUserProfileType,
+  useAuthContext,
+  DISPLAY_NAME_REGEX,
+} from "@/src/context/Authentication";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown, faLink } from "@fortawesome/free-solid-svg-icons";
 import { formatPronouns } from "@/src/helper/helperFunctions";
@@ -17,7 +22,6 @@ const DEFAULT_PRONOUNS: [string, string][] = [
   ["they", "them"],
 ];
 
-const DISPLAY_NAME_REGEX = /^[A-Za-z0-9À-ÖØ-öø-ÿ'-. @&#:]{2,20}$/;
 const BIO_REGEX = /^[A-Za-z0-9À-ÖØ-öø-ÿ'-.?!@#$%^&*()_+=\[\]{}|\\;:"<>,/ \n]{0,150}$/;
 const PRONOUNS_REGEX = /^[A-Za-zÀ-ÖØ-öø-ÿ]{1,6}$/;
 const SOCIAL_LINK_REGEX =
@@ -485,7 +489,7 @@ const EditProfileForm = ({
         <input
           type="text"
           placeholder="Display Name"
-          maxLength={20}
+          maxLength={15}
           className={`grow rounded-lg border border-gray-400 p-1 pl-2.5 text-sm focus:border-white ${
             validDisplayName || !displayName ? "bg-base-200" : "bg-input-error"
           }`}
