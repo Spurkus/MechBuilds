@@ -12,9 +12,11 @@ import {
   savePronouns,
 } from "../helper/cookiesFunctions";
 import { createUserProfile } from "../helper/firestoreFunctions";
+import { formatDisplayName, formatDefaultUsername } from "../helper/helperFunctions";
 
-export const DISPLAY_NAME_REGEX = /^[A-Za-z0-9À-ÖØ-öø-ÿ'-. @&#:]{2,15}$/;
-export const USERNAME_REGEX = /^[A-Za-z0-9_-]{2,15}$/;
+export const DISPLAY_NAME_REGEX = /^[A-Za-z0-9À-ÖØ-öø-ÿ'-. @&#:_]{2,15}$/;
+export const USERNAME_REGEX = /^[a-z]{2,15}$/;
+export const DEFAULT_PROFILE_PICTURE = process.env.NEXT_PUBLIC_DEFAULT_PROFILE_PICTURE as string;
 
 export type userStatus = "active" | "suspended" | "banned";
 export type userRole = "user" | "mod" | "admin";
@@ -141,12 +143,13 @@ export const AuthContextProvider = ({
 
   const createUserProfileAndUpdateState = async (currentUser: UserCredential) => {
     // Create a new user profile
+    const defaultUsername = await formatDefaultUsername(currentUser.user.displayName || "username");
     const newUserProfile: UserProfileType = {
       uid: currentUser.user.uid,
-      email: currentUser.user.email || "",
-      username: currentUser.user.displayName || "",
-      displayName: currentUser.user.displayName || "",
-      profilePicture: currentUser.user.photoURL || "",
+      email: currentUser.user.email || "email@gmail.com",
+      username: defaultUsername,
+      displayName: formatDisplayName(currentUser.user.displayName || "username"),
+      profilePicture: currentUser.user.photoURL || DEFAULT_PROFILE_PICTURE,
       premium: false,
       status: "active",
       joinedDate: new Date(),
@@ -162,7 +165,7 @@ export const AuthContextProvider = ({
       currentUser.user,
       newUserProfile,
       true,
-      newUserProfile.username,
+      defaultUsername,
       newUserProfile.displayName,
       newUserProfile.pronouns,
       currentUser.user.photoURL,

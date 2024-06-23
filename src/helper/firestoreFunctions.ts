@@ -1,5 +1,5 @@
 import { db } from "@/firebase";
-import { collection, setDoc, doc, updateDoc } from "firebase/firestore";
+import { collection, setDoc, doc, updateDoc, query, where, getDocs } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { UserProfileType, EditUserProfileType } from "../context/Authentication";
 
@@ -34,4 +34,11 @@ export const uploadProfilePicture = async (file: File | null, userProfile: UserP
   const snapshot = await uploadBytes(storageRef, file);
   const photoURL = await getDownloadURL(snapshot.ref);
   return photoURL;
+};
+
+export const isUsernameTaken = async (username: string): Promise<boolean> => {
+  const userProfilesCollectionRef = collection(db, "userProfiles");
+  const q = query(userProfilesCollectionRef, where("username", "==", username));
+  const querySnapshot = await getDocs(q);
+  return !querySnapshot.empty; // Returns true if the username is taken, false otherwise
 };

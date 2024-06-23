@@ -1,3 +1,4 @@
+import { isUsernameTaken } from "./firestoreFunctions";
 export const closeDropdown = () => {
   const elem = document.activeElement as HTMLElement;
   elem?.blur();
@@ -22,6 +23,31 @@ export const formatPronouns = (
 
 export const formatSocialLink = (link: string) => {
   return link.replace(/^(https?:\/\/)?(www\.)?/, "");
+};
+
+export const formatUsername = (username: string) => {
+  const formattedUsername = username.toLowerCase().replace(/[^a-z]/g, "");
+  return formattedUsername.length > 15
+    ? formattedUsername.substring(0, 15)
+    : formattedUsername.padEnd(2, "x");
+};
+
+export const formatDefaultUsername = async (username: string) => {
+  const formattedUsername = formatUsername(username);
+  let isTaken = await isUsernameTaken(formattedUsername);
+  let index = 0;
+  while (isTaken) {
+    isTaken = await isUsernameTaken(`${formattedUsername}${index}`);
+    index++;
+  }
+  return index > 0 ? `${formattedUsername}${index}` : formattedUsername;
+};
+
+export const formatDisplayName = (displayName: string): string => {
+  const formattedDisplayName = displayName.replace(/[^A-Za-z0-9À-ÖØ-öø-ÿ'-. @&#:_]/g, "");
+  return formattedDisplayName.length > 15
+    ? formattedDisplayName.substring(0, 15)
+    : formattedDisplayName.padEnd(2, "_");
 };
 
 export const ensureHttpsLink = (link: string): string => {
