@@ -31,6 +31,15 @@ export interface UserProfileType {
   pronouns: [string, string];
 }
 
+export interface EditUserProfileType {
+  displayName: string;
+  profilePicture: string;
+  lastActive: Date;
+  bio: string;
+  pronouns: [string, string];
+  socialLinks: string[];
+}
+
 export interface AuthContextProps {
   initialAuthenticated: boolean;
   initialUsername: string | null;
@@ -49,7 +58,7 @@ export interface AuthContextType {
   displayName: string | null;
   pronouns: [string, string] | null;
   profilePicture: string | null;
-  editUserProfile: (newUserProfile: UserProfileType) => void;
+  editUserProfileState: (newUserProfile: EditUserProfileType) => void;
   signInWithGoogle: () => void;
   logout: () => void;
 }
@@ -100,14 +109,31 @@ export const AuthContextProvider = ({
     if (newPronouns !== null) savePronouns(newPronouns);
   };
 
-  const editUserProfile = async (newUserProfile: UserProfileType) => {
-    setUserProfile(newUserProfile);
-    setDisplayName(newUserProfile.displayName);
-    saveDisplayName(newUserProfile.displayName);
-    setProfilePicture(newUserProfile.profilePicture);
-    saveProfilePicture(newUserProfile.profilePicture);
-    setPronouns(newUserProfile.pronouns);
-    savePronouns(newUserProfile.pronouns);
+  const editUserProfileState = async (newUserProfile: EditUserProfileType) => {
+    if (!userProfile) return; // Ensure there's a userProfile to update
+
+    // Create a new updated profile object
+    const updatedUserProfile: UserProfileType = {
+      ...userProfile,
+      ...newUserProfile,
+    };
+
+    // Update the userProfile state
+    setUserProfile(updatedUserProfile);
+
+    // Update individual states if they exist in newUserProfile
+    if (newUserProfile.displayName) {
+      setDisplayName(newUserProfile.displayName);
+      saveDisplayName(newUserProfile.displayName);
+    }
+    if (newUserProfile.profilePicture) {
+      setProfilePicture(newUserProfile.profilePicture);
+      saveProfilePicture(newUserProfile.profilePicture);
+    }
+    if (newUserProfile.pronouns) {
+      setPronouns(newUserProfile.pronouns);
+      savePronouns(newUserProfile.pronouns);
+    }
   };
 
   const createUserProfileAndUpdateState = async (currentUser: UserCredential) => {
@@ -217,7 +243,7 @@ export const AuthContextProvider = ({
         displayName,
         pronouns,
         profilePicture,
-        editUserProfile,
+        editUserProfileState,
         signInWithGoogle,
         logout,
       }}

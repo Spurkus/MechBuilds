@@ -18,8 +18,7 @@ import EditProfile from "./EditProfile";
 export const DEFAULT_IMAGE_SIZE = 1000;
 
 const ProfileBaseDetails = () => {
-  const { username, displayName, pronouns, profilePicture, userProfile, editUserProfile } =
-    useAuthContext();
+  const { username, displayName, pronouns, profilePicture } = useAuthContext();
   const { handleModalError } = useGlobalModalContext();
   const [editProfile, setEditProfile] = useState(false);
 
@@ -62,12 +61,7 @@ const ProfileBaseDetails = () => {
       <button className="btn btn-outline btn-info btn-sm rounded-xl" onClick={openModal}>
         Edit Profile
       </button>
-      <EditProfile
-        open={editProfile}
-        toggleEditProfile={toggleEditProfile}
-        userProfile={userProfile}
-        editUserProfile={editUserProfile}
-      />
+      <EditProfile open={editProfile} toggleEditProfile={toggleEditProfile} />
     </div>
   );
 };

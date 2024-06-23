@@ -1,7 +1,7 @@
 import { db } from "@/firebase";
 import { collection, setDoc, doc, updateDoc } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { UserProfileType } from "../context/Authentication";
+import { UserProfileType, EditUserProfileType } from "../context/Authentication";
 
 export const createUserProfile = async (userProfile: UserProfileType) => {
   const userProfilesCollectionRef = collection(db, "userProfiles");
@@ -19,6 +19,12 @@ export const updateUserProfile = async (userProfile: UserProfileType) => {
   const userProfilesCollectionRef = collection(db, "userProfiles");
 
   await setDoc(doc(userProfilesCollectionRef, userProfile.uid), userProfile);
+};
+
+export const editUserProfile = async (uid: string, fieldsToUpdate: EditUserProfileType) => {
+  const userProfilesCollectionRef = collection(db, "userProfiles");
+
+  await updateDoc(doc(userProfilesCollectionRef, uid), fieldsToUpdate as { [x: string]: any });
 };
 
 export const uploadProfilePicture = async (file: File | null, userProfile: UserProfileType) => {

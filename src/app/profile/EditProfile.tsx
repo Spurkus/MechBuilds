@@ -2,11 +2,11 @@ import Loading from "@/src/components/Loading";
 import Image from "next/image";
 import { useEffect, useState, useMemo } from "react";
 import { adjustImageUrl, formatSocialLink, closeDropdown } from "@/src/helper/helperFunctions";
-import { UserProfileType } from "@/src/context/Authentication";
+import { UserProfileType, EditUserProfileType, useAuthContext } from "@/src/context/Authentication";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown, faLink } from "@fortawesome/free-solid-svg-icons";
 import { formatPronouns } from "@/src/helper/helperFunctions";
-import { updateUserProfile, uploadProfilePicture } from "@/src/helper/firestoreFunctions";
+import { editUserProfile, uploadProfilePicture } from "@/src/helper/firestoreFunctions";
 import { useGlobalModalContext } from "@/src/context/GlobalModal";
 
 const DEFAULT_IMAGE_SIZE = 1000;
@@ -26,14 +26,12 @@ const SOCIAL_LINK_REGEX =
 interface EditProfileProps {
   open: boolean;
   toggleEditProfile: () => void;
-  userProfile: UserProfileType | null;
-  editUserProfile: (newUserProfile: UserProfileType) => void;
 }
 
 interface EditProfileComponentProps {
   toggleEditProfile: () => void;
   userProfile: UserProfileType;
-  editUserProfile: (newUserProfile: UserProfileType) => void;
+  editUserProfileState: (newUserProfile: EditUserProfileType) => void;
 }
 
 interface PronounsFieldProps {
@@ -333,7 +331,7 @@ const checkDefaultPronouns = (pronouns: [string, string]) => {
 const EditProfileForm = ({
   toggleEditProfile,
   userProfile,
-  editUserProfile,
+  editUserProfileState,
 }: EditProfileComponentProps) => {
   const { handleModalError } = useGlobalModalContext();
 
@@ -445,22 +443,16 @@ const EditProfileForm = ({
     setLoading(true);
     try {
       const profilePictureURL = await uploadProfilePicture(selectedProfilePicture, userProfile);
-      const newUserProfile: UserProfileType = {
-        uid: userProfile.uid,
-        email: userProfile.email,
-        username: userProfile.username,
+      const fieldsToUpdate: EditUserProfileType = {
         displayName: displayName,
         profilePicture: profilePictureURL ? profilePictureURL : userProfile.profilePicture,
-        premium: userProfile.premium,
-        status: userProfile.status,
-        joinedDate: userProfile.joinedDate,
         lastActive: new Date(),
         bio: bio,
-        socialLinks: socialLinks,
         pronouns: pronouns,
+        socialLinks: socialLinks,
       };
-      await updateUserProfile(newUserProfile);
-      await editUserProfile(newUserProfile);
+      await editUserProfile(userProfile.uid, fieldsToUpdate);
+      await editUserProfileState(fieldsToUpdate);
     } catch (error: any) {
       handleModalError(error);
     } finally {
@@ -561,12 +553,8 @@ const EditProfileForm = ({
   );
 };
 
-const EditProfile = ({
-  open,
-  toggleEditProfile,
-  userProfile,
-  editUserProfile,
-}: EditProfileProps) => {
+const EditProfile = ({ open, toggleEditProfile }: EditProfileProps) => {
+  const { userProfile, editUserProfileState } = useAuthContext();
   return (
     <dialog id="editprofilemodal" className="modal modal-middle" open={open}>
       <div className="modal-box flex w-80 flex-col bg-base-200 pb-4 pt-4">
@@ -574,7 +562,7 @@ const EditProfile = ({
           <EditProfileForm
             toggleEditProfile={toggleEditProfile}
             userProfile={userProfile}
-            editUserProfile={editUserProfile}
+            editUserProfileState={editUserProfileState}
           />
         ) : (
           <Loading />
