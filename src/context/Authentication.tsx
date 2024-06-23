@@ -1,6 +1,6 @@
 "use client";
 import { useContext, createContext, useState, useEffect } from "react";
-import { signInWithPopup, signOut, onAuthStateChanged, User } from "firebase/auth";
+import { signInWithPopup, signOut, onAuthStateChanged, User, UserCredential } from "firebase/auth";
 import { auth, googleProvider, db } from "@/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { useGlobalModalContext } from "./GlobalModal";
@@ -25,15 +25,6 @@ export interface UserProfileType {
   premium: boolean;
   status: userStatus;
   joinedDate: Date;
-  lastActive: Date;
-  bio: string;
-  socialLinks: string[];
-  pronouns: [string, string];
-}
-
-export interface EditUserProfileType {
-  displayName: string;
-  profilePicture: string;
   lastActive: Date;
   bio: string;
   socialLinks: string[];
@@ -119,6 +110,51 @@ export const AuthContextProvider = ({
     savePronouns(newUserProfile.pronouns);
   };
 
+  const createUserProfileAndUpdateState = async (currentUser: UserCredential) => {
+    // Create a new user profile
+    const newUserProfile: UserProfileType = {
+      uid: currentUser.user.uid,
+      email: currentUser.user.email || "",
+      username: currentUser.user.displayName || "",
+      displayName: currentUser.user.displayName || "",
+      profilePicture: currentUser.user.photoURL || "",
+      premium: false,
+      status: "active",
+      joinedDate: new Date(),
+      lastActive: new Date(),
+      bio: "",
+      socialLinks: [],
+      pronouns: ["", ""],
+    };
+
+    // Save user profile to Firestore and update state
+    await createUserProfile(newUserProfile);
+    await updateUserState(
+      currentUser.user,
+      newUserProfile,
+      true,
+      newUserProfile.username,
+      newUserProfile.displayName,
+      newUserProfile.pronouns,
+      currentUser.user.photoURL,
+    );
+  };
+
+  const updateUserProfileState = async (
+    currentUserProfile: UserProfileType,
+    currentUser: UserCredential,
+  ) => {
+    await updateUserState(
+      currentUser.user,
+      currentUserProfile,
+      true,
+      currentUserProfile.username,
+      currentUserProfile.displayName,
+      currentUserProfile.pronouns,
+      currentUserProfile.profilePicture,
+    );
+  };
+
   const signInWithGoogle = async () => {
     try {
       const currentUser = await signInWithPopup(auth, googleProvider);
@@ -126,50 +162,17 @@ export const AuthContextProvider = ({
       if (!currentUser.user.photoURL || !currentUser.user.displayName) {
         throw new Error("User is not valid");
       }
-
       // Check if user profile already exists
       const userProfileRef = doc(db, "userProfiles", currentUser.user.uid);
       const userProfileSnap = await getDoc(userProfileRef);
 
-      if (!userProfileSnap.exists()) {
-        // Create a new user profile if it doesn't exist
-        const newUserProfile: UserProfileType = {
-          uid: currentUser.user.uid,
-          email: currentUser.user.email || "",
-          username: currentUser.user.displayName || "",
-          displayName: currentUser.user.displayName || "",
-          profilePicture: currentUser.user.photoURL || "",
-          premium: false,
-          status: "active",
-          joinedDate: new Date(),
-          lastActive: new Date(),
-          bio: "",
-          socialLinks: [],
-          pronouns: ["", ""],
-        };
-
-        await createUserProfile(newUserProfile);
-
-        await updateUserState(
-          currentUser.user,
-          newUserProfile,
-          true,
-          newUserProfile.username,
-          newUserProfile.displayName,
-          newUserProfile.pronouns,
-          currentUser.user.photoURL,
-        );
-      } else {
+      if (userProfileSnap.exists()) {
+        // Update state with existing user profile
         const currentUserProfile = userProfileSnap.data() as UserProfileType;
-        await updateUserState(
-          currentUser.user,
-          currentUserProfile,
-          true,
-          currentUserProfile.username,
-          currentUserProfile.displayName,
-          currentUserProfile.pronouns,
-          currentUserProfile.profilePicture,
-        );
+        updateUserProfileState(currentUserProfile, currentUser);
+      } else {
+        // Create a new user profile if it doesn't exist
+        createUserProfileAndUpdateState(currentUser);
       }
     } catch (error: any) {
       handleModalError(error);
@@ -185,14 +188,17 @@ export const AuthContextProvider = ({
     }
   };
 
+  // Check if user is authenticated on page load and update state accordingly
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser: User | null) => {
       setUser(currentUser);
       if (currentUser) {
+        // Check if user profile exists and update state
         const userProfileRef = doc(db, "userProfiles", currentUser.uid);
         const userProfileSnap = await getDoc(userProfileRef);
         setUserProfile(userProfileSnap.data() as UserProfileType);
       } else {
+        // Reset state if user is not authenticated
         setUserProfile(null);
       }
       setAuthLoading(false);
