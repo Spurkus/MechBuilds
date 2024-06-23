@@ -53,6 +53,18 @@ interface SocialLinksFieldProps {
   socialLinks: string[];
   setSocialLink: (socialLinks: string[]) => void;
   setValidSocialLinks: (validSocialLinks: boolean) => void;
+  socialLinkOne: string;
+  setSocialLinkOne: (socialLinkOne: string) => void;
+  socialLinkTwo: string;
+  setSocialLinkTwo: (socialLinkTwo: string) => void;
+  socialLinkThree: string;
+  setSocialLinkThree: (socialLinkThree: string) => void;
+  validSocialLinkOne: boolean;
+  setValidSocialLinkOne: (validSocialLinkOne: boolean) => void;
+  validSocialLinkTwo: boolean;
+  setValidSocialLinkTwo: (validSocialLinkTwo: boolean) => void;
+  validSocialLinkThree: boolean;
+  setValidSocialLinkThree: (validSocialLinkThree: boolean) => void;
 }
 
 interface ProfilePictureFieldProps {
@@ -103,16 +115,21 @@ const ProfilePictureField = ({
 };
 
 const SocialLinksField = ({
-  socialLinks,
   setSocialLink,
   setValidSocialLinks,
+  socialLinkOne,
+  setSocialLinkOne,
+  socialLinkTwo,
+  setSocialLinkTwo,
+  socialLinkThree,
+  setSocialLinkThree,
+  validSocialLinkOne,
+  setValidSocialLinkOne,
+  validSocialLinkTwo,
+  setValidSocialLinkTwo,
+  validSocialLinkThree,
+  setValidSocialLinkThree,
 }: SocialLinksFieldProps) => {
-  const [socialLinkOne, setSocialLinkOne] = useState(socialLinks[0] || "");
-  const [socialLinkTwo, setSocialLinkTwo] = useState(socialLinks[1] || "");
-  const [socialLinkThree, setSocialLinkThree] = useState(socialLinks[2] || "");
-  const [validSocialLinkOne, setValidSocialLinkOne] = useState(true);
-  const [validSocialLinkTwo, setValidSocialLinkTwo] = useState(true);
-  const [validSocialLinkThree, setValidSocialLinkThree] = useState(true);
   const [isSocialLinkOneFocused, setSocialLinkOneFocused] = useState(false);
   const [isSocialLinkTwoFocused, setSocialLinkTwoFocused] = useState(false);
   const [isSocialLinkThreeFocused, setSocialLinkThreeFocused] = useState(false);
@@ -122,7 +139,18 @@ const SocialLinksField = ({
     setValidSocialLinkOne(!socialLinkOne || SOCIAL_LINK_REGEX.test(socialLinkOne));
     setValidSocialLinkTwo(!socialLinkTwo || SOCIAL_LINK_REGEX.test(socialLinkTwo));
     setValidSocialLinkThree(!socialLinkThree || SOCIAL_LINK_REGEX.test(socialLinkThree));
-  }, [socialLinkOne, socialLinkTwo, socialLinkThree]);
+  }, [
+    socialLinkOne,
+    socialLinkTwo,
+    socialLinkThree,
+    setValidSocialLinkOne,
+    setValidSocialLinkTwo,
+    setValidSocialLinkThree,
+  ]);
+
+  useEffect(() => {
+    setValidSocialLinks(validSocialLinkOne && validSocialLinkTwo && validSocialLinkThree);
+  }, [validSocialLinkOne, validSocialLinkTwo, validSocialLinkThree, setValidSocialLinks]);
 
   // Create social link list
   useEffect(() => {
@@ -331,6 +359,18 @@ const EditProfileForm = ({
   const [validSocialLinks, setValidSocialLinks] = useState(
     socialLinks.every((link) => SOCIAL_LINK_REGEX.test(link)),
   );
+  const [socialLinkOne, setSocialLinkOne] = useState(userProfile.socialLinks[0] || "");
+  const [socialLinkTwo, setSocialLinkTwo] = useState(userProfile.socialLinks[1] || "");
+  const [socialLinkThree, setSocialLinkThree] = useState(userProfile.socialLinks[2] || "");
+  const [validSocialLinkOne, setValidSocialLinkOne] = useState(
+    !userProfile.socialLinks[0] || SOCIAL_LINK_REGEX.test(userProfile.socialLinks[0]),
+  );
+  const [validSocialLinkTwo, setValidSocialLinkTwo] = useState(
+    !userProfile.socialLinks[1] || SOCIAL_LINK_REGEX.test(userProfile.socialLinks[1]),
+  );
+  const [validSocialLinkThree, setValidSocialLinkThree] = useState(
+    !userProfile.socialLinks[2] || SOCIAL_LINK_REGEX.test(userProfile.socialLinks[2]),
+  );
 
   // Select Image
   const [selectedProfilePicture, setSelectedProfilePicture] = useState<File | null>(null);
@@ -361,15 +401,29 @@ const EditProfileForm = ({
     // Default pronouns
     setPronouns(userProfile.pronouns);
     setIsCustom(!checkDefaultPronouns(userProfile.pronouns));
-    setCustomOne(isCustom ? pronouns[0] : "");
-    setCustomTwo(isCustom ? pronouns[1] : "");
+    setCustomOne(!checkDefaultPronouns(userProfile.pronouns) ? userProfile.pronouns[0] : "");
+    setCustomTwo(!checkDefaultPronouns(userProfile.pronouns) ? userProfile.pronouns[1] : "");
     setValidPronouns(
       isCustom ? PRONOUNS_REGEX.test(customOne) && PRONOUNS_REGEX.test(customTwo) : true,
     );
 
     // Default social links
     setSocialLinks(userProfile.socialLinks);
-    setValidSocialLinks(socialLinks.every((link) => SOCIAL_LINK_REGEX.test(link)));
+    setValidSocialLinks(userProfile.socialLinks.every((link) => SOCIAL_LINK_REGEX.test(link)));
+    setSocialLinkOne(userProfile.socialLinks[0] || "");
+    setSocialLinkTwo(userProfile.socialLinks[1] || "");
+    setSocialLinkThree(userProfile.socialLinks[2] || "");
+    setValidSocialLinkOne(
+      !userProfile.socialLinks[0] || SOCIAL_LINK_REGEX.test(userProfile.socialLinks[0]),
+    );
+    setValidSocialLinkTwo(
+      !userProfile.socialLinks[1] || SOCIAL_LINK_REGEX.test(userProfile.socialLinks[1]),
+    );
+    setValidSocialLinkThree(
+      !userProfile.socialLinks[2] || SOCIAL_LINK_REGEX.test(userProfile.socialLinks[2]),
+    );
+
+    // Default profile picture
     setSelectedProfilePicture(null);
   };
 
@@ -476,6 +530,18 @@ const EditProfileForm = ({
           socialLinks={socialLinks}
           setSocialLink={setSocialLinks}
           setValidSocialLinks={setValidSocialLinks}
+          socialLinkOne={socialLinkOne}
+          setSocialLinkOne={setSocialLinkOne}
+          socialLinkTwo={socialLinkTwo}
+          setSocialLinkTwo={setSocialLinkTwo}
+          socialLinkThree={socialLinkThree}
+          setSocialLinkThree={setSocialLinkThree}
+          validSocialLinkOne={validSocialLinkOne}
+          setValidSocialLinkOne={setValidSocialLinkOne}
+          validSocialLinkTwo={validSocialLinkTwo}
+          setValidSocialLinkTwo={setValidSocialLinkTwo}
+          validSocialLinkThree={validSocialLinkThree}
+          setValidSocialLinkThree={setValidSocialLinkThree}
         />
       </div>
       <div className="mt-4">
