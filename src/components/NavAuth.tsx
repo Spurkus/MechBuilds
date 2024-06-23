@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useAuthContext } from "../context/Authentication";
 import { useGlobalModalContext } from "../context/GlobalModal";
 import { closeDropdown } from "../helper/helperFunctions";
@@ -33,17 +34,26 @@ const LoginRegisterButton = () => {
 };
 
 const NavProfileMenu = ({ profilePicture = null, displayName = null }: NavProfileMenuType) => {
+  const router = useRouter();
   const { user, logout } = useAuthContext();
   const { handleModalError } = useGlobalModalContext();
 
   const profile = profilePicture || user?.photoURL;
   const name = displayName || user?.displayName;
 
+  // Redirect to home page if user is invalid
   if (!profile) {
+    router.push("/");
     handleModalError("User is invalid");
     logout();
     return <AuthLoadingButton />;
   }
+
+  // Sign out user and redirect to home page
+  const handleSignOut = async () => {
+    await logout();
+    router.push("/");
+  };
 
   return (
     <div className="dropdown dropdown-end">
@@ -68,7 +78,7 @@ const NavProfileMenu = ({ profilePicture = null, displayName = null }: NavProfil
           </Link>
         </li>
         <li onClick={closeDropdown}>
-          <button onClick={logout} className="font-satoshi">
+          <button onClick={handleSignOut} className="font-satoshi">
             Sign Out
           </button>
         </li>
