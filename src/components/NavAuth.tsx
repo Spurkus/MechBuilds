@@ -76,6 +76,9 @@ const NavProfileMenu = ({ profilePicture = null, displayName = null }: NavProfil
           <Link href="/profile">Profile</Link>
         </li>
         <li onClick={closeDropdown}>
+          <Link href="/settings">Settings</Link>
+        </li>
+        <li onClick={closeDropdown}>
           <button onClick={handleSignOut}>Sign Out</button>
         </li>
       </ul>

@@ -1,0 +1,65 @@
+"use client";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useAuthContext } from "@/src/context/Authentication";
+import ProfileDetails from "../../components/ProfileDetails";
+import Loading from "@/src/components/Loading";
+import AccountSettings from "./AccountSettings";
+import BillingAndPlansSettings from "./BillingAndPlansSettings";
+
+type SettingsType = "Account" | "Billing and Plans";
+
+const SettingsMenu = ({ setSettings }: { setSettings: (settings: SettingsType) => void }) => {
+  return (
+    <div className="flex grow flex-col">
+      <ul className="menu flex grow rounded-[1.25rem] bg-base-300 text-base [&_li>*]:rounded-xl">
+        <h1 className="ml-2 mt-1 p-1 font-clashgrotesk text-4xl font-medium">Settings</h1>
+        <li onClick={() => setSettings("Account")}>
+          <a>Account</a>
+        </li>
+        <li onClick={() => setSettings("Billing and Plans")}>
+          <a>Billing and Plans</a>
+        </li>
+      </ul>
+    </div>
+  );
+};
+
+const Settings = () => {
+  const router = useRouter();
+  const { authenticated } = useAuthContext();
+  const [settings, setSettings] = useState<SettingsType>("Account");
+
+  // Redirects to home if user is not authenticated
+  if (!authenticated) {
+    router.push("/");
+    return (
+      <div className="flex w-full items-center justify-center">
+        <Loading />
+      </div>
+    );
+  } else {
+    return (
+      <div className="flex w-full">
+        <div className="w-[23%] p-2">
+          <SettingsMenu setSettings={setSettings} />
+        </div>
+        <div className="flex w-[77%] grow">
+          <div className={`flex grow min-w-[${settings === "Account" ? "67.5" : "100"}%] p-2`}>
+            <div className="flex grow flex-col space-y-2 rounded-[2rem] bg-base-300 p-6">
+              {settings === "Account" && <AccountSettings />}
+              {settings === "Billing and Plans" && <BillingAndPlansSettings />}
+            </div>
+          </div>
+          {settings === "Account" && (
+            <div className="w-[32.5%] p-2">
+              <ProfileDetails />
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+};
+
+export default Settings;
