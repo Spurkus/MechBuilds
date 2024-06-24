@@ -11,7 +11,7 @@ import {
 } from "@/src/context/Authentication";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown, faLink } from "@fortawesome/free-solid-svg-icons";
-import { formatPronouns } from "@/src/helper/helperFunctions";
+import { formatPronouns, areArraysEqual } from "@/src/helper/helperFunctions";
 import { editUserProfile, uploadProfilePicture } from "@/src/helper/firestoreFunctions";
 import { useGlobalModalContext } from "@/src/context/GlobalModal";
 
@@ -401,8 +401,30 @@ const EditProfileForm = ({
 
   // Check if profile is savable
   const isSavable = useMemo(() => {
-    return validDisplayName && validPronouns && validBio && validSocialLinks && !loading;
-  }, [validDisplayName, validPronouns, validBio, validSocialLinks, loading]);
+    const valid = validDisplayName && validPronouns && validBio && validSocialLinks && !loading;
+    const changed =
+      displayName !== userProfile.displayName ||
+      bio !== userProfile.bio ||
+      !areArraysEqual(pronouns, userProfile.pronouns) ||
+      !areArraysEqual(socialLinks, userProfile.socialLinks) ||
+      selectedProfilePicture ||
+      removedProfilePicture;
+
+    return valid && changed;
+  }, [
+    validDisplayName,
+    validPronouns,
+    validBio,
+    validSocialLinks,
+    loading,
+    userProfile,
+    displayName,
+    bio,
+    pronouns,
+    socialLinks,
+    selectedProfilePicture,
+    removedProfilePicture,
+  ]);
 
   // Check validity of display name, bio (the rest are handled within their components)
   useEffect(() => {

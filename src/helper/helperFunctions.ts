@@ -56,3 +56,7 @@ export const ensureHttpsLink = (link: string): string => {
   }
   return link;
 };
+
+export const areArraysEqual = <T>(arrayOne: T[], arrayTwo: T[]) =>
+  arrayOne.length === arrayTwo.length &&
+  arrayOne.every((element, index) => element === arrayTwo[index]);
