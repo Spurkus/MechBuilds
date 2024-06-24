@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useAuthContext } from "@/src/context/Authentication";
 import { useGlobalModalContext } from "@/src/context/GlobalModal";
+import { Timestamp } from "firebase/firestore";
 import {
   adjustImageUrl,
   ensureHttpsLink,
@@ -75,38 +76,41 @@ const ProfileExtraDetails = () => {
       </div>
     );
 
+  const joinedDate = new Date((userProfile.joinedDate as unknown as Timestamp).toDate());
+
   return (
-    <>
-      {(userProfile.bio || userProfile.socialLinks.length !== 0) && (
-        <hr className="my-4 border-t border-gray-400" />
-      )}
-      <div className="flex flex-col space-y-2">
-        {userProfile.bio && <p className="font-satoshi font-light leading-5">{userProfile.bio}</p>}
-        {userProfile.socialLinks.length !== 0 && (
-          <div className="flex flex-col space-y-1 font-light">
-            <h3 className="font-satoshi font-bold">Social Links</h3>
-            <div className="flex flex-col space-y-2">
-              {userProfile.socialLinks.map((link, index) => (
-                <Link
-                  key={index}
-                  href={ensureHttpsLink(link)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-outline btn-sm justify-start rounded-xl"
-                >
-                  <div className="flex flex-row space-x-1">
-                    <FontAwesomeIcon icon={faLink} className="mt-2" />
-                    <p className="max-w-[11rem] truncate py-2 font-satoshi">
-                      {formatSocialLink(link)}
-                    </p>
-                  </div>
-                </Link>
-              ))}
-            </div>
+    <div className="flex flex-col space-y-2">
+      {userProfile.bio && <p className="font-satoshi font-light leading-5">{userProfile.bio}</p>}
+      {userProfile.socialLinks.length !== 0 && (
+        <div className="flex flex-col space-y-1 font-light">
+          <h3 className="font-satoshi font-bold">Social Links</h3>
+          <div className="flex flex-col space-y-2">
+            {userProfile.socialLinks.map((link, index) => (
+              <Link
+                key={index}
+                href={ensureHttpsLink(link)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-outline btn-sm justify-start rounded-xl"
+              >
+                <div className="flex flex-row space-x-1">
+                  <FontAwesomeIcon icon={faLink} className="mt-2" />
+                  <p className="max-w-[11rem] truncate py-2 font-satoshi">
+                    {formatSocialLink(link)}
+                  </p>
+                </div>
+              </Link>
+            ))}
           </div>
-        )}
+        </div>
+      )}
+      <div className="flex w-full grow flex-col">
+        <h3 className="self-center font-satoshi font-bold">User Joined</h3>
+        <span className="self-center font-satoshi text-sm font-bold leading-3 text-gray-500">
+          {joinedDate.toLocaleDateString()}
+        </span>
       </div>
-    </>
+    </div>
   );
 };
 
@@ -114,6 +118,7 @@ const ProfileDetails = () => {
   return (
     <div className="flex w-full flex-col rounded-[3rem] bg-base-300 p-6">
       <ProfileBaseDetails />
+      <hr className="my-4 border-t border-gray-400" />
       <ProfileExtraDetails />
     </div>
   );
