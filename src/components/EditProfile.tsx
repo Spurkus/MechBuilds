@@ -1,5 +1,5 @@
 import Loading from "@/src/components/Loading";
-import Image from "next/image";
+import NextImage from "next/image";
 import { useEffect, useState, useMemo } from "react";
 import { adjustImageUrl, formatSocialLink, closeDropdown } from "@/src/helper/helperFunctions";
 import {
@@ -22,6 +22,8 @@ const DEFAULT_PRONOUNS: [string, string][] = [
   ["she", "her"],
   ["they", "them"],
 ];
+const MEGABYTES = 1048 * 1048;
+const MAXIMUM_IMAGE_SIZE = 5 * MEGABYTES;
 
 const BIO_REGEX = /^[A-Za-z0-9À-ÖØ-öø-ÿ'-.?!@#$%^&*()_+=\[\]{}|\\;:"<>,/ \n]{0,150}$/;
 const PRONOUNS_REGEX = /^[A-Za-zÀ-ÖØ-öø-ÿ]{1,6}$/;
@@ -85,13 +87,39 @@ const ProfilePictureField = ({
   removedProfilePicture,
   setRemovedProfilePicture,
 }: ProfilePictureFieldProps) => {
+  const { handleModal } = useGlobalModalContext();
   const [isHovering, setIsHovering] = useState(false);
-  const source = removedProfilePicture
-    ? adjustImageUrl(DEFAULT_PROFILE_PICTURE, DEFAULT_IMAGE_SIZE)
-    : selectedProfilePicture
-      ? URL.createObjectURL(selectedProfilePicture)
-      : defaultProfilePicture;
+  const source = useMemo(() => {
+    return removedProfilePicture
+      ? adjustImageUrl(DEFAULT_PROFILE_PICTURE, DEFAULT_IMAGE_SIZE)
+      : selectedProfilePicture
+        ? URL.createObjectURL(selectedProfilePicture)
+        : defaultProfilePicture;
+  }, [removedProfilePicture, selectedProfilePicture, defaultProfilePicture]);
 
+  useEffect(() => {
+    if (selectedProfilePicture) {
+      if (selectedProfilePicture.size > MAXIMUM_IMAGE_SIZE) {
+        handleModal("Profile Picture", "Image size must be less than 5MB", "error");
+        setSelectedProfilePicture(null);
+      } else {
+        const imageUrl = URL.createObjectURL(selectedProfilePicture);
+        const img = new Image();
+        img.onload = () => {
+          if (img.width < 250 || img.height < 250) {
+            handleModal("Profile Picture", "Image size must be bigger than 250x250px", "error");
+            setSelectedProfilePicture(null);
+          }
+          URL.revokeObjectURL(imageUrl); // Clean up
+        };
+        img.onerror = () => {
+          handleModal("Error", "Could not load the image", "error");
+          URL.revokeObjectURL(imageUrl); // Clean up
+        };
+        img.src = imageUrl;
+      }
+    }
+  }, [selectedProfilePicture, setSelectedProfilePicture, handleModal]);
   return (
     <div className="flex w-full grow flex-col space-y-2">
       <div
@@ -114,7 +142,7 @@ const ProfilePictureField = ({
           >
             <span className="text font-bold text-white">Change Profile Picture</span>
           </div>
-          <Image
+          <NextImage
             src={source}
             alt="Profile"
             className="aspect-square rounded-[2.5rem]"
