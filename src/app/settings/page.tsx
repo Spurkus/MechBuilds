@@ -45,14 +45,14 @@ const Settings = () => {
           <SettingsMenu setSettings={setSettings} />
         </div>
         <div className="flex w-[77%] grow">
-          <div className={`flex grow min-w-[${settings === "Account" ? "67.5" : "100"}%] p-2`}>
+          <div className={`flex grow min-w-[${settings === "Account" ? "60" : "100"}%] p-2`}>
             <div className="flex grow flex-col space-y-2 rounded-[2rem] bg-base-300 p-6">
               {settings === "Account" && <AccountSettings />}
               {settings === "Billing and Plans" && <BillingAndPlansSettings />}
             </div>
           </div>
           {settings === "Account" && (
-            <div className="w-[32.5%] p-2">
+            <div className="w-[40%] p-2">
               <ProfileDetails />
             </div>
           )}
