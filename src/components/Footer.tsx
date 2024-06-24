@@ -47,10 +47,10 @@ const Footer = () => {
         </nav>
       </div>
       <aside className="flex">
-        <p className="text-base">
-          A keyboard management app for custom mechanical keyboard enthusiasts
-        </p>
-        <p className="text-base">:3</p>
+        <span className="text-base">
+          A keyboard management app for custom mechanical keyboard enthusiasts{" "}
+          <span className="font-sans">:3</span>
+        </span>
       </aside>
     </footer>
   );
