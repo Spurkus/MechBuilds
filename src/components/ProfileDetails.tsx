@@ -53,7 +53,7 @@ const ProfileBaseDetails = () => {
         />
       </div>
       <div className="flex flex-col">
-        <h2 className="username text-left font-satoshi text-2xl font-bold">
+        <h2 className="username text-left text-2xl font-bold">
           {displayName}
           <a className="pl-1 text-lg font-normal text-gray-600">{formatPronouns(pronouns, true)}</a>
         </h2>
@@ -80,10 +80,10 @@ const ProfileExtraDetails = () => {
 
   return (
     <div className="flex flex-col space-y-2">
-      {userProfile.bio && <p className="font-satoshi font-light leading-5">{userProfile.bio}</p>}
+      {userProfile.bio && <p className="font-light leading-5">{userProfile.bio}</p>}
       {userProfile.socialLinks.length !== 0 && (
         <div className="flex flex-col space-y-1 font-light">
-          <h3 className="font-satoshi font-bold">Social Links</h3>
+          <h3 className="font-bold">Social Links</h3>
           <div className="flex flex-col space-y-2">
             {userProfile.socialLinks.map((link, index) => (
               <Link
@@ -95,18 +95,16 @@ const ProfileExtraDetails = () => {
               >
                 <div className="flex flex-row space-x-1">
                   <FontAwesomeIcon icon={faLink} className="mt-2" />
-                  <p className="max-w-[11rem] truncate py-2 font-satoshi">
-                    {formatSocialLink(link)}
-                  </p>
+                  <p className="max-w-[11rem] truncate py-2">{formatSocialLink(link)}</p>
                 </div>
               </Link>
             ))}
           </div>
         </div>
       )}
-      <div className="flex w-full grow flex-col">
-        <h3 className="self-center font-satoshi font-bold">User Joined</h3>
-        <span className="self-center font-satoshi text-sm font-bold leading-3 text-gray-500">
+      <div className="flex w-full grow flex-col items-center">
+        <h3 className="font-bold">User Joined</h3>
+        <span className="text-sm font-bold leading-3 text-gray-500">
           {joinedDate.toLocaleDateString()}
         </span>
       </div>

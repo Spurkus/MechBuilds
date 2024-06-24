@@ -97,7 +97,7 @@ const ProfilePictureField = ({
         <div
           className={`${isHovering ? "flex" : "hidden"} absolute inset-0 items-center justify-center rounded-[2.5rem] bg-black bg-opacity-60`}
         >
-          <span className="text font-satoshi font-bold text-white">Change Profile Picture</span>
+          <span className="text font-bold text-white">Change Profile Picture</span>
         </div>
         <Image
           src={
@@ -162,7 +162,7 @@ const SocialLinksField = ({
 
   return (
     <div className="flex flex-col">
-      <label className="label pb-0 font-satoshi font-bold">Social Links</label>
+      <label className="label pb-0 font-bold">Social Links</label>
       <div className="flex flex-col space-y-2">
         <div className="flex flex-row space-x-1.5">
           <FontAwesomeIcon icon={faLink} className="self-center text-gray-400" />
@@ -252,7 +252,7 @@ const PronounsField = ({
 
   return (
     <div className="flex flex-col">
-      <label className="label pb-0 font-satoshi font-bold">Pronouns</label>
+      <label className="label pb-0 font-bold">Pronouns</label>
       <div className="dropdown dropdown-end">
         <div
           tabIndex={0}
@@ -307,7 +307,7 @@ const PronounsField = ({
             onChange={(e) => setCustomOne(e.target.value)}
             value={customOne}
           />
-          <a className="font-satoshi text-gray-500">/</a>
+          <a className="text-gray-500">/</a>
           <input
             type="text"
             placeholder="them"
@@ -485,7 +485,7 @@ const EditProfileForm = ({
         defaultProfilePicture={userProfile.profilePicture}
       />
       <div className="form-control">
-        <label className="label pb-0 font-satoshi font-bold">Display Name</label>
+        <label className="label pb-0 font-bold">Display Name</label>
         <input
           type="text"
           placeholder="Display Name"
@@ -510,7 +510,7 @@ const EditProfileForm = ({
           customTwo={customTwo}
           setCustomTwo={setCustomTwo}
         />
-        <label className="label pb-0 font-satoshi font-bold">Bio</label>
+        <label className="label pb-0 font-bold">Bio</label>
         <textarea
           placeholder="Bio"
           maxLength={150}

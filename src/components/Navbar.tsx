@@ -9,12 +9,10 @@ const Navbar = () => {
   return (
     <div className="navbar bg-base-100 px-6 min-[1360px]:px-36">
       <div className="navbar-start">
-        <ul className="menu menu-horizontal hidden space-x-8 px-4 font-satoshi min-[950px]:flex">
+        <ul className="menu menu-horizontal hidden space-x-8 px-4 min-[950px]:flex">
           <li>
             <Link href="/" className="btn-nav-link btn shadow-none">
-              <p className="text-base font-normal shadow-nav-text-contour text-shadow-lg">
-                Home
-              </p>
+              <p className="text-base font-normal shadow-nav-text-contour text-shadow-lg">Home</p>
             </Link>
           </li>
           <li>
@@ -26,9 +24,7 @@ const Navbar = () => {
           </li>
           <li>
             <Link href="/about" className="btn-nav-link btn shadow-none">
-              <p className="text-base font-normal shadow-nav-text-contour text-shadow-lg">
-                About
-              </p>
+              <p className="text-base font-normal shadow-nav-text-contour text-shadow-lg">About</p>
             </Link>
           </li>
         </ul>
@@ -36,10 +32,7 @@ const Navbar = () => {
           <label tabIndex={0} className="btn m-1">
             <FontAwesomeIcon icon={faBars} className="h-7 w-7" />
           </label>
-          <ul
-            tabIndex={0}
-            className="menu dropdown-content z-10 w-56 rounded-box bg-base-200"
-          >
+          <ul tabIndex={0} className="menu dropdown-content z-10 w-56 rounded-box bg-base-200">
             <li>
               <Link href="/">Home</Link>
             </li>
@@ -60,7 +53,7 @@ const Navbar = () => {
         </Link>
       </div>
       <div className="navbar-end flex">
-        <ul className="menu menu-horizontal flex align-middle font-satoshi text-base shadow-nav-text-contour text-shadow-lg">
+        <ul className="menu menu-horizontal flex align-middle text-base shadow-nav-text-contour text-shadow-lg">
           <li>
             <NavAddKeyboardButton />
           </li>
