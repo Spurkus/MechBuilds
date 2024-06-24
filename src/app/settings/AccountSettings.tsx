@@ -113,7 +113,7 @@ const ChangeUsernameForm = ({
             onChange={(e) => setUsername(e.target.value)}
             value={username}
           />
-          {usernameLoading && <Loading height={5} width={5} />}
+          {usernameLoading && <Loading height={15} width={15} />}
         </label>
         <div className="mt-3 flex grow flex-row justify-center space-x-8">
           <button className="btn btn-neutral btn-sm" onClick={handleCancel}>

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import JonathanYun from "../public/images/JonathanYun.png";
+import JonathanYun from "@/src/public/images/JonathanYun.png";
 
 const NotFound = () => {
   return (

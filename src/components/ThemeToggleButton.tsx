@@ -1,5 +1,5 @@
 "use client";
-import { useGlobalThemeContext } from "../context/GlobalTheme";
+import { useGlobalThemeContext } from "@/src/context/GlobalTheme";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMoon } from "@fortawesome/free-solid-svg-icons";
 
@@ -33,10 +33,7 @@ const ThemeToggleButton = () => {
   const { theme, toggleMode } = useGlobalThemeContext();
 
   return (
-    <button
-      onClick={toggleMode}
-      className="btn btn-circle btn-sm flex px-5 pb-10"
-    >
+    <button onClick={toggleMode} className="btn btn-circle btn-sm flex px-5 pb-10">
       <div className="mt-2.5">
         {theme === "dark" ? (
           <BrightnessIcon />

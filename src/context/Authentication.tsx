@@ -10,9 +10,9 @@ import {
   saveUsername,
   saveDisplayName,
   savePronouns,
-} from "../helper/cookiesFunctions";
-import { createUserProfile } from "../helper/firestoreFunctions";
-import { formatDisplayName, formatDefaultUsername } from "../helper/helperFunctions";
+} from "@/src/helper/cookiesFunctions";
+import { createUserProfile } from "@/src/helper/firestoreFunctions";
+import { formatDisplayName, formatDefaultUsername } from "@/src/helper/helperFunctions";
 
 export const DISPLAY_NAME_REGEX = /^[A-Za-z0-9À-ÖØ-öø-ÿ'-. @&#:_]{2,15}$/;
 export const USERNAME_REGEX = /^[a-z]{2,15}$/;

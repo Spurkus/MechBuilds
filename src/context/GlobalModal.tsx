@@ -1,6 +1,6 @@
 "use client";
 import { createContext, useState, useContext } from "react";
-import Modal from "../components/Modal";
+import Modal from "@/src/components/Modal";
 
 export const DEFAULT_MODAL_TEXT = "";
 export const DEFAULT_MODAL_THEME = "base";

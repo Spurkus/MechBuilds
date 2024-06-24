@@ -1,7 +1,8 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useAuthContext } from "@/src/context/Authentication";
-import ProfileDetails from "../../components/ProfileDetails";
+import { useEffect } from "react";
+import ProfileDetails from "@/src/components/ProfileDetails/ProfileDetails";
 import Loading from "@/src/components/Loading";
 
 const Profile = () => {
@@ -9,8 +10,14 @@ const Profile = () => {
   const { authenticated } = useAuthContext();
 
   // Redirects to home if user is not authenticated
+  useEffect(() => {
+    if (!authenticated) {
+      router.push("/");
+    }
+  }, [authenticated, router]);
+
   if (!authenticated) {
-    router.push("/");
+    // Loading screen when user is not authenticated
     return (
       <div className="flex w-full items-center justify-center">
         <Loading />

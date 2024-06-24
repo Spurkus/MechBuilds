@@ -21,6 +21,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "tailwind.config.js", "firebase.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx","**/*/*.ts", "**/*/*.tsx", ".next/types/**/*.ts", "tailwind.config.js", "firebase.ts"],
   "exclude": ["node_modules"]
 }

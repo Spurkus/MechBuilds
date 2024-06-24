@@ -2,9 +2,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useAuthContext } from "../context/Authentication";
-import { useGlobalModalContext } from "../context/GlobalModal";
-import { closeDropdown } from "../helper/helperFunctions";
+import { useAuthContext } from "@/src/context/Authentication";
+import { useGlobalModalContext } from "@/src/context/GlobalModal";
+import { closeDropdown } from "@/src/helper/helperFunctions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 

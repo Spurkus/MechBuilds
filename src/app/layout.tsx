@@ -9,12 +9,12 @@ import {
   getUsername,
   getDisplayName,
   getPronouns,
-} from "../helper/cookiesFunctions";
-import { GlobalThemeContextProvider } from "../context/GlobalTheme";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-import { GlobalModalContextProvider } from "../context/GlobalModal";
-import { AuthContextProvider } from "../context/Authentication";
+} from "@/src/helper/cookiesFunctions";
+import { GlobalThemeContextProvider } from "@/src/context/GlobalTheme";
+import Navbar from "@/src/components/Navbar/Navbar";
+import Footer from "@/src/components/Footer";
+import { GlobalModalContextProvider } from "@/src/context/GlobalModal";
+import { AuthContextProvider } from "@/src/context/Authentication";
 
 const inter = Inter({ subsets: ["latin"] });
 

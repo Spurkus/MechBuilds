@@ -1,6 +1,6 @@
 "use client";
 import { createContext, useState, useContext } from "react";
-import { saveTheme } from "../helper/cookiesFunctions";
+import { saveTheme } from "@/src/helper/cookiesFunctions";
 
 export interface GlobalThemeType {
   theme: string;
@@ -15,10 +15,7 @@ export interface GlobalThemeProps {
 
 export const GlobalThemeContext = createContext<GlobalThemeType | null>(null);
 
-export const GlobalThemeContextProvider = ({
-  children,
-  initialTheme,
-}: GlobalThemeProps) => {
+export const GlobalThemeContextProvider = ({ children, initialTheme }: GlobalThemeProps) => {
   const [theme, setTheme] = useState(initialTheme);
 
   const toggleMode = () => {
@@ -37,9 +34,7 @@ export const GlobalThemeContextProvider = ({
 export const useGlobalThemeContext = () => {
   const context = useContext(GlobalThemeContext);
   if (!context) {
-    throw new Error(
-      "useGlobalThemeContext must be used within a GlobalThemeContextProvider",
-    );
+    throw new Error("useGlobalThemeContext must be used within a GlobalThemeContextProvider");
   }
   return context;
 };

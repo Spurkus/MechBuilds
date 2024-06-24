@@ -1,4 +1,4 @@
-import { ModalButtonType, ModalThemeType } from "../context/GlobalModal";
+import { ModalButtonType, ModalThemeType } from "@/src/context/GlobalModal";
 import classNames from "classnames";
 
 export interface ModalType {
