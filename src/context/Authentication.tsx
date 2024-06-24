@@ -37,14 +37,7 @@ export interface UserProfileType {
   pronouns: [string, string];
 }
 
-export interface EditUserProfileType {
-  displayName: string;
-  profilePicture: string;
-  lastActive: Date;
-  bio: string;
-  pronouns: [string, string];
-  socialLinks: string[];
-}
+export type EditUserProfileType = Partial<UserProfileType>;
 
 export interface AuthContextProps {
   initialAuthenticated: boolean;
@@ -128,6 +121,10 @@ export const AuthContextProvider = ({
     setUserProfile(updatedUserProfile);
 
     // Update individual states if they exist in newUserProfile
+    if (newUserProfile.username) {
+      setUsername(newUserProfile.username);
+      saveUsername(newUserProfile.username);
+    }
     if (newUserProfile.displayName) {
       setDisplayName(newUserProfile.displayName);
       saveDisplayName(newUserProfile.displayName);
