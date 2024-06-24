@@ -58,13 +58,15 @@ const NavProfileMenu = ({ profilePicture = null, displayName = null }: NavProfil
   return (
     <div className="dropdown dropdown-end">
       <div tabIndex={0} role="button" className="btn w-full grow rounded-xl px-3 text-base">
-        <Image
-          src={profile}
-          alt="profile picture"
-          width={34}
-          height={34}
-          className="aspect-square rounded-xl"
-        />
+        <div className="avatar mask flex h-9 w-9">
+          <Image
+            src={profile}
+            alt="profile picture"
+            width={9}
+            height={9}
+            className="aspect-square rounded-xl"
+          />
+        </div>
         <span>{name}</span>
         <FontAwesomeIcon icon={faCaretDown} className="h-4 w-4" />
       </div>
