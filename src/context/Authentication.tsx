@@ -29,6 +29,7 @@ export interface UserProfileType {
   profilePicture: string;
   premium: boolean;
   status: userStatus;
+  role: userRole;
   joinedDate: Date;
   lastActive: Date;
   bio: string;
@@ -152,6 +153,7 @@ export const AuthContextProvider = ({
       profilePicture: currentUser.user.photoURL || DEFAULT_PROFILE_PICTURE,
       premium: false,
       status: "active",
+      role: "user",
       joinedDate: new Date(),
       lastActive: new Date(),
       bio: "",
