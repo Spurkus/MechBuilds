@@ -32,6 +32,7 @@ const addCustomStyles = (theme: DaisyUITheme) => {
       "background-color": "#fff3cd",
       color: "#856404",
     },
+    fontFamily: "Satoshi",
   };
 };
 
