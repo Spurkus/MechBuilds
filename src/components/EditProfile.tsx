@@ -114,6 +114,7 @@ const ProfilePictureField = ({
         };
         img.onerror = () => {
           handleModal("Error", "Could not load the image", "error");
+          setSelectedProfilePicture(null);
           URL.revokeObjectURL(imageUrl); // Clean up
         };
         img.src = imageUrl;
