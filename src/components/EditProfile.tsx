@@ -7,6 +7,7 @@ import {
   EditUserProfileType,
   useAuthContext,
   DISPLAY_NAME_REGEX,
+  DEFAULT_PROFILE_PICTURE,
 } from "@/src/context/Authentication";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown, faLink } from "@fortawesome/free-solid-svg-icons";
@@ -73,45 +74,62 @@ interface ProfilePictureFieldProps {
   selectedProfilePicture: File | null;
   setSelectedProfilePicture: (selectedProfilePicture: File | null) => void;
   defaultProfilePicture: string;
+  removedProfilePicture: boolean;
+  setRemovedProfilePicture: (defaultProfilePicture: boolean) => void;
 }
 
 const ProfilePictureField = ({
   selectedProfilePicture,
   setSelectedProfilePicture,
   defaultProfilePicture,
+  removedProfilePicture,
+  setRemovedProfilePicture,
 }: ProfilePictureFieldProps) => {
   const [isHovering, setIsHovering] = useState(false);
+  const source = removedProfilePicture
+    ? adjustImageUrl(DEFAULT_PROFILE_PICTURE, DEFAULT_IMAGE_SIZE)
+    : selectedProfilePicture
+      ? URL.createObjectURL(selectedProfilePicture)
+      : defaultProfilePicture;
+
   return (
-    <div
-      className="avatar mask flex w-full grow self-center"
-      onMouseEnter={() => setIsHovering(true)}
-      onMouseLeave={() => setIsHovering(false)}
-    >
-      <label className="relative w-full grow cursor-pointer">
-        <input
-          type="file"
-          accept="image/*"
-          className="hidden"
-          onChange={(e) => setSelectedProfilePicture(e.target.files?.[0] || null)}
-        />
-        <div
-          className={`${isHovering ? "flex" : "hidden"} absolute inset-0 items-center justify-center rounded-[2.5rem] bg-black bg-opacity-60`}
-        >
-          <span className="text font-bold text-white">Change Profile Picture</span>
-        </div>
-        <Image
-          src={
-            selectedProfilePicture
-              ? URL.createObjectURL(selectedProfilePicture)
-              : adjustImageUrl(defaultProfilePicture, DEFAULT_IMAGE_SIZE)
-          }
-          alt="Profile"
-          className="aspect-square rounded-[2.5rem]"
-          width={DEFAULT_IMAGE_SIZE}
-          height={DEFAULT_IMAGE_SIZE}
-          quality={100}
-        />
-      </label>
+    <div className="flex w-full grow flex-col space-y-2">
+      <div
+        className="avatar mask flex w-full grow self-center"
+        onMouseEnter={() => setIsHovering(true)}
+        onMouseLeave={() => setIsHovering(false)}
+      >
+        <label className="relative w-full grow cursor-pointer">
+          <input
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={(e) => {
+              setSelectedProfilePicture(e.target.files?.[0] || null);
+              setRemovedProfilePicture(false);
+            }}
+          />
+          <div
+            className={`${isHovering ? "flex" : "hidden"} absolute inset-0 items-center justify-center rounded-[2.5rem] bg-black bg-opacity-60`}
+          >
+            <span className="text font-bold text-white">Change Profile Picture</span>
+          </div>
+          <Image
+            src={source}
+            alt="Profile"
+            className="aspect-square rounded-[2.5rem]"
+            width={DEFAULT_IMAGE_SIZE}
+            height={DEFAULT_IMAGE_SIZE}
+            quality={100}
+          />
+        </label>
+      </div>
+      <button
+        className="btn btn-outline btn-error btn-sm rounded-xl"
+        onClick={() => setRemovedProfilePicture(true)}
+      >
+        remove profile picture
+      </button>
     </div>
   );
 };
@@ -376,6 +394,7 @@ const EditProfileForm = ({
 
   // Select Image
   const [selectedProfilePicture, setSelectedProfilePicture] = useState<File | null>(null);
+  const [removedProfilePicture, setRemovedProfilePicture] = useState(false);
 
   // Loading state when saving
   const [loading, setLoading] = useState(false);
@@ -427,6 +446,7 @@ const EditProfileForm = ({
 
     // Default profile picture
     setSelectedProfilePicture(null);
+    setRemovedProfilePicture(false);
   };
 
   const closeProfileModal = () => {
@@ -446,7 +466,9 @@ const EditProfileForm = ({
     if (!isSavable || loading) return;
     setLoading(true);
     try {
-      const profilePictureURL = await uploadProfilePicture(selectedProfilePicture, userProfile);
+      const profilePictureURL = removedProfilePicture
+        ? DEFAULT_PROFILE_PICTURE
+        : await uploadProfilePicture(selectedProfilePicture, userProfile);
       const fieldsToUpdate: EditUserProfileType = {
         displayName: displayName,
         profilePicture: profilePictureURL ? profilePictureURL : userProfile.profilePicture,
@@ -483,6 +505,8 @@ const EditProfileForm = ({
         selectedProfilePicture={selectedProfilePicture}
         setSelectedProfilePicture={setSelectedProfilePicture}
         defaultProfilePicture={userProfile.profilePicture}
+        removedProfilePicture={removedProfilePicture}
+        setRemovedProfilePicture={setRemovedProfilePicture}
       />
       <div className="form-control">
         <label className="label pb-0 font-bold">Display Name</label>
