@@ -71,7 +71,7 @@ const ProfileExtraDetails = () => {
   const { userProfile } = useAuthContext();
   if (!userProfile)
     return (
-      <div className="mt-6 flex grow flex-col items-center">
+      <div className="mt-0.5 flex grow flex-col items-center">
         <Loading />
       </div>
     );
