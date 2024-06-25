@@ -14,7 +14,7 @@ const useInputValidator = <T>(
     };
 
     validate();
-  }, [value]);
+  }, [value, validator]);
 
   return [value, setValue, isValid];
 };
