@@ -1,5 +1,6 @@
 import { USERNAME_REGEX, useAuthContext } from "@/src/context/Authentication";
-import { useEffect, useState } from "react";
+import useInputValidator from "@/src/hooks/useInputValidator";
+import { useState, useRef } from "react";
 import { UserProfileType, EditUserProfileType } from "@/src/context/Authentication";
 import Loading from "@/src/components/Loading";
 import { isUsernameTaken, editUserProfile } from "@/src/helper/firestoreFunctions";
@@ -22,37 +23,52 @@ const ChangeUsernameForm = ({
   editUserProfileState,
 }: ChangeUsernameFormProps) => {
   const { handleModalError } = useGlobalModalContext();
-  const [username, setUsername] = useState(userProfile.username);
-  const [validUsername, setValidUsername] = useState(true);
+  const [usernameTaken, setUsernameTaken] = useState(false);
   const [usernameLoading, setUsernameLoading] = useState(false);
   const [saveLoading, setSaveLoading] = useState(false);
   const [isSavable, setIsSavable] = useState(false);
 
-  // Check if username is valid or taken
-  useEffect(() => {
-    if (username === userProfile.username) {
-      setValidUsername(true);
-      return setIsSavable(false);
-    }
+  const usernameRef = useRef(0);
 
-    if (!USERNAME_REGEX.test(username)) {
-      setValidUsername(false);
-      return setIsSavable(false);
-    }
+  const usernameValidity = async (name: string): Promise<boolean> => {
+    // Increment the reference to keep track of the current username check
+    const currentUsernameRef = ++usernameRef.current;
 
+    // Set loading state
     setUsernameLoading(true);
-    isUsernameTaken(username)
+    setUsernameTaken(false);
+    setIsSavable(false);
+
+    // Check if the username is the same as the current user's username or if it is invalid
+    if (name === userProfile.username || !USERNAME_REGEX.test(name)) {
+      setIsSavable(false);
+      setUsernameLoading(false);
+      return name === userProfile.username;
+    }
+
+    // Check if the username is taken
+    const usernameTaken = await isUsernameTaken(username)
       .then((result) => {
-        setValidUsername(!result);
+        if (currentUsernameRef !== usernameRef.current) return !result;
+        setUsernameTaken(result);
         setIsSavable(!result);
-        setUsernameLoading(false);
+        return !result;
       })
       .catch((error) => {
+        if (currentUsernameRef !== usernameRef.current) return false;
         setIsSavable(false);
         handleModalError(error);
-        setUsernameLoading(false);
+        return false;
       });
-  }, [username, handleModalError, userProfile.username]);
+
+    setUsernameLoading(false);
+    return usernameTaken;
+  };
+
+  const [username, setUsername, validUsername] = useInputValidator(
+    userProfile.username,
+    usernameValidity,
+  );
 
   const closeProfileModal = () => {
     const element = document.getElementById("changeusernamemodal");
@@ -97,7 +113,15 @@ const ChangeUsernameForm = ({
   return (
     <div className="flex w-full flex-grow flex-col">
       <h2 className="text-center font-clashgrotesk text-2xl font-medium">Change Username</h2>
-      <div className="form-control mt-2">
+      <span className="text-sm leading-4 text-gray-500">
+        Your username must be unique and can only contain lowercase letters
+      </span>
+      {usernameTaken && (
+        <span className="mt-1 text-center text-sm font-semibold text-error">
+          Username already taken
+        </span>
+      )}
+      <div className="form-control mt-1">
         <label
           className={`flex grow flex-row rounded-lg border border-gray-400 p-1 pl-2.5 text-sm focus:border-white ${
             validUsername || !username ? "bg-base-200" : "bg-input-error"
@@ -113,7 +137,7 @@ const ChangeUsernameForm = ({
             onChange={(e) => setUsername(e.target.value)}
             value={username}
           />
-          {usernameLoading && <Loading height={15} width={15} />}
+          {usernameLoading && !isSavable && <Loading height={15} width={15} />}
         </label>
         <div className="mt-3 flex grow flex-row justify-center space-x-8">
           <button className="btn btn-neutral btn-sm" onClick={handleCancel}>
@@ -136,7 +160,7 @@ const ChangeUsernameModal = ({ open, toggleChangeUsername }: ChangeUsernameModal
 
   return (
     <dialog id="changeusernamemodal" className="modal modal-middle" open={open}>
-      <div className="modal-box flex w-80 flex-col bg-base-200 pb-4 pt-4">
+      <div className="modal-box flex w-[23rem] flex-col bg-base-200 pb-4 pt-4">
         {userProfile ? (
           <ChangeUsernameForm
             toggleChangeUsername={toggleChangeUsername}
