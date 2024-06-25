@@ -1,9 +1,7 @@
 "use client";
-import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
-import { useAuthContext } from "@/src/context/Authentication";
+import { useState } from "react";
+import NeedsAuthentication from "@/src/context/NeedsAuthentication";
 import ProfileDetails from "@/src/components/ProfileDetails/ProfileDetails";
-import Loading from "@/src/components/Loading";
 import AccountSettings from "./AccountSettings";
 import BillingAndPlansSettings from "./BillingAndPlansSettings";
 
@@ -26,26 +24,10 @@ const SettingsMenu = ({ setSettings }: { setSettings: (settings: SettingsType) =
 };
 
 const Settings = () => {
-  const router = useRouter();
-  const { authenticated } = useAuthContext();
   const [settings, setSettings] = useState<SettingsType>("Account");
 
-  // Redirects to home if user is not authenticated
-  useEffect(() => {
-    if (!authenticated) {
-      router.push("/");
-    }
-  }, [authenticated, router]);
-
-  if (!authenticated) {
-    // Loading screen when user is not authenticated
-    return (
-      <div className="flex w-full items-center justify-center">
-        <Loading />
-      </div>
-    );
-  } else {
-    return (
+  return (
+    <NeedsAuthentication>
       <div className="flex w-full">
         <div className="w-[23%] p-2">
           <SettingsMenu setSettings={setSettings} />
@@ -64,8 +46,8 @@ const Settings = () => {
           )}
         </div>
       </div>
-    );
-  }
+    </NeedsAuthentication>
+  );
 };
 
 export default Settings;

@@ -1,30 +1,9 @@
-"use client";
-import { useRouter } from "next/navigation";
-import { useAuthContext } from "@/src/context/Authentication";
-import { useEffect } from "react";
 import ProfileDetails from "@/src/components/ProfileDetails/ProfileDetails";
-import Loading from "@/src/components/Loading";
+import NeedsAuthentication from "@/src/context/NeedsAuthentication";
 
 const Profile = () => {
-  const router = useRouter();
-  const { authenticated } = useAuthContext();
-
-  // Redirects to home if user is not authenticated
-  useEffect(() => {
-    if (!authenticated) {
-      router.push("/");
-    }
-  }, [authenticated, router]);
-
-  if (!authenticated) {
-    // Loading screen when user is not authenticated
-    return (
-      <div className="flex w-full items-center justify-center">
-        <Loading />
-      </div>
-    );
-  } else {
-    return (
+  return (
+    <NeedsAuthentication>
       <div className="flex w-full space-x-6">
         <div className="w-[28%] p-2">
           <ProfileDetails />
@@ -38,8 +17,8 @@ const Profile = () => {
           </div>
         </div>
       </div>
-    );
-  }
+    </NeedsAuthentication>
+  );
 };
 
 export default Profile;
