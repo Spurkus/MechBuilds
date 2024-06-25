@@ -63,6 +63,7 @@ const ChangeUsernameForm = ({
     },
     [userProfile.username, handleModalError],
   );
+
   const [username, setUsername, validUsername] = useInputValidator(
     userProfile.username,
     usernameValidity,
