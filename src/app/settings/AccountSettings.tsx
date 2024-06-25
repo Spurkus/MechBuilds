@@ -27,15 +27,12 @@ const ChangeUsernameForm = ({
   const [usernameLoading, setUsernameLoading] = useState(false);
   const [saveLoading, setSaveLoading] = useState(false);
   const [isSavable, setIsSavable] = useState(false);
-
-  const usernameRef = useRef(0);
+  const usernameRef = useRef(0); // Reference to keep track of the current username check
 
   const usernameValidity = useCallback(
     async (name: string): Promise<boolean> => {
-      // Increment the reference to keep track of the current username check
-      const currentUsernameRef = ++usernameRef.current;
-
-      // Set loading state
+      const currentUsernameRef = ++usernameRef.current; // Increment reference for tracking username
+      // Set loading states
       setUsernameLoading(true);
       setUsernameTaken(false);
       setIsSavable(false);
@@ -61,13 +58,11 @@ const ChangeUsernameForm = ({
           handleModalError(error);
           return false;
         });
-
       setUsernameLoading(false);
       return usernameTaken;
     },
     [userProfile.username, handleModalError],
   );
-
   const [username, setUsername, validUsername] = useInputValidator(
     userProfile.username,
     usernameValidity,
