@@ -8,6 +8,7 @@ import {
   ensureHttpsLink,
   formatPronouns,
   formatSocialLink,
+  showModal,
 } from "@/src/helper/helperFunctions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLink } from "@fortawesome/free-solid-svg-icons";
@@ -32,14 +33,6 @@ const ProfileBaseDetails = () => {
     setEditProfile(!editProfile);
   };
 
-  const openModal = () => {
-    const element = document.getElementById("editprofilemodal");
-    if (element instanceof HTMLDialogElement) {
-      element.showModal();
-      toggleEditProfile();
-    }
-  };
-
   return (
     <div className="flex flex-col space-y-2">
       <div className="avatar mask flex w-full grow self-center">
@@ -59,7 +52,10 @@ const ProfileBaseDetails = () => {
         </h2>
         <h3 className="font-light text-gray-500">{username}</h3>
       </div>
-      <button className="btn btn-outline btn-info btn-sm rounded-xl" onClick={openModal}>
+      <button
+        className="btn btn-outline btn-info btn-sm rounded-xl"
+        onClick={() => showModal("editprofilemodal", toggleEditProfile)}
+      >
         Edit Profile
       </button>
       <EditProfile open={editProfile} toggleEditProfile={toggleEditProfile} />

@@ -4,6 +4,7 @@ import { useState, useRef, useCallback } from "react";
 import { UserProfileType, EditUserProfileType } from "@/src/context/Authentication";
 import Loading from "@/src/components/Loading";
 import { isUsernameTaken, editUserProfile } from "@/src/helper/firestoreFunctions";
+import { showModal } from "@/src/helper/helperFunctions";
 import { useGlobalModalContext } from "@/src/context/GlobalModal";
 
 interface ChangeUsernameModalProps {
@@ -225,14 +226,6 @@ const AccountDetails = () => {
     setChangeUsername(!changeUsername);
   };
 
-  const openModal = () => {
-    const element = document.getElementById("changeusernamemodal");
-    if (element instanceof HTMLDialogElement) {
-      element.showModal();
-      toggleChangeUsername();
-    }
-  };
-
   return (
     <div className="flex flex-col space-y-2">
       <div className="flex flex-row justify-between">
@@ -242,7 +235,7 @@ const AccountDetails = () => {
         </div>
         <button
           className="btn btn-outline btn-neutral btn-sm self-center rounded-xl pb-10"
-          onClick={openModal}
+          onClick={() => showModal("changeusernamemodal", toggleChangeUsername)}
         >
           <span className="mt-[0.6rem] text-sm">Change Username</span>
         </button>

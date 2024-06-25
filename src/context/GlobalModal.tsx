@@ -1,5 +1,6 @@
 "use client";
 import { createContext, useState, useContext } from "react";
+import { showModal, closeModal } from "@/src/helper/helperFunctions";
 import Modal from "@/src/components/Modal";
 
 export const DEFAULT_MODAL_TEXT = "";
@@ -46,22 +47,8 @@ export const GlobalModalContextProvider = ({ children }: GlobalModalProps) => {
   const [modalTheme, setModalTheme] = useState<ModalThemeType>(DEFAULT_MODAL_THEME);
   const [modalButtons, setModalButtons] = useState<ModalButtonType[]>(DEFAULT_MODAL_BUTTONS);
 
-  const showModal = () => {
-    const element = document.getElementById("globalmodal");
-    if (element instanceof HTMLDialogElement) {
-      element.showModal();
-    }
-  };
-
-  const closeModal = () => {
-    const element = document.getElementById("globalmodal");
-    if (element instanceof HTMLDialogElement) {
-      element.close();
-    }
-  };
-
   const toggleModal = () => {
-    closeModal();
+    closeModal("globalmodal");
     setModalOpen(!modalOpen);
     setModalTitle(DEFAULT_MODAL_TEXT);
     setModalMessage(DEFAULT_MODAL_TEXT);
@@ -74,7 +61,7 @@ export const GlobalModalContextProvider = ({ children }: GlobalModalProps) => {
     setModalTitle("Error");
     setModalMessage(message);
     setModalTheme("error");
-    showModal();
+    showModal("globalmodal");
     setModalOpen(true);
   };
 
@@ -88,7 +75,7 @@ export const GlobalModalContextProvider = ({ children }: GlobalModalProps) => {
     setModalMessage(message);
     setModalTheme(theme);
     setModalButtons(buttons);
-    showModal();
+    showModal("globalmodal");
     setModalOpen(true);
   };
 
