@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, useMemo, createContext, useContext } from "react";
+import useInputValidator from "@/src/hooks/useInputValidator";
 import { areArraysEqual, adjustImageUrl } from "@/src/helper/helperFunctions";
 import { UserProfileType, DEFAULT_PROFILE_PICTURE } from "./Authentication";
 import { DISPLAY_NAME_REGEX } from "./Authentication";
@@ -88,39 +89,50 @@ export const EditProfileContextProvider = ({
   toggleEditProfile,
 }: EditProfileContextProps) => {
   const { handleModal } = useGlobalModalContext();
-  // Check display name
-  const [displayName, setDisplayName] = useState(userProfile.displayName);
-  const [validDisplayName, setValidDisplayName] = useState(DISPLAY_NAME_REGEX.test(displayName));
+
+  // Check Display name
+  const displayNameValidation = (name: string) => DISPLAY_NAME_REGEX.test(name);
+  const [displayName, setDisplayName, validDisplayName] = useInputValidator(
+    userProfile.displayName,
+    displayNameValidation,
+  );
 
   // Check bio
-  const [bio, setBio] = useState(userProfile.bio);
-  const [validBio, setValidBio] = useState(DISPLAY_NAME_REGEX.test(bio));
+  const bioValidation = (bio: string) => BIO_REGEX.test(bio);
+  const [bio, setBio, validBio] = useInputValidator(userProfile.bio, bioValidation);
 
   // Check pronouns
-  const [pronouns, setPronouns] = useState(userProfile.pronouns);
   const [isCustom, setIsCustom] = useState(!checkDefaultPronouns(userProfile.pronouns));
-  const [customOne, setCustomOne] = useState(isCustom ? pronouns[0] : "");
-  const [customTwo, setCustomTwo] = useState(isCustom ? pronouns[1] : "");
-  const [validPronouns, setValidPronouns] = useState(
-    isCustom ? PRONOUNS_REGEX.test(customOne) && PRONOUNS_REGEX.test(customTwo) : true,
+  const [customOne, setCustomOne] = useState(isCustom ? userProfile.pronouns[0] : "");
+  const [customTwo, setCustomTwo] = useState(isCustom ? userProfile.pronouns[1] : "");
+
+  const pronounsValidation = () =>
+    isCustom ? PRONOUNS_REGEX.test(customOne) && PRONOUNS_REGEX.test(customTwo) : true;
+  const [pronouns, setPronouns, validPronouns] = useInputValidator(
+    userProfile.pronouns,
+    pronounsValidation,
   );
 
   // Check social links
-  const [socialLinks, setSocialLinks] = useState(userProfile.socialLinks);
-  const [validSocialLinks, setValidSocialLinks] = useState(
-    socialLinks.every((link) => SOCIAL_LINK_REGEX.test(link)),
+  const socialLinksValidation = (links: string[]) =>
+    links.every((link) => SOCIAL_LINK_REGEX.test(link));
+  const [socialLinks, setSocialLinks, validSocialLinks] = useInputValidator(
+    userProfile.socialLinks,
+    socialLinksValidation,
   );
-  const [socialLinkOne, setSocialLinkOne] = useState(userProfile.socialLinks[0] || "");
-  const [socialLinkTwo, setSocialLinkTwo] = useState(userProfile.socialLinks[1] || "");
-  const [socialLinkThree, setSocialLinkThree] = useState(userProfile.socialLinks[2] || "");
-  const [validSocialLinkOne, setValidSocialLinkOne] = useState(
-    !userProfile.socialLinks[0] || SOCIAL_LINK_REGEX.test(userProfile.socialLinks[0]),
+
+  const socialLinkValidation = (link: string) => !link || SOCIAL_LINK_REGEX.test(link);
+  const [socialLinkOne, setSocialLinkOne, validSocialLinkOne] = useInputValidator(
+    userProfile.socialLinks[0] || "",
+    socialLinkValidation,
   );
-  const [validSocialLinkTwo, setValidSocialLinkTwo] = useState(
-    !userProfile.socialLinks[1] || SOCIAL_LINK_REGEX.test(userProfile.socialLinks[1]),
+  const [socialLinkTwo, setSocialLinkTwo, validSocialLinkTwo] = useInputValidator(
+    userProfile.socialLinks[1] || "",
+    socialLinkValidation,
   );
-  const [validSocialLinkThree, setValidSocialLinkThree] = useState(
-    !userProfile.socialLinks[2] || SOCIAL_LINK_REGEX.test(userProfile.socialLinks[2]),
+  const [socialLinkThree, setSocialLinkThree, validSocialLinkThree] = useInputValidator(
+    userProfile.socialLinks[2] || "",
+    socialLinkValidation,
   );
 
   // Select Image
@@ -157,6 +169,7 @@ export const EditProfileContextProvider = ({
     removedProfilePicture,
   ]);
 
+  // Get source for profile picture
   const source = useMemo(() => {
     return removedProfilePicture
       ? adjustImageUrl(DEFAULT_PROFILE_PICTURE, DEFAULT_IMAGE_SIZE)
@@ -164,19 +177,6 @@ export const EditProfileContextProvider = ({
         ? URL.createObjectURL(selectedProfilePicture)
         : userProfile.profilePicture;
   }, [removedProfilePicture, selectedProfilePicture, userProfile.profilePicture]);
-
-  // Check validity of display name, bio
-  useEffect(() => {
-    setValidDisplayName(DISPLAY_NAME_REGEX.test(displayName));
-    setValidBio(BIO_REGEX.test(bio));
-  }, [displayName, bio]);
-
-  // Test validity of custom pronouns
-  useEffect(() => {
-    setValidPronouns(
-      isCustom ? PRONOUNS_REGEX.test(customOne) && PRONOUNS_REGEX.test(customTwo) : true,
-    );
-  }, [customOne, customTwo, setValidPronouns, isCustom]);
 
   useEffect(() => {
     if (isCustom) {
@@ -188,24 +188,6 @@ export const EditProfileContextProvider = ({
     setCustomOne("");
     setCustomTwo("");
   };
-
-  // Test validity of social links
-  useEffect(() => {
-    setValidSocialLinkOne(!socialLinkOne || SOCIAL_LINK_REGEX.test(socialLinkOne));
-    setValidSocialLinkTwo(!socialLinkTwo || SOCIAL_LINK_REGEX.test(socialLinkTwo));
-    setValidSocialLinkThree(!socialLinkThree || SOCIAL_LINK_REGEX.test(socialLinkThree));
-  }, [
-    socialLinkOne,
-    socialLinkTwo,
-    socialLinkThree,
-    setValidSocialLinkOne,
-    setValidSocialLinkTwo,
-    setValidSocialLinkThree,
-  ]);
-
-  useEffect(() => {
-    setValidSocialLinks(validSocialLinkOne && validSocialLinkTwo && validSocialLinkThree);
-  }, [validSocialLinkOne, validSocialLinkTwo, validSocialLinkThree, setValidSocialLinks]);
 
   // Create social link list
   useEffect(() => {
@@ -239,39 +221,22 @@ export const EditProfileContextProvider = ({
     }
   }, [selectedProfilePicture, setSelectedProfilePicture, handleModal]);
 
+  // Setting default states
   const setDefault = () => {
-    // Default display name
     setDisplayName(userProfile.displayName);
-    setValidDisplayName(DISPLAY_NAME_REGEX.test(displayName));
-
-    // Default bio
     setBio(userProfile.bio);
-    setValidBio(BIO_REGEX.test(bio));
 
     // Default pronouns
     setPronouns(userProfile.pronouns);
     setIsCustom(!checkDefaultPronouns(userProfile.pronouns));
     setCustomOne(!checkDefaultPronouns(userProfile.pronouns) ? userProfile.pronouns[0] : "");
     setCustomTwo(!checkDefaultPronouns(userProfile.pronouns) ? userProfile.pronouns[1] : "");
-    setValidPronouns(
-      isCustom ? PRONOUNS_REGEX.test(customOne) && PRONOUNS_REGEX.test(customTwo) : true,
-    );
 
     // Default social links
     setSocialLinks(userProfile.socialLinks);
-    setValidSocialLinks(userProfile.socialLinks.every((link) => SOCIAL_LINK_REGEX.test(link)));
     setSocialLinkOne(userProfile.socialLinks[0] || "");
     setSocialLinkTwo(userProfile.socialLinks[1] || "");
     setSocialLinkThree(userProfile.socialLinks[2] || "");
-    setValidSocialLinkOne(
-      !userProfile.socialLinks[0] || SOCIAL_LINK_REGEX.test(userProfile.socialLinks[0]),
-    );
-    setValidSocialLinkTwo(
-      !userProfile.socialLinks[1] || SOCIAL_LINK_REGEX.test(userProfile.socialLinks[1]),
-    );
-    setValidSocialLinkThree(
-      !userProfile.socialLinks[2] || SOCIAL_LINK_REGEX.test(userProfile.socialLinks[2]),
-    );
 
     // Default profile picture
     setSelectedProfilePicture(null);
