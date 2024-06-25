@@ -60,3 +60,19 @@ export const ensureHttpsLink = (link: string): string => {
 export const areArraysEqual = <T>(arrayOne: T[], arrayTwo: T[]) =>
   arrayOne.length === arrayTwo.length &&
   arrayOne.every((element, index) => element === arrayTwo[index]);
+
+export const showModal = (elementID: string, toggleChange?: () => void) => {
+  const element = document.getElementById(elementID);
+  if (element instanceof HTMLDialogElement) {
+    element.showModal();
+    if (toggleChange) toggleChange();
+  }
+};
+
+export const closeModal = (elementID: string, toggleChange?: () => void) => {
+  const element = document.getElementById(elementID);
+  if (element instanceof HTMLDialogElement) {
+    element.close();
+    if (toggleChange) toggleChange();
+  }
+};
