@@ -1,6 +1,6 @@
 import { USERNAME_REGEX, useAuthContext } from "@/src/context/Authentication";
 import useInputValidator from "@/src/hooks/useInputValidator";
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import { UserProfileType, EditUserProfileType } from "@/src/context/Authentication";
 import Loading from "@/src/components/Loading";
 import { isUsernameTaken, editUserProfile } from "@/src/helper/firestoreFunctions";
@@ -30,40 +30,43 @@ const ChangeUsernameForm = ({
 
   const usernameRef = useRef(0);
 
-  const usernameValidity = async (name: string): Promise<boolean> => {
-    // Increment the reference to keep track of the current username check
-    const currentUsernameRef = ++usernameRef.current;
+  const usernameValidity = useCallback(
+    async (name: string): Promise<boolean> => {
+      // Increment the reference to keep track of the current username check
+      const currentUsernameRef = ++usernameRef.current;
 
-    // Set loading state
-    setUsernameLoading(true);
-    setUsernameTaken(false);
-    setIsSavable(false);
-
-    // Check if the username is the same as the current user's username or if it is invalid
-    if (name === userProfile.username || !USERNAME_REGEX.test(name)) {
+      // Set loading state
+      setUsernameLoading(true);
+      setUsernameTaken(false);
       setIsSavable(false);
-      setUsernameLoading(false);
-      return name === userProfile.username;
-    }
 
-    // Check if the username is taken
-    const usernameTaken = await isUsernameTaken(username)
-      .then((result) => {
-        if (currentUsernameRef !== usernameRef.current) return !result;
-        setUsernameTaken(result);
-        setIsSavable(!result);
-        return !result;
-      })
-      .catch((error) => {
-        if (currentUsernameRef !== usernameRef.current) return false;
+      // Check if the username is the same as the current user's username or if it is invalid
+      if (name === userProfile.username || !USERNAME_REGEX.test(name)) {
         setIsSavable(false);
-        handleModalError(error);
-        return false;
-      });
+        setUsernameLoading(false);
+        return name === userProfile.username;
+      }
 
-    setUsernameLoading(false);
-    return usernameTaken;
-  };
+      // Check if the username is taken
+      const usernameTaken = await isUsernameTaken(name)
+        .then((result) => {
+          if (currentUsernameRef !== usernameRef.current) return !result;
+          setUsernameTaken(result);
+          setIsSavable(!result);
+          return !result;
+        })
+        .catch((error) => {
+          if (currentUsernameRef !== usernameRef.current) return false;
+          setIsSavable(false);
+          handleModalError(error);
+          return false;
+        });
+
+      setUsernameLoading(false);
+      return usernameTaken;
+    },
+    [userProfile.username, handleModalError],
+  );
 
   const [username, setUsername, validUsername] = useInputValidator(
     userProfile.username,
@@ -121,7 +124,7 @@ const ChangeUsernameForm = ({
           Username already taken
         </span>
       )}
-      <div className="form-control mt-1">
+      <div className={`form-control ${usernameTaken ? "mt-1" : "mt-2"}`}>
         <label
           className={`flex grow flex-row rounded-lg border border-gray-400 p-1 pl-2.5 text-sm focus:border-white ${
             validUsername || !username ? "bg-base-200" : "bg-input-error"
@@ -160,7 +163,7 @@ const ChangeUsernameModal = ({ open, toggleChangeUsername }: ChangeUsernameModal
 
   return (
     <dialog id="changeusernamemodal" className="modal modal-middle" open={open}>
-      <div className="modal-box flex w-[23rem] flex-col bg-base-200 pb-4 pt-4">
+      <div className="modal-box flex w-80 flex-col bg-base-200 pb-4 pt-4">
         {userProfile ? (
           <ChangeUsernameForm
             toggleChangeUsername={toggleChangeUsername}
