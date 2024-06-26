@@ -1,7 +1,8 @@
-import { USERNAME_REGEX, useAuthContext } from "@/src/context/Authentication";
+import { useAuthContext } from "@/src/context/Authentication";
 import useInputValidator from "@/src/hooks/useInputValidator";
 import { useState, useRef, useCallback } from "react";
-import { UserProfileType, EditUserProfileType } from "@/src/context/Authentication";
+import { USERNAME_REGEX } from "@/src/constants";
+import { UserProfileType, EditUserProfileType } from "@/src/types/user";
 import Loading from "@/src/components/Loading";
 import { isUsernameTaken, editUserProfile } from "@/src/helper/firestoreFunctions";
 import { showModal } from "@/src/helper/helperFunctions";
