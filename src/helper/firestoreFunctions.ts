@@ -1,7 +1,7 @@
 import { db } from "@/firebase";
 import { collection, setDoc, doc, updateDoc, query, where, getDocs } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { UserProfileType, EditUserProfileType } from "@/src/context/Authentication";
+import { UserProfileType, EditUserProfileType } from "@/src/types/user";
 
 export const createUserProfile = async (userProfile: UserProfileType) => {
   const userProfilesCollectionRef = collection(db, "userProfiles");
