@@ -2,23 +2,18 @@
 import { useState, useEffect, useMemo, createContext, useContext } from "react";
 import useInputValidator from "@/src/hooks/useInputValidator";
 import { areArraysEqual, adjustImageUrl } from "@/src/helper/helperFunctions";
-import { UserProfileType, DEFAULT_PROFILE_PICTURE } from "./Authentication";
-import { DISPLAY_NAME_REGEX } from "./Authentication";
+import { UserProfileType } from "@/src/types/user";
+import {
+  DEFAULT_PRONOUNS,
+  DISPLAY_NAME_REGEX,
+  BIO_REGEX,
+  PRONOUNS_REGEX,
+  SOCIAL_LINK_REGEX,
+  DEFAULT_PROFILE_PICTURE,
+  DEFAULT_IMAGE_SIZE,
+  MAXIMUM_IMAGE_SIZE,
+} from "@/src/constants";
 import { useGlobalModalContext } from "./GlobalModal";
-
-export const MEGABYTES = 1048 * 1048;
-export const DEFAULT_IMAGE_SIZE = 1000;
-export const MAXIMUM_IMAGE_SIZE = 5 * MEGABYTES;
-export const DEFAULT_PRONOUNS: [string, string][] = [
-  ["", ""],
-  ["he", "him"],
-  ["she", "her"],
-  ["they", "them"],
-];
-export const BIO_REGEX = /^[A-Za-z0-9À-ÖØ-öø-ÿ'-.?!@#$%^&*()_+=\[\]{}|\\;:"<>,/ \n]{0,150}$/;
-export const PRONOUNS_REGEX = /^[A-Za-zÀ-ÖØ-öø-ÿ]{1,6}$/;
-export const SOCIAL_LINK_REGEX =
-  /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/;
 
 export interface EditProfileContextType {
   userProfile: UserProfileType;

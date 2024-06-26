@@ -10,14 +10,13 @@ import {
   formatSocialLink,
   showModal,
 } from "@/src/helper/helperFunctions";
+import { DEFAULT_IMAGE_SIZE } from "@/src/constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLink } from "@fortawesome/free-solid-svg-icons";
 import Loading from "@/src/components/Loading";
 import Image from "next/image";
 import Link from "next/link";
 import EditProfile from "./EditProfile";
-
-export const DEFAULT_IMAGE_SIZE = 1000;
 
 const ProfileBaseDetails = () => {
   const { username, displayName, pronouns, profilePicture } = useAuthContext();

@@ -2,11 +2,9 @@ import Loading from "@/src/components/Loading";
 import NextImage from "next/image";
 import { useState } from "react";
 import { formatSocialLink, closeDropdown } from "@/src/helper/helperFunctions";
-import {
-  EditUserProfileType,
-  useAuthContext,
-  DEFAULT_PROFILE_PICTURE,
-} from "@/src/context/Authentication";
+import { useAuthContext } from "@/src/context/Authentication";
+import { EditUserProfileType } from "@/src/types/user";
+import { DEFAULT_PROFILE_PICTURE, DEFAULT_IMAGE_SIZE, DEFAULT_PRONOUNS } from "@/src/constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown, faLink } from "@fortawesome/free-solid-svg-icons";
 import { formatPronouns } from "@/src/helper/helperFunctions";
@@ -14,8 +12,6 @@ import { editUserProfile, uploadProfilePicture } from "@/src/helper/firestoreFun
 import {
   EditProfileContextProvider,
   useEditProfileContext,
-  DEFAULT_PRONOUNS,
-  DEFAULT_IMAGE_SIZE,
 } from "@/src/context/EditProfileContext";
 import { useGlobalModalContext } from "@/src/context/GlobalModal";
 

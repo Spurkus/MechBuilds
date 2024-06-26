@@ -11,33 +11,10 @@ import {
   saveDisplayName,
   savePronouns,
 } from "@/src/helper/cookiesFunctions";
+import { UserProfileType, EditUserProfileType } from "@/src/types/user";
+import { DEFAULT_PROFILE_PICTURE } from "@/src/constants";
 import { createUserProfile } from "@/src/helper/firestoreFunctions";
 import { formatDisplayName, formatDefaultUsername } from "@/src/helper/helperFunctions";
-
-export const DISPLAY_NAME_REGEX = /^[A-Za-z0-9À-ÖØ-öø-ÿ'-. @&#:_]{2,15}$/;
-export const USERNAME_REGEX = /^[a-z]{2,15}$/;
-export const DEFAULT_PROFILE_PICTURE = process.env.NEXT_PUBLIC_DEFAULT_PROFILE_PICTURE as string;
-
-export type userStatus = "active" | "suspended" | "banned";
-export type userRole = "user" | "mod" | "admin";
-
-export interface UserProfileType {
-  uid: string;
-  email: string;
-  username: string;
-  displayName: string;
-  profilePicture: string;
-  premium: boolean;
-  status: userStatus;
-  role: userRole;
-  joinedDate: Date;
-  lastActive: Date;
-  bio: string;
-  socialLinks: string[];
-  pronouns: [string, string];
-}
-
-export type EditUserProfileType = Partial<UserProfileType>;
 
 export interface AuthContextProps {
   initialAuthenticated: boolean;
