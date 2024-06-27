@@ -8,7 +8,7 @@ import {
   DISPLAY_NAME_REGEX,
   BIO_REGEX,
   PRONOUNS_REGEX,
-  SOCIAL_LINK_REGEX,
+  LINK_REGEX,
   DEFAULT_PROFILE_PICTURE,
   DEFAULT_IMAGE_SIZE,
   MAXIMUM_IMAGE_SIZE,
@@ -109,14 +109,13 @@ export const EditProfileContextProvider = ({
   );
 
   // Check social links
-  const socialLinksValidation = (links: string[]) =>
-    links.every((link) => SOCIAL_LINK_REGEX.test(link));
+  const socialLinksValidation = (links: string[]) => links.every((link) => LINK_REGEX.test(link));
   const [socialLinks, setSocialLinks, validSocialLinks] = useInputValidator(
     userProfile.socialLinks,
     socialLinksValidation,
   );
 
-  const socialLinkValidation = (link: string) => !link || SOCIAL_LINK_REGEX.test(link);
+  const socialLinkValidation = (link: string) => !link || LINK_REGEX.test(link);
   const [socialLinkOne, setSocialLinkOne, validSocialLinkOne] = useInputValidator(
     userProfile.socialLinks[0] || "",
     socialLinkValidation,
