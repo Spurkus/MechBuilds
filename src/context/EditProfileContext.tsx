@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useMemo, createContext, useContext } from "react";
 import useInputValidator from "@/src/hooks/useInputValidator";
-import { areArraysEqual, adjustImageUrl } from "@/src/helper/helperFunctions";
+import { areArraysEqual, adjustImageUrl, linkValidation } from "@/src/helper/helperFunctions";
 import { UserProfileType } from "@/src/types/user";
 import {
   DEFAULT_PRONOUNS,
@@ -115,18 +115,17 @@ export const EditProfileContextProvider = ({
     socialLinksValidation,
   );
 
-  const socialLinkValidation = (link: string) => !link || LINK_REGEX.test(link);
   const [socialLinkOne, setSocialLinkOne, validSocialLinkOne] = useInputValidator(
     userProfile.socialLinks[0] || "",
-    socialLinkValidation,
+    linkValidation,
   );
   const [socialLinkTwo, setSocialLinkTwo, validSocialLinkTwo] = useInputValidator(
     userProfile.socialLinks[1] || "",
-    socialLinkValidation,
+    linkValidation,
   );
   const [socialLinkThree, setSocialLinkThree, validSocialLinkThree] = useInputValidator(
     userProfile.socialLinks[2] || "",
-    socialLinkValidation,
+    linkValidation,
   );
 
   // Select Image
