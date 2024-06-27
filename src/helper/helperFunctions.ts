@@ -1,4 +1,6 @@
 import { isUsernameTaken } from "./firestoreFunctions";
+import { LINK_REGEX } from "@/src/constants";
+
 export const closeDropdown = () => {
   const elem = document.activeElement as HTMLElement;
   elem?.blur();
@@ -76,3 +78,5 @@ export const closeModal = (elementID: string, toggleChange?: () => void) => {
     if (toggleChange) toggleChange();
   }
 };
+
+export const linkValidation = (link: string) => !link || LINK_REGEX.test(link);
