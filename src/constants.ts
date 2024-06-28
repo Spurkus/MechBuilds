@@ -13,6 +13,16 @@ export const DISPLAY_NAME_REGEX = /^[A-Za-z0-9À-ÖØ-öø-ÿ'-. @&#:_]{2,15}$/;
 export const BIO_REGEX = /^[A-Za-z0-9À-ÖØ-öø-ÿ'-.?!@#$%^&*()_+=\[\]{}|\\;:"<>,/ \n]{0,150}$/;
 export const PRONOUNS_REGEX = /^[A-Za-zÀ-ÖØ-öø-ÿ]{1,6}$/;
 
+// Keyboard Regex
+export const KEYBOARD_NAME_REGEX = /^[A-Za-z0-9-_ ]{2,50}$/;
+export const KEYBOARD_DESCRIPTION_REGEX =
+  /^[A-Za-z0-9À-ÖØ-öø-ÿ'-.?!@#$%^&*()_+=\[\]{}|\\;:"<>,/ \n]{0,1000}$/;
+export const KEYBOARD_SIZE_REGEX = /^[A-Za-z0-9-_ \(\)]{1,20}$/;
+export const KEYBOARD_MOD_REGEX = /^[A-Za-z0-9-_ \(\)\[\]]{1,25}$/;
+
+// Keyboard Constants
+export const KEYBOARD_KIT_ITEMS = ["case", "pcb", "plate", "stabilizers", "keycaps"];
+
 // User Profile Constants
 export const DEFAULT_PROFILE_PICTURE = process.env.NEXT_PUBLIC_DEFAULT_PROFILE_PICTURE as string;
 export const DEFAULT_PRONOUNS: [string, string][] = [
