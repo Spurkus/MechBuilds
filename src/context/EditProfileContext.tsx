@@ -288,7 +288,7 @@ export const EditProfileContextProvider = ({
 export const useEditProfileContext = () => {
   const context = useContext(EditProfileContext);
   if (!context) {
-    throw new Error("useEditProfileContext must be used within a EditProfileContextProvider");
+    throw new Error("useEditProfileContext must be used within an EditProfileContextProvider");
   }
   return context;
 };
