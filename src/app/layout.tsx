@@ -49,9 +49,9 @@ const RootLayout = async ({
               <div className="flex min-h-screen flex-col">
                 <Navbar />
                 <main className="flex flex-grow">
-                  <div className="flex w-[6%] xl:w-1/6"></div>
+                  <div className="flex w-[6%] 2xl:w-1/6"></div>
                   <div className="flex flex-grow">{children}</div>
-                  <div className="flex w-[6%] xl:w-1/6"></div>
+                  <div className="flex w-[6%] 2xl:w-1/6"></div>
                 </main>
                 <Footer />
               </div>
