@@ -106,7 +106,7 @@ export const AddKeyboardContext = createContext<AddKeyboardContextType | null>(n
 
 export const AddKeyboardContextProvider = ({ children }: AddKeyboardContextProps) => {
   // Screen state
-  const [screen, setScreen] = useState(0);
+  const [screen, setScreen] = useState(1);
   const [validScreenOne, setValidScreenOne] = useState(false);
   const [validScreenTwo, setValidScreenTwo] = useState(false);
   const [validScreenThree, setValidScreenThree] = useState(false);
