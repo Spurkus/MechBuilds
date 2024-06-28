@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 type ValidatorFunction<T> = (value: T[]) => boolean;
 type FieldValidatorFunction<T> = (value: T) => boolean;
@@ -21,6 +21,11 @@ function useObjectsValidator<T extends object>(
     throw new Error("Number of field validators should match the number of fields in the object");
   }
 
+  // Using function references for dependency withdrawal
+  const isValidObjectRef = useRef(isValidObject);
+  const fieldValidatorsRef = useRef(fieldValidators);
+
+  // Setting states for object validation
   const [values, setValues] = useState<T[]>(initialValues);
   const [isValid, setIsValid] = useState<boolean>(false);
   const [validationMap, setValidationMap] = useState<Partial<Record<keyof T, boolean>>[]>([]);
@@ -28,7 +33,6 @@ function useObjectsValidator<T extends object>(
   const updateElement = (index: number, newValue: T) => {
     setValues(values.map((value, i) => (i === index ? newValue : value)));
   };
-
   const removeElement = (index: number) => {
     setValues(values.filter((_, i) => i !== index));
   };
@@ -42,7 +46,7 @@ function useObjectsValidator<T extends object>(
 
         // Validate each field in the object
         Object.keys(obj).forEach((key, index) => {
-          const isValidField = fieldValidators[index](obj[key]);
+          const isValidField = fieldValidatorsRef.current[index](obj[key]);
           fieldResults[key as keyof T] = isValidField;
         });
 
@@ -51,11 +55,11 @@ function useObjectsValidator<T extends object>(
     );
 
     setIsValid(
-      isValidObject(values) && // Check if the object is valid and all fields are true
+      isValidObjectRef.current(values) && // Check if the object is valid and all fields are true
         newValidationResults.every((obj) => Object.values(obj).every((value) => value === true)),
     );
     setValidationMap(newValidationResults);
-  }, [values, isValidObject, fieldValidators]);
+  }, [values]);
 
   return [values, setValues, addElement, updateElement, removeElement, isValid, validationMap];
 }
