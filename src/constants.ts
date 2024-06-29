@@ -1,3 +1,6 @@
+import defaultProfilePicture from "@/src/public/images/Default Profile Picture.png";
+import defaultKeyboardImage from "@/src/public/images/Default Keyboard Image.png";
+
 // General Constants
 export const MEGABYTES = 1048 * 1048;
 export const DEFAULT_IMAGE_SIZE = 1000;
@@ -24,10 +27,10 @@ export const KEYBOARD_MOD_REGEX = /^[A-Za-z0-9-_ \(\)\[\]]{1,25}$/;
 
 // Keyboard Constants
 export const KEYBOARD_KIT_ITEMS = ["case", "pcb", "plate", "stabilizers", "keycaps"];
-export const DEFAULT_KEYBOARD_IMAGE = process.env.NEXT_PUBLIC_DEFAULT_KEYBOARD_IMAGE as string;
+export const DEFAULT_KEYBOARD_IMAGE = defaultKeyboardImage;
 
 // User Profile Constants
-export const DEFAULT_PROFILE_PICTURE = process.env.NEXT_PUBLIC_DEFAULT_PROFILE_PICTURE as string;
+export const DEFAULT_PROFILE_PICTURE = defaultProfilePicture;
 export const DEFAULT_PRONOUNS: [string, string][] = [
   ["", ""],
   ["he", "him"],

@@ -1,7 +1,8 @@
 "use client";
 import { useState, useEffect, useMemo, createContext, useContext } from "react";
 import useInputValidator from "@/src/hooks/useInputValidator";
-import { areArraysEqual, adjustImageUrl, linkValidation } from "@/src/helper/helperFunctions";
+import { areArraysEqual, adjustImageURL, linkValidation } from "@/src/helper/helperFunctions";
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { UserProfileType } from "@/src/types/user";
 import {
   DEFAULT_PRONOUNS,
@@ -14,6 +15,7 @@ import {
   MAXIMUM_IMAGE_SIZE,
 } from "@/src/constants";
 import { useGlobalModalContext } from "./GlobalModal";
+import { StaticImageData } from "next/image";
 
 export interface EditProfileContextType {
   userProfile: UserProfileType;
@@ -54,7 +56,7 @@ export interface EditProfileContextType {
   setSelectedProfilePicture: React.Dispatch<React.SetStateAction<File | null>>;
   removedProfilePicture: boolean;
   setRemovedProfilePicture: React.Dispatch<React.SetStateAction<boolean>>;
-  source: string;
+  imageSource: string | StaticImageData;
 
   loading: boolean;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
@@ -163,12 +165,12 @@ export const EditProfileContextProvider = ({
   ]);
 
   // Get source for profile picture
-  const source = useMemo(() => {
+  const imageSource = useMemo(() => {
     return removedProfilePicture
-      ? adjustImageUrl(DEFAULT_PROFILE_PICTURE, DEFAULT_IMAGE_SIZE)
+      ? DEFAULT_PROFILE_PICTURE
       : selectedProfilePicture
         ? URL.createObjectURL(selectedProfilePicture)
-        : userProfile.profilePicture;
+        : adjustImageURL(userProfile.profilePicture, DEFAULT_IMAGE_SIZE);
   }, [removedProfilePicture, selectedProfilePicture, userProfile.profilePicture]);
 
   useEffect(() => {
@@ -272,7 +274,7 @@ export const EditProfileContextProvider = ({
         setSelectedProfilePicture,
         removedProfilePicture,
         setRemovedProfilePicture,
-        source,
+        imageSource,
         loading,
         setLoading,
         isSavable,

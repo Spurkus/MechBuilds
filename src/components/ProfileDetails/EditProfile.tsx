@@ -4,11 +4,15 @@ import { useState } from "react";
 import { formatSocialLink, closeDropdown } from "@/src/helper/helperFunctions";
 import { useAuthContext } from "@/src/context/Authentication";
 import { EditUserProfileType } from "@/src/types/user";
-import { DEFAULT_PROFILE_PICTURE, DEFAULT_IMAGE_SIZE, DEFAULT_PRONOUNS } from "@/src/constants";
+import { DEFAULT_IMAGE_SIZE, DEFAULT_PRONOUNS } from "@/src/constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown, faLink } from "@fortawesome/free-solid-svg-icons";
 import { formatPronouns } from "@/src/helper/helperFunctions";
-import { editUserProfile, uploadProfilePicture } from "@/src/helper/firestoreFunctions";
+import {
+  editUserProfile,
+  uploadProfilePicture,
+  getDefaultProfilePictureURL,
+} from "@/src/helper/firestoreFunctions";
 import {
   EditProfileContextProvider,
   useEditProfileContext,
@@ -21,7 +25,8 @@ interface EditProfileProps {
 }
 
 const ProfilePictureField = () => {
-  const { setSelectedProfilePicture, setRemovedProfilePicture, source } = useEditProfileContext();
+  const { setSelectedProfilePicture, setRemovedProfilePicture, imageSource } =
+    useEditProfileContext();
   const [isHovering, setIsHovering] = useState(false);
   return (
     <div className="flex w-full grow flex-col space-y-2">
@@ -46,7 +51,7 @@ const ProfilePictureField = () => {
             <span className="text font-bold text-white">Change Profile Picture</span>
           </div>
           <NextImage
-            src={source}
+            src={imageSource}
             alt="Profile"
             className="aspect-square rounded-[2.5rem]"
             width={DEFAULT_IMAGE_SIZE}
@@ -283,6 +288,7 @@ const CancelAndSaveButtons = () => {
     removedProfilePicture,
     isSavable,
     loading,
+    imageSource,
     setLoading,
     setDefault,
     toggleEditProfile,
@@ -306,7 +312,7 @@ const CancelAndSaveButtons = () => {
     setLoading(true);
     try {
       const profilePictureURL = removedProfilePicture
-        ? DEFAULT_PROFILE_PICTURE
+        ? await getDefaultProfilePictureURL()
         : await uploadProfilePicture(selectedProfilePicture, userProfile);
       const fieldsToUpdate: EditUserProfileType = {
         displayName: displayName,
@@ -320,6 +326,7 @@ const CancelAndSaveButtons = () => {
       await editUserProfileState(fieldsToUpdate);
     } catch (error: any) {
       handleModalError(error);
+      setDefault();
     } finally {
       setTimeout(() => {
         setLoading(false);
@@ -373,7 +380,7 @@ const EditProfileForm = () => {
 };
 
 const EditProfile = ({ open, toggleEditProfile }: EditProfileProps) => {
-  const { userProfile, editUserProfileState } = useAuthContext();
+  const { userProfile } = useAuthContext();
   return (
     <dialog id="editprofilemodal" className="modal modal-middle" open={open}>
       <div className="modal-box flex w-80 flex-col bg-base-200 pb-4 pt-4">

@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useAuthContext } from "@/src/context/Authentication";
 import { useGlobalModalContext } from "@/src/context/GlobalModal";
-import { closeDropdown } from "@/src/helper/helperFunctions";
+import { closeDropdown, adjustImageURL } from "@/src/helper/helperFunctions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 
@@ -60,10 +60,11 @@ const NavProfileMenu = ({ profilePicture = null, displayName = null }: NavProfil
       <div tabIndex={0} role="button" className="btn w-full grow rounded-xl px-3 text-base">
         <div className="avatar mask flex h-9 w-9">
           <Image
-            src={profile}
+            src={adjustImageURL(profile, 300)}
             alt="profile picture"
-            width={9}
-            height={9}
+            width={50}
+            height={50}
+            quality={100}
             className="aspect-square rounded-xl"
           />
         </div>

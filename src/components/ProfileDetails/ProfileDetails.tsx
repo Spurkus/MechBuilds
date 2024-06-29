@@ -4,7 +4,7 @@ import { useAuthContext } from "@/src/context/Authentication";
 import { useGlobalModalContext } from "@/src/context/GlobalModal";
 import { Timestamp } from "firebase/firestore";
 import {
-  adjustImageUrl,
+  adjustImageURL,
   ensureHttpsLink,
   formatPronouns,
   formatSocialLink,
@@ -36,7 +36,7 @@ const ProfileBaseDetails = () => {
     <div className="flex flex-col space-y-2">
       <div className="avatar mask flex w-full grow self-center">
         <Image
-          src={adjustImageUrl(profilePicture, DEFAULT_IMAGE_SIZE)}
+          src={adjustImageURL(profilePicture, DEFAULT_IMAGE_SIZE)}
           alt="Profile"
           className="aspect-square rounded-[2.5rem]"
           width={DEFAULT_IMAGE_SIZE}

@@ -42,3 +42,15 @@ export const isUsernameTaken = async (username: string): Promise<boolean> => {
   const querySnapshot = await getDocs(q);
   return !querySnapshot.empty; // Returns true if the username is taken, false otherwise
 };
+
+export const getDefaultProfilePictureURL = async () => {
+  const storage = getStorage();
+  const storageRef = ref(storage, "profilePictures/Default_Profile_Picture.png");
+  return await getDownloadURL(storageRef);
+};
+
+export const getDefaultKeyboardImage = async () => {
+  const storage = getStorage();
+  const storageRef = ref(storage, "keyboardContent/Default_Keyboard_Image.png");
+  return await getDownloadURL(storageRef);
+};

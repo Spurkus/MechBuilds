@@ -13,7 +13,7 @@ import {
 } from "@/src/helper/cookiesFunctions";
 import { UserProfileType, EditUserProfileType } from "@/src/types/user";
 import { DEFAULT_PROFILE_PICTURE } from "@/src/constants";
-import { createUserProfile } from "@/src/helper/firestoreFunctions";
+import { createUserProfile, getDefaultProfilePictureURL } from "@/src/helper/firestoreFunctions";
 import { formatDisplayName, formatDefaultUsername } from "@/src/helper/helperFunctions";
 
 export interface AuthContextProps {
@@ -119,12 +119,13 @@ export const AuthContextProvider = ({
   const createUserProfileAndUpdateState = async (currentUser: UserCredential) => {
     // Create a new user profile
     const defaultUsername = await formatDefaultUsername(currentUser.user.displayName || "username");
+    const defaultProfilePicture = await getDefaultProfilePictureURL();
     const newUserProfile: UserProfileType = {
       uid: currentUser.user.uid,
       email: currentUser.user.email || "email@gmail.com",
       username: defaultUsername,
       displayName: formatDisplayName(currentUser.user.displayName || "username"),
-      profilePicture: currentUser.user.photoURL || DEFAULT_PROFILE_PICTURE,
+      profilePicture: currentUser.user.photoURL || defaultProfilePicture,
       premium: false,
       status: "active",
       role: "user",
