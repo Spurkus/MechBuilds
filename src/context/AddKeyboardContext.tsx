@@ -34,12 +34,14 @@ export interface AddKeyboardContextType {
   kitName: string;
   setKitName: React.Dispatch<React.SetStateAction<string>>;
   validKitName: boolean;
-  kit: any[];
-  setKit: React.Dispatch<React.SetStateAction<any[]>>;
+  kit: KitType;
+  setKit: React.Dispatch<React.SetStateAction<KitType>>;
   validKit: boolean;
   kitLink: string;
   setKitLink: React.Dispatch<React.SetStateAction<string>>;
   validKitLink: boolean;
+  kitSelectedLink: boolean;
+  setKitSelectedLink: React.Dispatch<React.SetStateAction<boolean>>;
 
   caseName: string;
   setCaseName: React.Dispatch<React.SetStateAction<string>>;
@@ -47,6 +49,8 @@ export interface AddKeyboardContextType {
   caseLink: string;
   setCaseLink: React.Dispatch<React.SetStateAction<string>>;
   validCaseLink: boolean;
+  caseSelectedLink: boolean;
+  setCaseSelectedLink: React.Dispatch<React.SetStateAction<boolean>>;
 
   pcbName: string;
   setPcbName: React.Dispatch<React.SetStateAction<string>>;
@@ -54,6 +58,8 @@ export interface AddKeyboardContextType {
   pcbLink: string;
   setPcbLink: React.Dispatch<React.SetStateAction<string>>;
   validPcbLink: boolean;
+  pcbSelectedLink: boolean;
+  setPcbSelectedLink: React.Dispatch<React.SetStateAction<boolean>>;
 
   plateName: string;
   setPlateName: React.Dispatch<React.SetStateAction<string>>;
@@ -61,6 +67,8 @@ export interface AddKeyboardContextType {
   plateLink: string;
   setPlateLink: React.Dispatch<React.SetStateAction<string>>;
   validPlateLink: boolean;
+  plateSelectedLink: boolean;
+  setPlateSelectedLink: React.Dispatch<React.SetStateAction<boolean>>;
 
   size: string;
   setSize: React.Dispatch<React.SetStateAction<string>>;
@@ -124,23 +132,28 @@ export const AddKeyboardContextProvider = ({ children }: AddKeyboardContextProps
 
   // Check kit
   const [kitName, setKitName, validKitName] = useInputValidator<string>("", nameValidation);
-  const kitValidation = (kit: any[]) =>
+  const kitValidation = (kit: KitType) =>
     // Checks for no repeats and valid kit items
-    new Set(kit).size === kit.length && kit.every((item) => KEYBOARD_KIT_ITEMS.includes(item));
-  const [kit, setKit, validKit] = useInputValidator<string[]>([], kitValidation);
+    new Set(kit as string[]).size === kit.length &&
+    kit.every((item: string) => KEYBOARD_KIT_ITEMS.includes(item));
+  const [kit, setKit, validKit] = useInputValidator<KitType>(["hello"], kitValidation);
   const [kitLink, setKitLink, validKitLink] = useInputValidator<string>("", linkValidation);
+  const [kitSelectedLink, setKitSelectedLink] = useState<boolean>(false);
 
   // Check case
   const [caseName, setCaseName, validCaseName] = useInputValidator<string>("", nameValidation);
   const [caseLink, setCaseLink, validCaseLink] = useInputValidator<string>("", linkValidation);
+  const [caseSelectedLink, setCaseSelectedLink] = useState<boolean>(false);
 
   // Check PCB
   const [pcbName, setPcbName, validPcbName] = useInputValidator<string>("", nameValidation);
   const [pcbLink, setPcbLink, validPcbLink] = useInputValidator<string>("", linkValidation);
+  const [pcbSelectedLink, setPcbSelectedLink] = useState<boolean>(false);
 
   // Check plate
   const [plateName, setPlateName, validPlateName] = useInputValidator<string>("", nameValidation);
   const [plateLink, setPlateLink, validPlateLink] = useInputValidator<string>("", linkValidation);
+  const [plateSelectedLink, setPlateSelectedLink] = useState<boolean>(false);
 
   // Check size
   const sizeValidation = (size: string) => KEYBOARD_SIZE_REGEX.test(size);
@@ -216,24 +229,32 @@ export const AddKeyboardContextProvider = ({ children }: AddKeyboardContextProps
         kitLink,
         setKitLink,
         validKitLink,
+        kitSelectedLink,
+        setKitSelectedLink,
         caseName,
         setCaseName,
         validCaseName,
         caseLink,
         setCaseLink,
         validCaseLink,
+        caseSelectedLink,
+        setCaseSelectedLink,
         pcbName,
         setPcbName,
         validPcbName,
         pcbLink,
         setPcbLink,
         validPcbLink,
+        pcbSelectedLink,
+        setPcbSelectedLink,
         plateName,
         setPlateName,
         validPlateName,
         plateLink,
         setPlateLink,
         validPlateLink,
+        plateSelectedLink,
+        setPlateSelectedLink,
         size,
         setSize,
         validSize,
