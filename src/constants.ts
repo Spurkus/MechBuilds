@@ -22,7 +22,7 @@ export const PRONOUNS_REGEX = /^[A-Za-zÀ-ÖØ-öø-ÿ]{1,6}$/;
 export const KEYBOARD_NAME_REGEX = /^[A-Za-z0-9-_ ]{2,50}$/;
 export const KEYBOARD_DESCRIPTION_REGEX =
   /^[A-Za-z0-9À-ÖØ-öø-ÿ'-.?!@#$%^&*()_+=\[\]{}|\\;:"<>,/ \n]{0,1000}$/;
-export const KEYBOARD_SIZE_REGEX = /^[A-Za-z0-9-_ \(\)]{1,20}$/;
+export const KEYBOARD_SIZE_REGEX = /^[A-Za-z0-9-_ \(\)%]{1,20}$/;
 export const KEYBOARD_MOD_REGEX = /^[A-Za-z0-9-_ \(\)\[\]]{1,25}$/;
 
 // Keyboard Constants
