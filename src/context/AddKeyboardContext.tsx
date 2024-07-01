@@ -9,6 +9,7 @@ import {
   KEYBOARD_SIZE_REGEX,
   KEYBOARD_MOD_REGEX,
   KEYBOARD_KIT_ITEMS,
+  KEYBOARD_PLATE_REGEX,
 } from "@/src/constants";
 import { useGlobalModalContext } from "./GlobalModal";
 import useObjectsValidator from "../hooks/useObjectsValidator";
@@ -17,9 +18,7 @@ export interface AddKeyboardContextType {
   screen: number;
   setScreen: React.Dispatch<React.SetStateAction<number>>;
   validScreenOne: boolean;
-  setValidScreenOne: React.Dispatch<React.SetStateAction<boolean>>;
   validScreenTwo: boolean;
-  setValidScreenTwo: React.Dispatch<React.SetStateAction<boolean>>;
   validScreenThree: boolean;
   setValidScreenThree: React.Dispatch<React.SetStateAction<boolean>>;
 
@@ -34,9 +33,18 @@ export interface AddKeyboardContextType {
   kitName: string;
   setKitName: React.Dispatch<React.SetStateAction<string>>;
   validKitName: boolean;
-  kit: KitType;
-  setKit: React.Dispatch<React.SetStateAction<KitType>>;
-  validKit: boolean;
+  kitSelected: boolean | null;
+  setKitSelected: React.Dispatch<React.SetStateAction<boolean | null>>;
+  kitCase: boolean;
+  setKitCase: React.Dispatch<React.SetStateAction<boolean>>;
+  kitPcb: boolean;
+  setKitPcb: React.Dispatch<React.SetStateAction<boolean>>;
+  kitPlate: boolean;
+  setKitPlate: React.Dispatch<React.SetStateAction<boolean>>;
+  kitStabilizers: boolean;
+  setKitStabilizers: React.Dispatch<React.SetStateAction<boolean>>;
+  kitKeycaps: boolean;
+  setKitKeycaps: React.Dispatch<React.SetStateAction<boolean>>;
   kitLink: string;
   setKitLink: React.Dispatch<React.SetStateAction<string>>;
   validKitLink: boolean;
@@ -113,12 +121,6 @@ export interface AddKeyboardContextProps {
 export const AddKeyboardContext = createContext<AddKeyboardContextType | null>(null);
 
 export const AddKeyboardContextProvider = ({ children }: AddKeyboardContextProps) => {
-  // Screen state
-  const [screen, setScreen] = useState(1);
-  const [validScreenOne, setValidScreenOne] = useState(false);
-  const [validScreenTwo, setValidScreenTwo] = useState(false);
-  const [validScreenThree, setValidScreenThree] = useState(false);
-
   // Check name
   const nameValidation = (name: string) => KEYBOARD_NAME_REGEX.test(name);
   const [name, setName, validName] = useInputValidator<string>("", nameValidation);
@@ -132,11 +134,12 @@ export const AddKeyboardContextProvider = ({ children }: AddKeyboardContextProps
 
   // Check kit
   const [kitName, setKitName, validKitName] = useInputValidator<string>("", nameValidation);
-  const kitValidation = (kit: KitType) =>
-    // Checks for no repeats and valid kit items
-    new Set(kit as string[]).size === kit.length &&
-    kit.every((item: string) => KEYBOARD_KIT_ITEMS.includes(item));
-  const [kit, setKit, validKit] = useInputValidator<KitType>(["hello"], kitValidation);
+  const [kitSelected, setKitSelected] = useState<boolean | null>(null);
+  const [kitCase, setKitCase] = useState<boolean>(false);
+  const [kitPcb, setKitPcb] = useState<boolean>(false);
+  const [kitPlate, setKitPlate] = useState<boolean>(false);
+  const [kitStabilizers, setKitStabilizers] = useState<boolean>(false);
+  const [kitKeycaps, setKitKeycaps] = useState<boolean>(false);
   const [kitLink, setKitLink, validKitLink] = useInputValidator<string>("", linkValidation);
   const [kitSelectedLink, setKitSelectedLink] = useState<boolean>(false);
 
@@ -151,7 +154,8 @@ export const AddKeyboardContextProvider = ({ children }: AddKeyboardContextProps
   const [pcbSelectedLink, setPcbSelectedLink] = useState<boolean>(false);
 
   // Check plate
-  const [plateName, setPlateName, validPlateName] = useInputValidator<string>("", nameValidation);
+  const plateValidation = (plate: string) => KEYBOARD_PLATE_REGEX.test(plate);
+  const [plateName, setPlateName, validPlateName] = useInputValidator<string>("", plateValidation);
   const [plateLink, setPlateLink, validPlateLink] = useInputValidator<string>("", linkValidation);
   const [plateSelectedLink, setPlateSelectedLink] = useState<boolean>(false);
 
@@ -203,15 +207,55 @@ export const AddKeyboardContextProvider = ({ children }: AddKeyboardContextProps
   // Check images
   const [images, setImages] = useState<File[]>([]);
 
+  // Screen state
+  const [screen, setScreen] = useState(1);
+  const validScreenOne = useMemo(() => validName, [validName]);
+  const validScreenTwo = useMemo(() => {
+    // Kit checkboxes can only be selected if the user has selected a kit
+    const kitCheckBoxValid = kitSelected
+      ? true
+      : !(kitCase || kitPcb || kitPlate || kitStabilizers || kitKeycaps);
+    const valid =
+      kitSelected !== null &&
+      (kitSelected ? validKitLink : true) &&
+      kitCheckBoxValid &&
+      validSize &&
+      validPlateName &&
+      (validPlateLink || !plateLink) &&
+      validCaseName &&
+      (validCaseLink || !caseLink) &&
+      validPcbName &&
+      (validPcbLink || !pcbLink);
+
+    return valid;
+  }, [
+    caseLink,
+    kitCase,
+    kitKeycaps,
+    kitPcb,
+    kitPlate,
+    kitSelected,
+    kitStabilizers,
+    pcbLink,
+    plateLink,
+    validCaseLink,
+    validCaseName,
+    validKitLink,
+    validPcbLink,
+    validPcbName,
+    validPlateLink,
+    validPlateName,
+    validSize,
+  ]);
+  const [validScreenThree, setValidScreenThree] = useState(false);
+
   return (
     <AddKeyboardContext.Provider
       value={{
         screen,
         setScreen,
         validScreenOne,
-        setValidScreenOne,
         validScreenTwo,
-        setValidScreenTwo,
         validScreenThree,
         setValidScreenThree,
         name,
@@ -223,9 +267,18 @@ export const AddKeyboardContextProvider = ({ children }: AddKeyboardContextProps
         kitName,
         setKitName,
         validKitName,
-        kit,
-        setKit,
-        validKit,
+        kitSelected,
+        setKitSelected,
+        kitCase,
+        setKitCase,
+        kitPcb,
+        setKitPcb,
+        kitPlate,
+        setKitPlate,
+        kitStabilizers,
+        setKitStabilizers,
+        kitKeycaps,
+        setKitKeycaps,
         kitLink,
         setKitLink,
         validKitLink,

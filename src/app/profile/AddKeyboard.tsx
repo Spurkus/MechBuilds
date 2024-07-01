@@ -11,14 +11,17 @@ import {
   closeDropdown,
   formatSocialLink,
 } from "@/src/helper/helperFunctions";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   DEFAULT_KEYBOARD_IMAGE,
   DEFAULT_KEYBOARD_IMAGE_HEIGHT,
   DEFAULT_KEYBOARD_IMAGE_WIDTH,
+  KEYBOARD_PLATES,
+  KEYBOARD_SIZES,
 } from "@/src/constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown, faLink } from "@fortawesome/free-solid-svg-icons";
+import { useGlobalThemeContext } from "@/src/context/GlobalTheme";
 
 interface AddKeyboardModalProps {
   open: boolean;
@@ -44,19 +47,373 @@ const AddKeyboardButton = () => {
   );
 };
 
-const ScreenTwo = () => {
+const CheckBoxField = ({
+  name,
+  checked,
+  setChecked,
+}: {
+  name: string;
+  checked: boolean;
+  setChecked: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
+  const { kitSelected } = useAddKeyboardContext();
+  const { theme } = useGlobalThemeContext();
+  const isLight = theme === "light";
+  const kitNoInput = !kitSelected || kitSelected === null;
+  const toggleChecked = () => {
+    if (kitNoInput) return;
+    setChecked(!checked);
+  };
+
+  useEffect(() => {
+    setChecked(false);
+  }, [kitSelected, setChecked]);
+
+  return (
+    <div className="flex flex-row justify-between space-x-1.5 pb-1">
+      <button
+        className={`btn ${isLight ? "btn-active" : "btn-neutral"} ${kitNoInput && "btn-disabled"} btn-sm gap-1.5 px-2.5`}
+        onClick={toggleChecked}
+        disabled={kitNoInput}
+      >
+        <span>{name}</span>
+        <input
+          type="checkbox"
+          checked={checked}
+          onClick={toggleChecked}
+          className="checkbox checkbox-sm"
+        />
+      </button>
+    </div>
+  );
+};
+
+const KitCheckBoxField = () => {
+  const {
+    kitCase,
+    setKitCase,
+    kitPcb,
+    setKitPcb,
+    kitPlate,
+    setKitPlate,
+    kitStabilizers,
+    setKitStabilizers,
+    kitKeycaps,
+    setKitKeycaps,
+  } = useAddKeyboardContext();
+  console.log(kitCase);
+  return (
+    <div className="flex flex-row justify-between space-x-1.5 py-0.5">
+      <CheckBoxField name="Case" checked={kitCase} setChecked={setKitCase} />
+      <CheckBoxField name="PCB" checked={kitPcb} setChecked={setKitPcb} />
+      <CheckBoxField name="Plate" checked={kitPlate} setChecked={setKitPlate} />
+      <CheckBoxField name="Stabilizers" checked={kitStabilizers} setChecked={setKitStabilizers} />
+      <CheckBoxField name="Keycaps" checked={kitKeycaps} setChecked={setKitKeycaps} />
+    </div>
+  );
+};
+
+const InputNameField = ({
+  type,
+  name,
+  validName,
+  namePlaceholder,
+  nameMaxLength,
+  noInput,
+  nameChange,
+}: {
+  type: string;
+  name: string;
+  validName: boolean;
+  namePlaceholder: string;
+  nameMaxLength: number;
+  noInput: boolean;
+  nameChange: (e: any) => void;
+}) => {
+  return (
+    <input
+      type="text"
+      placeholder={namePlaceholder}
+      maxLength={nameMaxLength}
+      className={`mr-2 grow truncate rounded-lg border border-gray-400 p-1 pl-2.5 text-sm focus:border-white ${
+        noInput && "input-disabled"
+      } ${name && "font-medium"} ${validName || !name ? "bg-base-200" : "bg-input-error"}`}
+      disabled={noInput}
+      id={`${type}name`}
+      autoComplete="off"
+      onChange={nameChange}
+      value={name}
+    />
+  );
+};
+
+const InputNameDropdownField = ({
+  type,
+  name,
+  setName,
+  validName,
+  namePlaceholder,
+  nameMaxLength,
+  noInput,
+  nameChange,
+  dropdown = false,
+  list = [],
+}: {
+  type: string;
+  name: string;
+  setName: React.Dispatch<React.SetStateAction<string>>;
+  validName: boolean;
+  namePlaceholder: string;
+  nameMaxLength: number;
+  noInput: boolean;
+  nameChange: (e: any) => void;
+  dropdown?: boolean;
+  list?: string[];
+}) => {
+  const nameListChange = (nameList: string) => {
+    if (noInput) return;
+    setName(nameList);
+    closeDropdown();
+  };
+  return (
+    <div className="dropdown dropdown-end h-full w-full">
+      <div tabIndex={0} role="button" className="flex h-full w-full grow flex-col">
+        <InputNameField
+          type={type}
+          name={name}
+          validName={validName}
+          namePlaceholder={namePlaceholder}
+          nameMaxLength={nameMaxLength}
+          noInput={noInput}
+          nameChange={nameChange}
+        />
+      </div>
+      {dropdown && (
+        <ul
+          tabIndex={0}
+          className={`${noInput && "hidden"} menu dropdown-content menu-sm z-[3] mr-1.5 mt-2 w-[98%] rounded-xl border border-white bg-base-100 p-[0.3rem] shadow`}
+        >
+          {list.map((nameList, index) => (
+            <li key={index} onClick={() => nameListChange(nameList)}>
+              <a className="w-full font-bold">{nameList}</a>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+};
+
+const InputNameLinkField = ({
+  type,
+  selectedLink,
+  setSelectedLink,
+  name,
+  setName,
+  namePlaceholder,
+  nameMaxLength,
+  validName,
+  link,
+  setLink,
+  validLink,
+  noInput,
+  fieldSelect,
+  dropdown = false,
+  list = [],
+}: {
+  type: string;
+  selectedLink: boolean;
+  setSelectedLink: React.Dispatch<React.SetStateAction<boolean>>;
+  name: string;
+  setName: React.Dispatch<React.SetStateAction<string>>;
+  namePlaceholder: string;
+  nameMaxLength: number;
+  validName: boolean;
+  link: string;
+  setLink: React.Dispatch<React.SetStateAction<string>>;
+  validLink: boolean;
+  noInput: boolean;
+  fieldSelect: boolean | null;
+  dropdown?: boolean;
+  list?: string[];
+}) => {
+  const { kitSelected, kitName } = useAddKeyboardContext();
+  const [linkFocused, setLinkFocused] = useState(false);
+  const buttonError = (selectedLink && !validName && name) || (!selectedLink && !validLink && link);
+
+  // Preventing input when kit is not selected
+  const selectLink = () => {
+    if (noInput) return;
+    setSelectedLink(!selectedLink);
+  };
+  const nameChange = (e: any) => {
+    if (noInput) return;
+    setName(e.target.value);
+  };
+  const linkChange = (e: any) => {
+    if (noInput) return;
+    setLink(e.target.value);
+  };
+
+  useEffect(() => {
+    setSelectedLink(false);
+  }, [fieldSelect, setSelectedLink]);
+
+  useEffect(() => {
+    setLink("");
+    if (kitSelected && fieldSelect) {
+      setName(kitName);
+    } else if (!kitSelected) {
+      setName("");
+    }
+  }, [kitSelected, fieldSelect, setName, setLink, kitName]);
+
+  return (
+    <div className="flex flex-row">
+      {selectedLink ? (
+        <input
+          type="text"
+          placeholder="www.example.com"
+          id={`${type}link`}
+          maxLength={100}
+          className={`mr-2 grow truncate rounded-lg border border-gray-400 p-1 pl-2.5 text-sm focus:border-white ${
+            noInput && "input-disabled"
+          } ${validLink || !link ? "bg-base-200" : "bg-input-error"}`}
+          disabled={noInput}
+          autoComplete="off"
+          onFocus={() => setLinkFocused(true)}
+          onBlur={() => setLinkFocused(false)}
+          onChange={linkChange}
+          value={linkFocused ? link : formatSocialLink(link)}
+        />
+      ) : dropdown ? (
+        <InputNameDropdownField
+          type={type}
+          name={name}
+          setName={setName}
+          validName={validName}
+          namePlaceholder={namePlaceholder}
+          nameMaxLength={nameMaxLength}
+          noInput={noInput}
+          nameChange={nameChange}
+          dropdown={dropdown}
+          list={list}
+        />
+      ) : (
+        <InputNameField
+          type={type}
+          name={name}
+          validName={validName}
+          namePlaceholder={namePlaceholder}
+          nameMaxLength={nameMaxLength}
+          noInput={noInput}
+          nameChange={nameChange}
+        />
+      )}
+      <button
+        className={`btn btn-square btn-outline btn-sm self-center rounded-lg ${buttonError && "text-error"} ${noInput && "input-disabled"} ${selectedLink ? "btn-active" : ""}`}
+        disabled={noInput}
+        onClick={selectLink}
+      >
+        <FontAwesomeIcon
+          icon={faLink}
+          className={`ml-[0.1rem] mt-[0.1rem] ${buttonError && "text-error"}`}
+        />
+      </button>
+    </div>
+  );
+};
+const KitField = () => {
   const {
     kitName,
     setKitName,
     validKitName,
-    kit,
-    setKit,
-    validKit,
     kitLink,
     setKitLink,
     validKitLink,
     kitSelectedLink,
     setKitSelectedLink,
+    kitSelected,
+    setKitSelected,
+  } = useAddKeyboardContext();
+  const kitInitial = kitSelected === null;
+  const kitMenuMessage = kitInitial
+    ? "Do you have a Keyboard Kit?"
+    : kitSelected
+      ? "Keyboard Kit Selected"
+      : "No Keyboard Kit";
+  const kitNoInput = !kitSelected || kitInitial;
+
+  // Dropdown functions
+  const kitSelectYes = () => {
+    setKitSelected(true);
+    closeDropdown();
+  };
+
+  const kitSelectNo = () => {
+    setKitSelected(false);
+    closeDropdown();
+  };
+
+  return (
+    <>
+      <div className="flex flex-row">
+        <div className="flex w-[47.5%] flex-col">
+          <label className="label pb-0 font-bold">Keyboard Kit</label>
+          <div className="dropdown dropdown-end">
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn btn-sm flex w-full grow flex-col items-center rounded-lg border border-gray-400 pl-2.5 text-sm hover:border-white focus:border-white"
+            >
+              <p className="self-start">{kitMenuMessage}</p>
+              <FontAwesomeIcon icon={faCaretDown} className="h-4 w-4 self-end" />
+            </div>
+            <ul
+              tabIndex={0}
+              className="menu dropdown-content menu-sm z-[3] mt-2 w-full rounded-xl border border-white bg-base-100 p-[0.3rem] shadow"
+            >
+              <li onClick={kitSelectYes}>
+                <a className="w-full justify-center font-bold">yes</a>
+              </li>
+              <li onClick={kitSelectNo}>
+                <a className="w-full justify-center font-bold">no</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div className="flex grow flex-col">
+          <label className="label ml-3 pb-0 font-bold">
+            Kit {kitSelectedLink ? "Link (Optional)" : "Name"}
+          </label>
+          <div className="ml-3">
+            <InputNameLinkField
+              type="kit"
+              selectedLink={kitSelectedLink}
+              setSelectedLink={setKitSelectedLink}
+              name={kitName}
+              setName={setKitName}
+              namePlaceholder="Chosfox CF81"
+              nameMaxLength={50}
+              validName={validKitName}
+              link={kitLink}
+              setLink={setKitLink}
+              validLink={validKitLink}
+              noInput={kitNoInput}
+              fieldSelect={kitSelected}
+            />
+          </div>
+        </div>
+      </div>
+      <KitCheckBoxField />
+    </>
+  );
+};
+
+const ScreenTwo = () => {
+  const {
+    kitSelected,
+    kitCase,
     caseName,
     setCaseName,
     validCaseName,
@@ -65,6 +422,7 @@ const ScreenTwo = () => {
     validCaseLink,
     caseSelectedLink,
     setCaseSelectedLink,
+    kitPcb,
     pcbName,
     setPcbName,
     validPcbName,
@@ -73,6 +431,7 @@ const ScreenTwo = () => {
     validPcbLink,
     pcbSelectedLink,
     setPcbSelectedLink,
+    kitPlate,
     plateName,
     setPlateName,
     validPlateName,
@@ -85,256 +444,92 @@ const ScreenTwo = () => {
     setSize,
     validSize,
   } = useAddKeyboardContext();
-  const [isKitLinkFocused, setKitLinkFocused] = useState(false);
-  const [isCaseLinkFocused, setCaseLinkFocused] = useState(false);
-  const [isPcbLinkFocused, setPcbLinkFocused] = useState(false);
-  const [isPlateLinkFocused, setPlateLinkFocused] = useState(false);
+  const kitInitial = kitSelected === null;
 
   return (
     <>
-      <div className="flex flex-col">
-        <div className="flex flex-row">
-          <div className="flex flex-col">
-            <label className="label pb-0 font-bold">Keyboard Kit</label>
-            <div className="dropdown dropdown-end">
-              <div
-                tabIndex={0}
-                role="button"
-                className="btn btn-sm flex w-full grow flex-col items-center rounded-lg border border-gray-400 pl-2.5 text-sm hover:border-white focus:border-white"
-              >
-                <p className="self-start">Do you have a Keyboard Kit?</p>
-                <FontAwesomeIcon icon={faCaretDown} className="h-4 w-4 self-end" />
-              </div>
-              <ul
-                tabIndex={0}
-                className="menu dropdown-content menu-sm z-[3] mt-2 w-full rounded-xl border border-white bg-base-100 p-[0.3rem] shadow"
-              >
-                <li
-                  onClick={() => {
-                    closeDropdown();
-                  }}
-                >
-                  <a className="w-full justify-center font-bold">yes</a>
-                </li>
-                <li
-                  onClick={() => {
-                    closeDropdown();
-                  }}
-                >
-                  <a className="w-full justify-center font-bold">no</a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="flex grow flex-col">
-            <label className="label ml-3 pb-0 font-bold">
-              Kit {kitSelectedLink ? "Link (Optional)" : "Name"}
-            </label>
-            <div className="flex flex-row">
-              {kitSelectedLink ? (
-                <input
-                  type="text"
-                  placeholder="www.example.com"
-                  id="kitlink"
-                  maxLength={100}
-                  className={`ml-3 mr-2 grow truncate rounded-lg border border-gray-400 p-1 pl-2.5 text-sm focus:border-white ${
-                    validKitLink || !kitLink ? "bg-base-200" : "bg-input-error"
-                  }`}
-                  autoComplete="off"
-                  onFocus={() => setKitLinkFocused(true)}
-                  onBlur={() => setKitLinkFocused(false)}
-                  onChange={(e) => setKitLink(e.target.value)}
-                  value={isKitLinkFocused ? kitLink : formatSocialLink(kitLink)}
-                />
-              ) : (
-                <input
-                  type="text"
-                  placeholder="Chosfox CF81"
-                  maxLength={50}
-                  className={`ml-3 mr-2 grow rounded-lg border border-gray-400 p-1 pl-2.5 text-sm focus:border-white ${
-                    validKitName || !kitName ? "bg-base-200" : "bg-input-error"
-                  }`}
-                  id="kitname"
-                  autoComplete="off"
-                  onChange={(e) => setKitName(e.target.value)}
-                  value={kitName}
-                />
-              )}
-              <button
-                className={`btn btn-square btn-outline btn-sm self-center rounded-lg ${kitSelectedLink ? "btn-active" : ""}`}
-                onClick={() => setKitSelectedLink(!kitSelectedLink)}
-              >
-                <FontAwesomeIcon icon={faLink} className="ml-[0.1rem] mt-[0.1rem]" />
-              </button>
-            </div>
-          </div>
+      <KitField />
+      <hr className="border-t border-gray-700" />
+      <div className="flex flex-row justify-between">
+        <div className="flex w-2/5 flex-col">
+          <label className="label pb-0 pt-0.5 font-bold">Size</label>
+          <InputNameDropdownField
+            type="size"
+            name={size}
+            setName={setSize}
+            validName={validSize}
+            namePlaceholder="80% (TKL)"
+            nameMaxLength={20}
+            noInput={kitInitial}
+            nameChange={(e: any) => {
+              if (kitInitial) return;
+              setSize(e.target.value);
+            }}
+            dropdown={true}
+            list={KEYBOARD_SIZES}
+          />
+        </div>
+        <div className="flex w-3/5 flex-col">
+          <label className="label pb-0 pt-0.5 font-bold">
+            Plate {plateSelectedLink ? "Link (Optional)" : "Name"}
+          </label>
+          <InputNameLinkField
+            type="plate"
+            selectedLink={plateSelectedLink}
+            setSelectedLink={setPlateSelectedLink}
+            name={plateName}
+            setName={setPlateName}
+            namePlaceholder="POM"
+            nameMaxLength={50}
+            validName={validPlateName}
+            link={plateLink}
+            setLink={setPlateLink}
+            validLink={validPlateLink}
+            noInput={kitInitial || kitPlate}
+            dropdown={true}
+            list={KEYBOARD_PLATES}
+            fieldSelect={kitPlate}
+          />
         </div>
       </div>
-      <div className="flex flex-row space-x-1.5">
-        <label className="btn btn-neutral btn-sm cursor-pointer px-2.5">
-          <span className="label-text">Case</span>
-          <input type="checkbox" defaultChecked className="checkbox checkbox-sm" />
-        </label>
-        <label className="btn btn-neutral btn-sm cursor-pointer px-2.5">
-          <span className="label-text">PCB</span>
-          <input type="checkbox" defaultChecked className="checkbox checkbox-sm" />
-        </label>
-        <label className="btn btn-neutral btn-sm cursor-pointer px-2.5">
-          <span className="label-text">Plate</span>
-          <input type="checkbox" defaultChecked className="checkbox checkbox-sm" />
-        </label>
-        <label className="btn btn-neutral btn-sm cursor-pointer px-2.5">
-          <span className="label-text">Stabilizers</span>
-          <input type="checkbox" defaultChecked className="checkbox checkbox-sm" />
-        </label>
-        <label className="btn btn-neutral btn-sm cursor-pointer px-2.5">
-          <span className="label-text">Keycaps</span>
-          <input type="checkbox" defaultChecked className="checkbox checkbox-sm" />
-        </label>
-      </div>
-
       <div className="flex flex-col">
         <label className="label pb-0 pt-0 font-bold">
           Case {caseSelectedLink ? "Link (Optional)" : "Name"}
         </label>
-        <div className="flex flex-row">
-          {caseSelectedLink ? (
-            <input
-              type="text"
-              placeholder="www.example.com"
-              id="caselink"
-              maxLength={100}
-              className={`mr-2 grow truncate rounded-lg border border-gray-400 p-1 pl-2.5 text-sm focus:border-white ${
-                validCaseLink || !caseLink ? "bg-base-200" : "bg-input-error"
-              }`}
-              autoComplete="off"
-              onFocus={() => setCaseLinkFocused(true)}
-              onBlur={() => setCaseLinkFocused(false)}
-              onChange={(e) => setCaseLink(e.target.value)}
-              value={isCaseLinkFocused ? caseLink : formatSocialLink(caseLink)}
-            />
-          ) : (
-            <input
-              type="text"
-              placeholder="KBDfans Tofu65"
-              maxLength={50}
-              className={`mr-2 grow rounded-lg border border-gray-400 p-1 pl-2.5 text-sm focus:border-white ${
-                validCaseName || !caseName ? "bg-base-200" : "bg-input-error"
-              }`}
-              id="casename"
-              autoComplete="off"
-              onChange={(e) => setCaseName(e.target.value)}
-              value={caseName}
-            />
-          )}
-          <button
-            className={`btn btn-square btn-outline btn-sm self-center rounded-lg ${caseSelectedLink ? "btn-active" : ""}`}
-            onClick={() => setCaseSelectedLink(!caseSelectedLink)}
-          >
-            <FontAwesomeIcon icon={faLink} className="ml-[0.1rem] mt-[0.1rem]" />
-          </button>
-        </div>
+        <InputNameLinkField
+          type="case"
+          selectedLink={caseSelectedLink}
+          setSelectedLink={setCaseSelectedLink}
+          name={caseName}
+          setName={setCaseName}
+          namePlaceholder="KBDfans Tofu65"
+          nameMaxLength={50}
+          validName={validCaseName}
+          link={caseLink}
+          setLink={setCaseLink}
+          validLink={validCaseLink}
+          noInput={kitInitial || kitCase}
+          fieldSelect={kitCase}
+        />
       </div>
-
       <div className="flex flex-col">
         <label className="label pb-0 pt-0.5 font-bold">
           PCB {pcbSelectedLink ? "Link (Optional)" : "Name"}
         </label>
-        <div className="flex flex-row">
-          {pcbSelectedLink ? (
-            <input
-              type="text"
-              placeholder="www.example.com"
-              id="pcblink"
-              maxLength={100}
-              className={`mr-2 grow truncate rounded-lg border border-gray-400 p-1 pl-2.5 text-sm focus:border-white ${
-                validPcbLink || !pcbLink ? "bg-base-200" : "bg-input-error"
-              }`}
-              autoComplete="off"
-              onFocus={() => setPcbLinkFocused(true)}
-              onBlur={() => setPcbLinkFocused(false)}
-              onChange={(e) => setPcbLink(e.target.value)}
-              value={isPcbLinkFocused ? pcbLink : formatSocialLink(pcbLink)}
-            />
-          ) : (
-            <input
-              type="text"
-              placeholder="GH60"
-              maxLength={50}
-              className={`mr-2 grow rounded-lg border border-gray-400 p-1 pl-2.5 text-sm focus:border-white ${
-                validPcbName || !pcbName ? "bg-base-200" : "bg-input-error"
-              }`}
-              id="pcbname"
-              autoComplete="off"
-              onChange={(e) => setPcbName(e.target.value)}
-              value={pcbName}
-            />
-          )}
-          <button
-            className={`btn btn-square btn-outline btn-sm self-center rounded-lg ${pcbSelectedLink ? "btn-active" : ""}`}
-            onClick={() => setPcbSelectedLink(!pcbSelectedLink)}
-          >
-            <FontAwesomeIcon icon={faLink} className="ml-[0.1rem] mt-[0.1rem]" />
-          </button>
-        </div>
-      </div>
-
-      <div className="flex flex-col">
-        <label className="label pb-0 pt-0.5 font-bold">
-          Plate {plateSelectedLink ? "Link (Optional)" : "Name"}
-        </label>
-        <div className="flex flex-row">
-          {plateSelectedLink ? (
-            <input
-              type="text"
-              placeholder="www.example.com"
-              id="platelink"
-              maxLength={100}
-              className={`mr-2 grow truncate rounded-lg border border-gray-400 p-1 pl-2.5 text-sm focus:border-white ${
-                validPlateLink || !plateLink ? "bg-base-200" : "bg-input-error"
-              }`}
-              autoComplete="off"
-              onFocus={() => setPlateLinkFocused(true)}
-              onBlur={() => setPlateLinkFocused(false)}
-              onChange={(e) => setPlateLink(e.target.value)}
-              value={isPlateLinkFocused ? plateLink : formatSocialLink(plateLink)}
-            />
-          ) : (
-            <input
-              type="text"
-              placeholder="POM"
-              maxLength={50}
-              className={`mr-2 grow rounded-lg border border-gray-400 p-1 pl-2.5 text-sm focus:border-white ${
-                validPlateName || !plateName ? "bg-base-200" : "bg-input-error"
-              }`}
-              id="platename"
-              autoComplete="off"
-              onChange={(e) => setPlateName(e.target.value)}
-              value={plateName}
-            />
-          )}
-          <button
-            className={`btn btn-square btn-outline btn-sm self-center rounded-lg ${plateSelectedLink ? "btn-active" : ""}`}
-            onClick={() => setPlateSelectedLink(!plateSelectedLink)}
-          >
-            <FontAwesomeIcon icon={faLink} className="ml-[0.1rem] mt-[0.1rem]" />
-          </button>
-        </div>
-      </div>
-
-      <div className="flex flex-col">
-        <label className="label pb-0 pt-0.5 font-bold">Size</label>
-        <input
-          type="text"
-          placeholder="80% (TKL)"
-          maxLength={50}
-          className={`mr-2 grow rounded-lg border border-gray-400 p-1 pl-2.5 text-sm focus:border-white ${
-            validSize || !size ? "bg-base-200" : "bg-input-error"
-          }`}
-          id="keyboardsize"
-          autoComplete="off"
-          onChange={(e) => setSize(e.target.value)}
-          value={size}
+        <InputNameLinkField
+          type="pcb"
+          selectedLink={pcbSelectedLink}
+          setSelectedLink={setPcbSelectedLink}
+          name={pcbName}
+          setName={setPcbName}
+          namePlaceholder="GH60"
+          nameMaxLength={50}
+          validName={validPcbName}
+          link={pcbLink}
+          setLink={setPcbLink}
+          validLink={validPcbLink}
+          noInput={kitInitial || kitPcb}
+          fieldSelect={kitPcb}
         />
       </div>
     </>
@@ -389,10 +584,16 @@ const ScreenOne = () => {
 };
 
 const AddKeyboardForm = ({ closeKeyboardModal }: AddKeyboardFormProps) => {
-  const { screen, setScreen } = useAddKeyboardContext();
+  const { screen, setScreen, validScreenOne, validScreenTwo, validScreenThree } =
+    useAddKeyboardContext();
+
+  const canIncrement = useMemo(() => {
+    return screen === 1 ? validScreenOne : screen === 2 ? validScreenTwo : validScreenThree;
+  }, [screen, validScreenOne, validScreenTwo, validScreenThree]);
 
   const incrementScreen = (e: any) => {
     e.preventDefault();
+    if (!canIncrement) return;
     setScreen(screen + 1);
   };
 
@@ -427,7 +628,10 @@ const AddKeyboardForm = ({ closeKeyboardModal }: AddKeyboardFormProps) => {
             save changes
           </button>
         ) : (
-          <button className={`btn btn-success btn-sm`} onClick={incrementScreen}>
+          <button
+            className={`btn btn-success btn-sm ${!canIncrement && "btn-disabled"}`}
+            onClick={incrementScreen}
+          >
             next page
           </button>
         )}

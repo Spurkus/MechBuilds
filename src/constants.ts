@@ -23,10 +23,13 @@ export const KEYBOARD_NAME_REGEX = /^[A-Za-z0-9-_ ]{2,50}$/;
 export const KEYBOARD_DESCRIPTION_REGEX =
   /^[A-Za-z0-9À-ÖØ-öø-ÿ'-.?!@#$%^&*()_+=\[\]{}|\\;:"<>,/ \n]{0,1000}$/;
 export const KEYBOARD_SIZE_REGEX = /^[A-Za-z0-9-_ \(\)%]{1,20}$/;
+export const KEYBOARD_PLATE_REGEX = /^[A-Za-z0-9-_ \(\)%]{1,50}$/;
 export const KEYBOARD_MOD_REGEX = /^[A-Za-z0-9-_ \(\)\[\]]{1,25}$/;
 
 // Keyboard Constants
 export const KEYBOARD_KIT_ITEMS = ["case", "pcb", "plate", "stabilizers", "keycaps"];
+export const KEYBOARD_SIZES = ["100% (Full Size)", "80% (TKL)", "75%", "65%", "60%"];
+export const KEYBOARD_PLATES = ["Polycarbonate (PC)", "FR4", "POM", "Aluminium", "Acrylic"];
 export const DEFAULT_KEYBOARD_IMAGE = defaultKeyboardImage;
 
 // User Profile Constants
