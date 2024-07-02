@@ -10,7 +10,7 @@ export interface ModalType {
   toggleModal: () => void;
 }
 
-const renderButton = (button: ModalButtonType, index: number, toggleModal: () => void) => {
+const RenderButton = (button: ModalButtonType, index: number, toggleModal: () => void) => {
   if (typeof button === "string") {
     return (
       <button key={index} className="btn" onClick={toggleModal}>
@@ -21,15 +21,16 @@ const renderButton = (button: ModalButtonType, index: number, toggleModal: () =>
     return (
       <button
         key={index}
-        className={classNames("btn", {
+        className={classNames("btn", "btn-sm", "pb-10", {
           "btn-info": button.type === "info",
           "btn-success": button.type === "success",
           "btn-warning": button.type === "warning",
           "btn-error": button.type === "error",
+          "btn-neutral": button.type === "neutral",
         })}
         onClick={button.onClick}
       >
-        {button.text}
+        <span className="mt-[0.8rem]">{button.text}</span>
       </button>
     );
   }
@@ -49,8 +50,8 @@ const Modal = ({ open, title, message, theme, buttons, toggleModal }: ModalType)
         <h3 className="text-4xl font-bold">{title}</h3>
         <p className="py-4">{message}</p>
         <div className="modal-action">
-          <form method="dialog">
-            {buttons.map((button, index) => renderButton(button, index, toggleModal))}
+          <form method="dialog" className="flex flex-row space-x-28">
+            {buttons.map((button, index) => RenderButton(button, index, toggleModal))}
           </form>
         </div>
       </div>
