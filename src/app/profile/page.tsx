@@ -1,6 +1,6 @@
 import ProfileDetails from "@/src/components/ProfileDetails/ProfileDetails";
 import NeedsAuthentication from "@/src/context/NeedsAuthentication";
-import AddKeyboardButton from "./AddKeyboard";
+import AddKeyboardButton from "@/src/components/Keyboard/AddEditKeyboard/AddKeyboard";
 
 const Profile = () => {
   return (
