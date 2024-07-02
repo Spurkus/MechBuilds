@@ -1,23 +1,16 @@
 import Loading from "@/src/components/Loading";
 import NextImage from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { formatSocialLink, closeDropdown } from "@/src/helper/helperFunctions";
 import { useAuthContext } from "@/src/context/Authentication";
-import { EditUserProfileType } from "@/src/types/user";
 import { DEFAULT_IMAGE_SIZE, DEFAULT_PRONOUNS } from "@/src/constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown, faLink } from "@fortawesome/free-solid-svg-icons";
 import { formatPronouns } from "@/src/helper/helperFunctions";
 import {
-  editUserProfile,
-  uploadProfilePicture,
-  getDefaultProfilePictureURL,
-} from "@/src/helper/firestoreFunctions";
-import {
   EditProfileContextProvider,
   useEditProfileContext,
 } from "@/src/context/EditProfileContext";
-import { useGlobalModalContext } from "@/src/context/GlobalModal";
 
 interface EditProfileProps {
   open: boolean;
@@ -276,65 +269,7 @@ const DisplayNameField = () => {
 };
 
 const CancelAndSaveButtons = () => {
-  const { handleModalError } = useGlobalModalContext();
-  const { editUserProfileState } = useAuthContext();
-  const {
-    userProfile,
-    displayName,
-    bio,
-    pronouns,
-    socialLinks,
-    selectedProfilePicture,
-    removedProfilePicture,
-    isSavable,
-    loading,
-    imageSource,
-    setLoading,
-    setDefault,
-    toggleEditProfile,
-  } = useEditProfileContext();
-
-  const closeProfileModal = () => {
-    const element = document.getElementById("editprofilemodal");
-    if (element instanceof HTMLDialogElement) {
-      element.close();
-      toggleEditProfile();
-    }
-  };
-
-  const handleCancel = () => {
-    setDefault();
-    closeProfileModal();
-  };
-
-  const handleSave = async () => {
-    if (!isSavable || loading) return;
-    setLoading(true);
-    try {
-      const profilePictureURL = removedProfilePicture
-        ? await getDefaultProfilePictureURL()
-        : await uploadProfilePicture(selectedProfilePicture, userProfile);
-      const fieldsToUpdate: EditUserProfileType = {
-        displayName: displayName,
-        profilePicture: profilePictureURL ? profilePictureURL : userProfile.profilePicture,
-        lastActive: new Date(),
-        bio: bio,
-        pronouns: pronouns,
-        socialLinks: socialLinks,
-      };
-      await editUserProfile(userProfile.uid, fieldsToUpdate);
-      await editUserProfileState(fieldsToUpdate);
-    } catch (error: any) {
-      handleModalError(error);
-      setDefault();
-    } finally {
-      setTimeout(() => {
-        setLoading(false);
-        closeProfileModal();
-      }, 1500);
-    }
-  };
-
+  const { isSavable, handleCancel, handleSave } = useEditProfileContext();
   return (
     <form method="dialog" className="flex grow flex-row justify-center space-x-8">
       <button className="btn btn-neutral btn-sm" onClick={handleCancel}>
@@ -351,7 +286,7 @@ const CancelAndSaveButtons = () => {
 };
 
 const EditProfileForm = () => {
-  const { loading } = useEditProfileContext();
+  const { loading, handleCancel } = useEditProfileContext();
 
   // Saving profile loading state
   if (loading)
@@ -388,6 +323,7 @@ const EditProfile = ({ open, toggleEditProfile }: EditProfileProps) => {
           <EditProfileContextProvider
             userProfile={userProfile}
             toggleEditProfile={toggleEditProfile}
+            open={open}
           >
             <EditProfileForm />
           </EditProfileContextProvider>

@@ -1,9 +1,13 @@
 "use client";
-import { useState, useEffect, useMemo, createContext, useContext } from "react";
+import { useState, useEffect, useMemo, createContext, useContext, useCallback } from "react";
 import useInputValidator from "@/src/hooks/useInputValidator";
 import { areArraysEqual, adjustImageURL, linkValidation } from "@/src/helper/helperFunctions";
-import { getStorage, ref, getDownloadURL } from "firebase/storage";
-import { UserProfileType } from "@/src/types/user";
+import {
+  editUserProfile,
+  uploadProfilePicture,
+  getDefaultProfilePictureURL,
+} from "@/src/helper/firestoreFunctions";
+import { UserProfileType, EditUserProfileType } from "@/src/types/user";
 import {
   DEFAULT_PRONOUNS,
   DISPLAY_NAME_REGEX,
@@ -15,6 +19,7 @@ import {
   MAXIMUM_IMAGE_SIZE,
 } from "@/src/constants";
 import { useGlobalModalContext } from "./GlobalModal";
+import { useAuthContext } from "./Authentication";
 import { StaticImageData } from "next/image";
 
 export interface EditProfileContextType {
@@ -66,12 +71,17 @@ export interface EditProfileContextType {
   setDefault: () => void;
 
   toggleEditProfile: () => void;
+
+  closeProfileModal: () => void;
+  handleCancel: () => void;
+  handleSave: () => void;
 }
 
 export interface EditProfileContextProps {
+  children: React.ReactNode;
   userProfile: UserProfileType;
   toggleEditProfile: () => void;
-  children: React.ReactNode;
+  open: boolean;
 }
 
 const checkDefaultPronouns = (pronouns: [string, string]) => {
@@ -84,8 +94,10 @@ export const EditProfileContextProvider = ({
   children,
   userProfile,
   toggleEditProfile,
+  open,
 }: EditProfileContextProps) => {
-  const { handleModal } = useGlobalModalContext();
+  const { handleModal, handleModalError } = useGlobalModalContext();
+  const { editUserProfileState } = useAuthContext();
 
   // Check Display name
   const displayNameValidation = (name: string) => DISPLAY_NAME_REGEX.test(name);
@@ -137,32 +149,31 @@ export const EditProfileContextProvider = ({
   // Loading state when saving
   const [loading, setLoading] = useState(false);
 
-  // Check if profile is savable
-  const isSavable = useMemo(() => {
-    const valid = validDisplayName && validPronouns && validBio && validSocialLinks && !loading;
-    const changed =
+  // Check if any changes are made
+  const changed = useMemo(() => {
+    return (
       displayName !== userProfile.displayName ||
       bio !== userProfile.bio ||
       !areArraysEqual(pronouns, userProfile.pronouns) ||
       !areArraysEqual(socialLinks, userProfile.socialLinks) ||
       !!selectedProfilePicture ||
-      removedProfilePicture;
-
-    return valid && changed;
+      removedProfilePicture
+    );
   }, [
-    validDisplayName,
-    validPronouns,
-    validBio,
-    validSocialLinks,
-    loading,
-    userProfile,
     displayName,
     bio,
     pronouns,
     socialLinks,
     selectedProfilePicture,
     removedProfilePicture,
+    userProfile,
   ]);
+
+  // Check if profile is savable
+  const isSavable = useMemo(() => {
+    const valid = validDisplayName && validPronouns && validBio && validSocialLinks && !loading;
+    return valid && changed;
+  }, [changed, validDisplayName, validPronouns, validBio, validSocialLinks, loading]);
 
   // Get source for profile picture
   const imageSource = useMemo(() => {
@@ -217,7 +228,7 @@ export const EditProfileContextProvider = ({
   }, [selectedProfilePicture, setSelectedProfilePicture, handleModal]);
 
   // Setting default states
-  const setDefault = () => {
+  const setDefault = useCallback(() => {
     setDisplayName(userProfile.displayName);
     setBio(userProfile.bio);
 
@@ -236,7 +247,72 @@ export const EditProfileContextProvider = ({
     // Default profile picture
     setSelectedProfilePicture(null);
     setRemovedProfilePicture(false);
+  }, [
+    setBio,
+    setDisplayName,
+    setPronouns,
+    setSocialLinkOne,
+    setSocialLinkThree,
+    setSocialLinkTwo,
+    setSocialLinks,
+    userProfile.bio,
+    userProfile.displayName,
+    userProfile.pronouns,
+    userProfile.socialLinks,
+  ]);
+
+  const closeProfileModal = useCallback(() => {
+    const element = document.getElementById("editprofilemodal");
+    if (element instanceof HTMLDialogElement) {
+      element.close();
+      toggleEditProfile();
+    }
+  }, [toggleEditProfile]);
+
+  const handleCancel = useCallback(() => {
+    setDefault();
+    closeProfileModal();
+  }, [closeProfileModal, setDefault]);
+
+  const handleSave = async () => {
+    if (!isSavable || loading) return;
+    setLoading(true);
+    try {
+      const profilePictureURL = removedProfilePicture
+        ? await getDefaultProfilePictureURL()
+        : await uploadProfilePicture(selectedProfilePicture, userProfile);
+      const fieldsToUpdate: EditUserProfileType = {
+        displayName: displayName,
+        profilePicture: profilePictureURL ? profilePictureURL : userProfile.profilePicture,
+        lastActive: new Date(),
+        bio: bio,
+        pronouns: pronouns,
+        socialLinks: socialLinks,
+      };
+      await editUserProfile(userProfile.uid, fieldsToUpdate);
+      await editUserProfileState(fieldsToUpdate);
+    } catch (error: any) {
+      handleModalError(error);
+      setDefault();
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+        closeProfileModal();
+      }, 1500);
+    }
   };
+
+  // Handle escape key
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && !loading && open) {
+        handleCancel();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown); // Add event listener
+    return () => document.removeEventListener("keydown", handleKeyDown); // Remove on cleanup
+  }, [handleCancel, loading, open]);
 
   return (
     <EditProfileContext.Provider
@@ -280,6 +356,9 @@ export const EditProfileContextProvider = ({
         isSavable,
         setDefault,
         toggleEditProfile,
+        closeProfileModal,
+        handleCancel,
+        handleSave,
       }}
     >
       {children}
