@@ -66,6 +66,7 @@ const CheckBoxField = ({
   };
 
   useEffect(() => {
+    if (kitSelected) return;
     setChecked(false);
   }, [kitSelected, setChecked]);
 
@@ -80,7 +81,7 @@ const CheckBoxField = ({
         <input
           type="checkbox"
           checked={checked}
-          onClick={toggleChecked}
+          onChange={() => {}}
           className="checkbox checkbox-sm"
         />
       </button>
