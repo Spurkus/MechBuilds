@@ -401,7 +401,7 @@ const KitField = () => {
               setLink={setKitLink}
               validLink={validKitLink}
               noInput={kitNoInput}
-              fieldSelect={kitSelected}
+              fieldSelect={false}
             />
           </div>
         </div>

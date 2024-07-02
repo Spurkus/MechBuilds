@@ -236,6 +236,8 @@ export const AddKeyboardContextProvider = ({ children }: AddKeyboardContextProps
       validKitSelectedLink &&
       kitSelected !== null &&
       (kitSelected ? validKitLink : true) &&
+      validKitName &&
+      (validKitLink || !kitLink) &&
       validSize &&
       validPlateName &&
       (validPlateLink || !plateLink) &&
@@ -263,6 +265,7 @@ export const AddKeyboardContextProvider = ({ children }: AddKeyboardContextProps
     validCaseLink,
     validCaseName,
     validKitLink,
+    validKitName,
     validPcbLink,
     validPcbName,
     validPlateLink,
