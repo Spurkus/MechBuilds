@@ -270,9 +270,13 @@ const DisplayNameField = () => {
 
 const CancelAndSaveButtons = () => {
   const { isSavable, handleCancel, handleSave } = useEditProfileContext();
+  const handleCancelButton = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    handleCancel();
+  };
   return (
     <form method="dialog" className="flex grow flex-row justify-center space-x-8">
-      <button className="btn btn-neutral btn-sm" onClick={handleCancel}>
+      <button className="btn btn-neutral btn-sm" onClick={handleCancelButton}>
         cancel
       </button>
       <button

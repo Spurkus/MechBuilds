@@ -1,7 +1,12 @@
 "use client";
 import { useState, useEffect, useMemo, createContext, useContext, useCallback } from "react";
 import useInputValidator from "@/src/hooks/useInputValidator";
-import { areArraysEqual, adjustImageURL, linkValidation } from "@/src/helper/helperFunctions";
+import {
+  areArraysEqual,
+  adjustImageURL,
+  linkValidation,
+  closeModal,
+} from "@/src/helper/helperFunctions";
 import {
   editUserProfile,
   uploadProfilePicture,
@@ -72,7 +77,6 @@ export interface EditProfileContextType {
 
   toggleEditProfile: () => void;
 
-  closeProfileModal: () => void;
   handleCancel: () => void;
   handleSave: () => void;
 }
@@ -261,18 +265,26 @@ export const EditProfileContextProvider = ({
     userProfile.socialLinks,
   ]);
 
-  const closeProfileModal = useCallback(() => {
-    const element = document.getElementById("editprofilemodal");
-    if (element instanceof HTMLDialogElement) {
-      element.close();
-      toggleEditProfile();
-    }
-  }, [toggleEditProfile]);
-
   const handleCancel = useCallback(() => {
-    setDefault();
-    closeProfileModal();
-  }, [closeProfileModal, setDefault]);
+    const closeGlobalModal = () => {
+      closeModal("globalmodal");
+    };
+
+    const discardAndClose = () => {
+      setDefault();
+      closeModal("editprofilemodal");
+      toggleEditProfile();
+    };
+
+    if (changed) {
+      handleModal("Discard Changes", "Are you sure you want to discard the changes?", "error", [
+        { text: "Discard", type: "error", onClick: discardAndClose },
+        { text: "Cancel", type: "neutral", onClick: closeGlobalModal },
+      ]);
+    } else {
+      discardAndClose();
+    }
+  }, [changed, handleModal, setDefault, toggleEditProfile]);
 
   const handleSave = async () => {
     if (!isSavable || loading) return;
@@ -297,7 +309,8 @@ export const EditProfileContextProvider = ({
     } finally {
       setTimeout(() => {
         setLoading(false);
-        closeProfileModal();
+        closeModal("editprofilemodal");
+        toggleEditProfile();
       }, 1500);
     }
   };
@@ -356,7 +369,6 @@ export const EditProfileContextProvider = ({
         isSavable,
         setDefault,
         toggleEditProfile,
-        closeProfileModal,
         handleCancel,
         handleSave,
       }}
