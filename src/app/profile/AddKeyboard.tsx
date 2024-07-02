@@ -260,10 +260,11 @@ const InputNameLinkField = ({
   }, [fieldSelect, setSelectedLink]);
 
   useEffect(() => {
-    setLink("");
     if (kitSelected && fieldSelect) {
+      setLink("");
       setName(kitName);
     } else if (!kitSelected) {
+      setLink("");
       setName("");
     }
   }, [kitSelected, fieldSelect, setName, setLink, kitName]);

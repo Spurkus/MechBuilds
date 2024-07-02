@@ -212,13 +212,30 @@ export const AddKeyboardContextProvider = ({ children }: AddKeyboardContextProps
   const validScreenOne = useMemo(() => validName, [validName]);
   const validScreenTwo = useMemo(() => {
     // Kit checkboxes can only be selected if the user has selected a kit
-    const kitCheckBoxValid = kitSelected
+    const validKitCheckBox = kitSelected
       ? true
       : !(kitCase || kitPcb || kitPlate || kitStabilizers || kitKeycaps);
+
+    // Kit name must be the same as the selected kit if selected
+    const validKitSelectedName =
+      (kitSelected ? true : kitName === "") &&
+      (kitCase ? caseName === kitName : true) &&
+      (kitPcb ? pcbName === kitName : true) &&
+      (kitPlate ? plateName === kitName : true);
+
+    // Kit link must be empty if selected
+    const validKitSelectedLink =
+      (kitSelected ? true : kitLink === "") &&
+      (kitCase ? caseLink === "" : true) &&
+      (kitPcb ? pcbLink === "" : true) &&
+      (kitPlate ? plateLink === "" : true);
+
     const valid =
+      validKitCheckBox &&
+      validKitSelectedName &&
+      validKitSelectedLink &&
       kitSelected !== null &&
       (kitSelected ? validKitLink : true) &&
-      kitCheckBoxValid &&
       validSize &&
       validPlateName &&
       (validPlateLink || !plateLink) &&
@@ -230,14 +247,19 @@ export const AddKeyboardContextProvider = ({ children }: AddKeyboardContextProps
     return valid;
   }, [
     caseLink,
+    caseName,
     kitCase,
     kitKeycaps,
+    kitLink,
+    kitName,
     kitPcb,
     kitPlate,
     kitSelected,
     kitStabilizers,
     pcbLink,
+    pcbName,
     plateLink,
+    plateName,
     validCaseLink,
     validCaseName,
     validKitLink,
