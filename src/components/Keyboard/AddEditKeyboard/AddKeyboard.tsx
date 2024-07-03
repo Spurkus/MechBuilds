@@ -8,6 +8,7 @@ import { closeModal, showModal, closeDropdown } from "@/src/helper/helperFunctio
 import { useMemo, useState } from "react";
 import ScreenOne from "./ScreenOne";
 import ScreenTwo from "./ScreenTwo";
+import ScreenThree from "./ScreenThree";
 
 interface AddKeyboardModalProps {
   open: boolean;
@@ -54,14 +55,16 @@ const AddKeyboardForm = ({ closeKeyboardModal }: AddKeyboardFormProps) => {
 
   return (
     <div className="flex grow flex-col items-center pt-2">
-      <ul className="steps text-sm">
+      <ul className="steps text-sm font-medium">
         <li className="step step-success">Name and Imagery</li>
-        <li className={`step ${screen >= 2 && "step-success"}`}>Information</li>
-        <li className={`step ${screen >= 3 && "step-success"}`}>Mods and Extra</li>
+        <li className={`step ${screen >= 2 && "step-success"}`}>Kit Details</li>
+        <li className={`step ${screen >= 3 && "step-success"}`}>Information</li>
+        <li className={`step ${screen >= 4 && "step-success"}`}>Mods and Extra</li>
       </ul>
       <div className="form-control h-[23rem] w-full space-y-2 px-6 pb-2">
         {screen === 1 && <ScreenOne />}
         {screen === 2 && <ScreenTwo />}
+        {screen === 3 && <ScreenThree />}
       </div>
       <form method="dialog" className="flex w-full grow flex-row justify-between px-24 py-2">
         {screen === 1 ? (
