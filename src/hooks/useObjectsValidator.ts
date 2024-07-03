@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 type ValidatorFunction<T> = (value: T[]) => boolean;
 type FieldValidatorFunction<T> = (value: T) => boolean;
 
-function useObjectsValidator<T extends object>(
+const useObjectsValidator = <T extends object>(
   initialValues: T[],
   isValidObject: ValidatorFunction<T>,
   ...fieldValidators: FieldValidatorFunction<any>[]
@@ -15,7 +15,7 @@ function useObjectsValidator<T extends object>(
   (index: number) => void,
   boolean,
   Partial<Record<keyof T, boolean>>[],
-] {
+] => {
   // Check if the number of field validators match the number of fields in the object
   if (fieldValidators.length !== Object.keys(initialValues[0]).length) {
     throw new Error("Number of field validators should match the number of fields in the object");
@@ -62,6 +62,6 @@ function useObjectsValidator<T extends object>(
   }, [values]);
 
   return [values, setValues, addElement, updateElement, removeElement, isValid, validationMap];
-}
+};
 
 export default useObjectsValidator;
