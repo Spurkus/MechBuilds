@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect, useMemo, createContext, useContext } from "react";
-import useInputValidator from "@/src/hooks/useInputValidator";
 import { ItemType, KeyboardType, KitType } from "@/src/types/keyboard";
 import { linkValidation } from "@/src/helper/helperFunctions";
 import {
@@ -8,11 +7,13 @@ import {
   KEYBOARD_DESCRIPTION_REGEX,
   KEYBOARD_SIZE_REGEX,
   KEYBOARD_MOD_REGEX,
-  KEYBOARD_KIT_ITEMS,
   KEYBOARD_PLATE_REGEX,
+  DEFAULT_ITEMS,
 } from "@/src/constants";
 import { useGlobalModalContext } from "./GlobalModal";
-import useObjectsValidator from "../hooks/useObjectsValidator";
+import useInputValidator from "@/src/hooks/useInputValidator";
+import useObjectsValidator from "@/src/hooks/useObjectsValidator";
+import useBooleanList from "@/src/hooks/useBooleanList";
 
 export interface AddKeyboardContextType {
   screen: number;
@@ -84,11 +85,15 @@ export interface AddKeyboardContextType {
 
   switches: ItemType[];
   setSwitches: React.Dispatch<React.SetStateAction<ItemType[]>>;
-  addSwitches: (element: ItemType) => void;
   updateSwitches: (index: number, newValue: ItemType) => void;
   removeSwitches: (index: number) => void;
   validSwitches: boolean;
   validSwitchesMap: Partial<Record<keyof ItemType, boolean>>[];
+  switchesSelectedLink: boolean[];
+  setSwitchesSelectedLink: React.Dispatch<React.SetStateAction<boolean[]>>;
+  toggleSwitchesSelectedLink: (index: number) => void;
+  removeSwitchesSelectedLink: (index: number) => void;
+  addNewSwitch: () => void;
 
   stabilizers: ItemType[];
   setStabilizers: React.Dispatch<React.SetStateAction<ItemType[]>>;
@@ -97,6 +102,11 @@ export interface AddKeyboardContextType {
   removeStabilizers: (index: number) => void;
   validStabilizers: boolean;
   validStabilizersMap: Partial<Record<keyof ItemType, boolean>>[];
+  stabilizersSelectedLink: boolean[];
+  setStabilizersSelectedLink: React.Dispatch<React.SetStateAction<boolean[]>>;
+  addStabilizersSelectedLink: () => void;
+  toggleStabilizersSelectedLink: (index: number) => void;
+  removeStabilizersSelectedLink: (index: number) => void;
 
   keycaps: ItemType[];
   setKeycaps: React.Dispatch<React.SetStateAction<ItemType[]>>;
@@ -105,6 +115,11 @@ export interface AddKeyboardContextType {
   removeKeycaps: (index: number) => void;
   validKeycaps: boolean;
   validKeycapsMap: Partial<Record<keyof ItemType, boolean>>[];
+  keycapsSelectedLink: boolean[];
+  setKeycapsSelectedLink: React.Dispatch<React.SetStateAction<boolean[]>>;
+  addKeycapsSelectedLink: () => void;
+  toggleKeycapsSelectedLink: (index: number) => void;
+  removeKeycapsSelectedLink: (index: number) => void;
 
   mods: string[];
   setMods: React.Dispatch<React.SetStateAction<string[]>>;
@@ -164,7 +179,6 @@ export const AddKeyboardContextProvider = ({ children }: AddKeyboardContextProps
   const [size, setSize, validSize] = useInputValidator<string>("", sizeValidation);
 
   // Validating multiple items
-  const defaultItem: ItemType[] = [{ name: "", link: undefined }];
   const itemsValidation = (items: ItemType[]) => items.length <= 6;
 
   // Check switches
@@ -176,7 +190,18 @@ export const AddKeyboardContextProvider = ({ children }: AddKeyboardContextProps
     removeSwitches,
     validSwitches,
     validSwitchesMap,
-  ] = useObjectsValidator<ItemType>(defaultItem, itemsValidation, nameValidation, linkValidation);
+  ] = useObjectsValidator<ItemType>(DEFAULT_ITEMS, itemsValidation, nameValidation, linkValidation);
+  const [
+    switchesSelectedLink,
+    setSwitchesSelectedLink,
+    addSwitchesSelectedLink,
+    toggleSwitchesSelectedLink,
+    removeSwitchesSelectedLink,
+  ] = useBooleanList([false]);
+  const addNewSwitch = () => {
+    addSwitches(DEFAULT_ITEMS[0]);
+    addSwitchesSelectedLink();
+  };
 
   // Check stabilizers
   const [
@@ -187,7 +212,14 @@ export const AddKeyboardContextProvider = ({ children }: AddKeyboardContextProps
     removeStabilizers,
     validStabilizers,
     validStabilizersMap,
-  ] = useObjectsValidator<ItemType>(defaultItem, itemsValidation, nameValidation, linkValidation);
+  ] = useObjectsValidator<ItemType>(DEFAULT_ITEMS, itemsValidation, nameValidation, linkValidation);
+  const [
+    stabilizersSelectedLink,
+    setStabilizersSelectedLink,
+    addStabilizersSelectedLink,
+    toggleStabilizersSelectedLink,
+    removeStabilizersSelectedLink,
+  ] = useBooleanList([false]);
 
   // Check keycaps
   const [
@@ -198,7 +230,14 @@ export const AddKeyboardContextProvider = ({ children }: AddKeyboardContextProps
     removeKeycaps,
     validKeycaps,
     validKeycapsMap,
-  ] = useObjectsValidator<ItemType>(defaultItem, itemsValidation, nameValidation, linkValidation);
+  ] = useObjectsValidator<ItemType>(DEFAULT_ITEMS, itemsValidation, nameValidation, linkValidation);
+  const [
+    keycapsSelectedLink,
+    setKeycapsSelectedLink,
+    addKeycapsSelectedLink,
+    toggleKeycapsSelectedLink,
+    removeKeycapsSelectedLink,
+  ] = useBooleanList([false]);
 
   // Check mods
   const modsValidation = (mods: string[]) => mods.every((mod) => KEYBOARD_MOD_REGEX.test(mod));
@@ -218,14 +257,14 @@ export const AddKeyboardContextProvider = ({ children }: AddKeyboardContextProps
 
     // Kit name must be the same as the selected kit if selected
     const validKitSelectedName =
-      (kitSelected ? true : kitName === "") &&
+      (kitSelected ? validKitName : kitName === "") &&
       (kitCase ? caseName === kitName : true) &&
       (kitPcb ? pcbName === kitName : true) &&
       (kitPlate ? plateName === kitName : true);
 
     // Kit link must be empty if selected
     const validKitSelectedLink =
-      (kitSelected ? true : kitLink === "") &&
+      (kitSelected ? validKitLink || !kitLink : kitLink === "") &&
       (kitCase ? caseLink === "" : true) &&
       (kitPcb ? pcbLink === "" : true) &&
       (kitPlate ? plateLink === "" : true);
@@ -235,9 +274,6 @@ export const AddKeyboardContextProvider = ({ children }: AddKeyboardContextProps
       validKitSelectedName &&
       validKitSelectedLink &&
       kitSelected !== null &&
-      (kitSelected ? validKitLink : true) &&
-      validKitName &&
-      (validKitLink || !kitLink) &&
       validSize &&
       validPlateName &&
       (validPlateLink || !plateLink) &&
@@ -338,11 +374,15 @@ export const AddKeyboardContextProvider = ({ children }: AddKeyboardContextProps
         validSize,
         switches,
         setSwitches,
-        addSwitches,
         updateSwitches,
         removeSwitches,
         validSwitches,
         validSwitchesMap,
+        switchesSelectedLink,
+        setSwitchesSelectedLink,
+        toggleSwitchesSelectedLink,
+        removeSwitchesSelectedLink,
+        addNewSwitch,
         stabilizers,
         setStabilizers,
         addStabilizers,
@@ -350,6 +390,11 @@ export const AddKeyboardContextProvider = ({ children }: AddKeyboardContextProps
         removeStabilizers,
         validStabilizers,
         validStabilizersMap,
+        stabilizersSelectedLink,
+        setStabilizersSelectedLink,
+        addStabilizersSelectedLink,
+        toggleStabilizersSelectedLink,
+        removeStabilizersSelectedLink,
         keycaps,
         setKeycaps,
         addKeycaps,
@@ -357,6 +402,11 @@ export const AddKeyboardContextProvider = ({ children }: AddKeyboardContextProps
         removeKeycaps,
         validKeycaps,
         validKeycapsMap,
+        keycapsSelectedLink,
+        setKeycapsSelectedLink,
+        addKeycapsSelectedLink,
+        toggleKeycapsSelectedLink,
+        removeKeycapsSelectedLink,
         mods,
         setMods,
         validMods,

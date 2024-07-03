@@ -164,7 +164,7 @@ const PlateField = () => {
   const kitInitial = kitSelected === null;
   return (
     <div className="flex w-3/5 flex-col">
-      <label className="label pb-0 pt-0.5 font-bold">
+      <label className={`label pb-0 pt-0.5 font-bold ${kitPlate && "text-gray-500"}`}>
         Plate {plateSelectedLink ? "Link (Optional)" : "Name"}
       </label>
       <InputNameLinkField
@@ -204,7 +204,7 @@ const CaseField = () => {
   const kitInitial = kitSelected === null;
   return (
     <div className="flex flex-col">
-      <label className="label pb-0 pt-0 font-bold">
+      <label className={`label pb-0 pt-0 font-bold ${kitCase && "text-gray-500"}`}>
         Case {caseSelectedLink ? "Link (Optional)" : "Name"}
       </label>
       <InputNameLinkField
@@ -243,7 +243,7 @@ const PcbField = () => {
 
   return (
     <div className="flex flex-col">
-      <label className="label pb-0 pt-0.5 font-bold">
+      <label className={`label pb-0 pt-0.5 font-bold ${kitPcb && "text-gray-500"}`}>
         PCB {pcbSelectedLink ? "Link (Optional)" : "Name"}
       </label>
       <InputNameLinkField
