@@ -24,7 +24,7 @@ interface InputNameFieldProps {
 interface InputNameDropdownFieldProps {
   type: string;
   name: string;
-  setName: React.Dispatch<React.SetStateAction<string>>;
+  setName: React.Dispatch<React.SetStateAction<string>> | ((newName: string) => void);
   validName: boolean;
   namePlaceholder: string;
   nameMaxLength: number;
@@ -37,14 +37,15 @@ interface InputNameDropdownFieldProps {
 interface InputNameLinkFieldProps {
   type: string;
   selectedLink: boolean;
-  setSelectedLink: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectedLink?: React.Dispatch<React.SetStateAction<boolean>>;
+  toggleSelectedLink?: () => void;
   name: string;
-  setName: React.Dispatch<React.SetStateAction<string>>;
+  setName: React.Dispatch<React.SetStateAction<string>> | ((newName: string) => void);
   namePlaceholder: string;
   nameMaxLength: number;
   validName: boolean;
   link: string;
-  setLink: React.Dispatch<React.SetStateAction<string>>;
+  setLink: React.Dispatch<React.SetStateAction<string>> | ((newLink: string) => void);
   validLink: boolean;
   noInput: boolean;
   fieldSelect: boolean | null;
@@ -162,6 +163,7 @@ export const InputNameLinkField = ({
   type,
   selectedLink,
   setSelectedLink,
+  toggleSelectedLink,
   name,
   setName,
   namePlaceholder,
@@ -182,7 +184,8 @@ export const InputNameLinkField = ({
   // Preventing input when kit is not selected
   const selectLink = () => {
     if (noInput) return;
-    setSelectedLink(!selectedLink);
+    if (setSelectedLink) setSelectedLink(!selectedLink);
+    if (toggleSelectedLink) toggleSelectedLink();
   };
   const nameChange = (e: any) => {
     if (noInput) return;
@@ -194,14 +197,14 @@ export const InputNameLinkField = ({
   };
 
   useEffect(() => {
-    setSelectedLink(false);
+    if (setSelectedLink) setSelectedLink(false);
   }, [fieldSelect, setSelectedLink]);
 
   useEffect(() => {
     if (kitSelected && fieldSelect) {
       setLink("");
       setName(kitName);
-    } else if (!kitSelected) {
+    } else if (kitSelected === null) {
       setLink("");
       setName("");
     }
