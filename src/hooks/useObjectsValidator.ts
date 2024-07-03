@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from "react";
+import { set } from "firebase/database";
+import { useState, useEffect, useRef, useCallback } from "react";
 
 type ValidatorFunction<T> = (value: T[]) => boolean;
 type FieldValidatorFunction<T> = (value: T) => boolean;
@@ -25,11 +26,26 @@ const useObjectsValidator = <T extends object>(
   const isValidObjectRef = useRef(isValidObject);
   const fieldValidatorsRef = useRef(fieldValidators);
 
+  const validateObject = useCallback((obj: T): Partial<Record<keyof T, boolean>> => {
+    const fieldResults: Partial<Record<keyof T, boolean>> = {};
+
+    // Validate each field in the object
+    Object.keys(obj).forEach((key, index) => {
+      const isValidField = fieldValidatorsRef.current[index](obj[key as keyof T]);
+      fieldResults[key as keyof T] = isValidField;
+    });
+
+    return fieldResults;
+  }, []);
+
   // Setting states for object validation
   const [values, setValues] = useState<T[]>(initialValues);
   const [isValid, setIsValid] = useState<boolean>(false);
   const [validationMap, setValidationMap] = useState<Partial<Record<keyof T, boolean>>[]>([]);
-  const addElement = (element: T) => setValues([...values, element]);
+  const addElement = (element: T) => {
+    setValues([...values, element]);
+    setValidationMap([...validationMap, validateObject(element)]);
+  };
   const updateElement = (index: number, newValue: T) => {
     setValues(values.map((value, i) => (i === index ? newValue : value)));
   };
@@ -42,15 +58,7 @@ const useObjectsValidator = <T extends object>(
     // Create an array of objects with the validation results for each field
     const newValidationResults: Partial<Record<keyof T, boolean>>[] = values.map(
       (obj: { [key: string]: any }) => {
-        const fieldResults: Partial<Record<keyof T, boolean>> = {};
-
-        // Validate each field in the object
-        Object.keys(obj).forEach((key, index) => {
-          const isValidField = fieldValidatorsRef.current[index](obj[key]);
-          fieldResults[key as keyof T] = isValidField;
-        });
-
-        return fieldResults;
+        return validateObject(obj as T);
       },
     );
 
@@ -59,7 +67,7 @@ const useObjectsValidator = <T extends object>(
         newValidationResults.every((obj) => Object.values(obj).every((value) => value === true)),
     );
     setValidationMap(newValidationResults);
-  }, [values]);
+  }, [values, validateObject]);
 
   return [values, setValues, addElement, updateElement, removeElement, isValid, validationMap];
 };
