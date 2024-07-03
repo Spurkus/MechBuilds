@@ -179,7 +179,7 @@ export const AddKeyboardContextProvider = ({ children }: AddKeyboardContextProps
   const [size, setSize, validSize] = useInputValidator<string>("", sizeValidation);
 
   // Validating multiple items
-  const itemsValidation = (items: ItemType[]) => items.length <= 6;
+  const itemsValidation = (items: ItemType[]) => items.length <= 3;
 
   // Check switches
   const [

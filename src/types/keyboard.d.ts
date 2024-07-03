@@ -22,9 +22,9 @@ export interface KeyboardType {
   plate: string;
   plateLink?: string;
   size: string;
-  switches: MaxLengthArray<string, 6>;
-  stabilizers: MaxLengthArray<string, 6>;
-  keycaps: MaxLengthArray<string, 6>;
+  switches: MaxLengthArray<ItemType, 3>;
+  stabilizers: MaxLengthArray<ItemType, 3>;
+  keycaps: MaxLengthArray<ItemType, 3>;
   mods: string[];
   images: string[];
   createdAt: Date;
