@@ -76,7 +76,7 @@ const AddKeyboardForm = ({ closeKeyboardModal }: AddKeyboardFormProps) => {
             prev page
           </button>
         )}
-        {screen === 3 ? (
+        {screen === 4 ? (
           <button className={`btn btn-success btn-sm`} onClick={() => {}}>
             save changes
           </button>
