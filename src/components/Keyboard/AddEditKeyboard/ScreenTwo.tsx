@@ -270,7 +270,7 @@ const ScreenTwo = () => {
     <>
       <KitField />
       <hr className="border-t border-gray-700" />
-      <div className="flex flex-row justify-between">
+      <div className="flex flex-row justify-between space-x-3">
         <SizeField />
         <PlateField />
       </div>
