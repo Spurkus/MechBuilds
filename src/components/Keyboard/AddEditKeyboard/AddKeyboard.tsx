@@ -58,7 +58,7 @@ const AddKeyboardForm = ({ closeKeyboardModal }: AddKeyboardFormProps) => {
       <ul className="steps text-sm font-medium">
         <li className="step step-success">Name and Imagery</li>
         <li className={`step ${screen >= 2 && "step-success"}`}>Kit Details</li>
-        <li className={`step ${screen >= 3 && "step-success"}`}>Information</li>
+        <li className={`step ${screen >= 3 && "step-success"}`}>Components</li>
         <li className={`step ${screen >= 4 && "step-success"}`}>Mods and Extra</li>
       </ul>
       <div className="form-control h-[23rem] w-full space-y-2 px-6 pb-2">
