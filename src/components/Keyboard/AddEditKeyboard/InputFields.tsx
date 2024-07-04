@@ -101,7 +101,7 @@ export const InputNameField = ({
       type="text"
       placeholder={namePlaceholder}
       maxLength={nameMaxLength}
-      className={`mr-2 grow truncate rounded-lg border border-gray-400 p-1 pl-2.5 text-sm focus:border-white ${
+      className={`grow truncate rounded-lg border border-gray-400 p-1 pl-2.5 text-sm focus:border-white ${
         noInput && "input-disabled"
       } ${name && "font-medium"} ${validName || !name ? "bg-base-200" : "bg-input-error"}`}
       disabled={noInput}
@@ -146,7 +146,7 @@ export const InputNameDropdownField = ({
       {dropdown && (
         <ul
           tabIndex={0}
-          className={`${noInput && "hidden"} menu dropdown-content menu-sm z-[3] mr-1.5 mt-2 w-[98%] rounded-xl border border-white bg-base-100 p-[0.3rem] shadow`}
+          className={`${noInput && "hidden"} menu dropdown-content menu-sm z-[3] mt-2 w-full rounded-xl border border-white bg-base-100 p-[0.3rem] shadow`}
         >
           {list.map((nameList, index) => (
             <li key={index} onClick={() => nameListChange(nameList)}>
@@ -253,7 +253,7 @@ export const InputNameLinkField = ({
         />
       )}
       <button
-        className={`btn btn-square btn-outline btn-sm self-center rounded-lg ${buttonError && "text-error"} ${noInput && "input-disabled"} ${selectedLink ? "btn-active" : ""}`}
+        className={`btn btn-square btn-outline btn-sm ml-2.5 self-center rounded-lg ${buttonError && "text-error"} ${noInput && "input-disabled"} ${selectedLink ? "btn-active" : ""}`}
         disabled={noInput}
         onClick={selectLink}
       >
