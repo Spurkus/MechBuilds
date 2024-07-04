@@ -1,5 +1,13 @@
 "use client";
-import { useState, useEffect, useMemo, createContext, useContext } from "react";
+import {
+  useState,
+  useEffect,
+  useMemo,
+  createContext,
+  useContext,
+  useCallback,
+  useRef,
+} from "react";
 import { ItemType, KeyboardType, KitType } from "@/src/types/keyboard";
 import { linkValidation } from "@/src/helper/helperFunctions";
 import {
@@ -94,6 +102,9 @@ export interface AddKeyboardContextType {
   toggleSwitchesSelectedLink: (index: number) => void;
   removeSwitchesSelectedLink: (index: number) => void;
   addNewSwitch: () => void;
+  removeSwitch: (index: number) => void;
+  oneSwitch: boolean;
+  maxSwitches: boolean;
 
   stabilizers: ItemType[];
   setStabilizers: React.Dispatch<React.SetStateAction<ItemType[]>>;
@@ -107,6 +118,10 @@ export interface AddKeyboardContextType {
   addStabilizersSelectedLink: () => void;
   toggleStabilizersSelectedLink: (index: number) => void;
   removeStabilizersSelectedLink: (index: number) => void;
+  addNewStabilizer: () => void;
+  removeStabilizer: (index: number) => void;
+  oneStabilizer: boolean;
+  maxStabilizers: boolean;
 
   keycaps: ItemType[];
   setKeycaps: React.Dispatch<React.SetStateAction<ItemType[]>>;
@@ -120,6 +135,10 @@ export interface AddKeyboardContextType {
   addKeycapsSelectedLink: () => void;
   toggleKeycapsSelectedLink: (index: number) => void;
   removeKeycapsSelectedLink: (index: number) => void;
+  addNewKeycap: () => void;
+  removeKeycap: (index: number) => void;
+  oneKeycap: boolean;
+  maxKeycaps: boolean;
 
   mods: string[];
   setMods: React.Dispatch<React.SetStateAction<string[]>>;
@@ -198,7 +217,15 @@ export const AddKeyboardContextProvider = ({ children }: AddKeyboardContextProps
     toggleSwitchesSelectedLink,
     removeSwitchesSelectedLink,
   ] = useBooleanList([false]);
+  const oneSwitch = useMemo(() => switches.length === 1, [switches]);
+  const maxSwitches = useMemo(() => switches.length >= 3, [switches]);
+  const removeSwitch = (index: number) => {
+    if (oneSwitch) return;
+    removeSwitchesSelectedLink(index);
+    removeSwitches(index);
+  };
   const addNewSwitch = () => {
+    if (maxSwitches) return;
     addSwitches(DEFAULT_ITEMS[0]);
     addSwitchesSelectedLink();
   };
@@ -220,6 +247,32 @@ export const AddKeyboardContextProvider = ({ children }: AddKeyboardContextProps
     toggleStabilizersSelectedLink,
     removeStabilizersSelectedLink,
   ] = useBooleanList([false]);
+  const oneStabilizer = useMemo(() => stabilizers.length === 1, [stabilizers]);
+  const maxStabilizers = useMemo(() => stabilizers.length >= 3, [stabilizers]);
+  const removeStabilizer = useCallback(
+    (index: number) => {
+      if (oneStabilizer) return;
+      removeStabilizersSelectedLink(index);
+      removeStabilizers(index);
+    },
+    [oneStabilizer, removeStabilizers, removeStabilizersSelectedLink],
+  );
+  const addNewStabilizer = useCallback(() => {
+    if (maxSwitches) return;
+    addStabilizers(DEFAULT_ITEMS[0]);
+    addStabilizersSelectedLink();
+  }, [addStabilizers, addStabilizersSelectedLink, maxSwitches]);
+
+  // Using function references for dependency withdrawal when updating stabilizers if kit is selected
+  const updateStabilizersRef = useRef(updateStabilizers);
+  useEffect(() => {
+    if (kitSelected && kitStabilizers) {
+      setStabilizers(DEFAULT_ITEMS);
+      updateStabilizersRef.current(0, { name: kitName });
+    } else if (kitSelected === null) {
+      setStabilizers(DEFAULT_ITEMS);
+    }
+  }, [kitStabilizers, kitSelected, setStabilizers, kitName]);
 
   // Check keycaps
   const [
@@ -238,6 +291,32 @@ export const AddKeyboardContextProvider = ({ children }: AddKeyboardContextProps
     toggleKeycapsSelectedLink,
     removeKeycapsSelectedLink,
   ] = useBooleanList([false]);
+  const oneKeycap = useMemo(() => keycaps.length === 1, [keycaps]);
+  const maxKeycaps = useMemo(() => keycaps.length >= 3, [keycaps]);
+  const removeKeycap = useCallback(
+    (index: number) => {
+      if (oneKeycap) return;
+      removeKeycapsSelectedLink(index);
+      removeKeycaps(index);
+    },
+    [oneKeycap, removeKeycaps, removeKeycapsSelectedLink],
+  );
+  const addNewKeycap = useCallback(() => {
+    if (maxKeycaps) return;
+    addKeycaps(DEFAULT_ITEMS[0]);
+    addKeycapsSelectedLink();
+  }, [addKeycaps, addKeycapsSelectedLink, maxKeycaps]);
+
+  // Using function references for dependency withdrawal when updating keycaps if kit is selected
+  const updateKeycapsRef = useRef(updateKeycaps);
+  useEffect(() => {
+    if (kitSelected && kitKeycaps) {
+      setKeycaps(DEFAULT_ITEMS);
+      updateKeycapsRef.current(0, { name: kitName });
+    } else if (kitSelected === null) {
+      setKeycaps(DEFAULT_ITEMS);
+    }
+  }, [kitKeycaps, kitSelected, setKeycaps, kitName]);
 
   // Check mods
   const modsValidation = (mods: string[]) => mods.every((mod) => KEYBOARD_MOD_REGEX.test(mod));
@@ -383,6 +462,9 @@ export const AddKeyboardContextProvider = ({ children }: AddKeyboardContextProps
         toggleSwitchesSelectedLink,
         removeSwitchesSelectedLink,
         addNewSwitch,
+        removeSwitch,
+        oneSwitch,
+        maxSwitches,
         stabilizers,
         setStabilizers,
         addStabilizers,
@@ -395,6 +477,10 @@ export const AddKeyboardContextProvider = ({ children }: AddKeyboardContextProps
         addStabilizersSelectedLink,
         toggleStabilizersSelectedLink,
         removeStabilizersSelectedLink,
+        addNewStabilizer,
+        removeStabilizer,
+        oneStabilizer,
+        maxStabilizers,
         keycaps,
         setKeycaps,
         addKeycaps,
@@ -407,6 +493,10 @@ export const AddKeyboardContextProvider = ({ children }: AddKeyboardContextProps
         addKeycapsSelectedLink,
         toggleKeycapsSelectedLink,
         removeKeycapsSelectedLink,
+        addNewKeycap,
+        removeKeycap,
+        oneKeycap,
+        maxKeycaps,
         mods,
         setMods,
         validMods,
