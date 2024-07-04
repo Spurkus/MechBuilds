@@ -20,8 +20,7 @@ import {
 } from "@/src/constants";
 import { useGlobalModalContext } from "./GlobalModal";
 import useInputValidator from "@/src/hooks/useInputValidator";
-import useObjectsValidator from "@/src/hooks/useObjectsValidator";
-import useBooleanList from "@/src/hooks/useBooleanList";
+import useKeyboardItem from "../hooks/useKeyboardItem";
 
 export interface AddKeyboardContextType {
   screen: number;
@@ -214,26 +213,16 @@ export const AddKeyboardContextProvider = ({ children }: AddKeyboardContextProps
     removeSwitches,
     validSwitches,
     validSwitchesMap,
-  ] = useObjectsValidator<ItemType>(DEFAULT_ITEMS, itemsValidation, nameValidation, linkValidation);
-  const [
     switchesSelectedLink,
     setSwitchesSelectedLink,
     addSwitchesSelectedLink,
     toggleSwitchesSelectedLink,
     removeSwitchesSelectedLink,
-  ] = useBooleanList([false]);
-  const oneSwitch = useMemo(() => switches.length === 1, [switches]);
-  const maxSwitches = useMemo(() => switches.length >= 3, [switches]);
-  const removeSwitch = (index: number) => {
-    if (oneSwitch) return;
-    removeSwitchesSelectedLink(index);
-    removeSwitches(index);
-  };
-  const addNewSwitch = () => {
-    if (maxSwitches) return;
-    addSwitches(DEFAULT_ITEMS[0]);
-    addSwitchesSelectedLink();
-  };
+    addNewSwitch,
+    removeSwitch,
+    oneSwitch,
+    maxSwitches,
+  ] = useKeyboardItem(DEFAULT_ITEMS, itemsValidation, nameValidation, linkValidation, [false]);
 
   // Check stabilizers
   const [
@@ -244,30 +233,16 @@ export const AddKeyboardContextProvider = ({ children }: AddKeyboardContextProps
     removeStabilizers,
     validStabilizers,
     validStabilizersMap,
-  ] = useObjectsValidator<ItemType>(DEFAULT_ITEMS, itemsValidation, nameValidation, linkValidation);
-  const [
     stabilizersSelectedLink,
     setStabilizersSelectedLink,
     addStabilizersSelectedLink,
     toggleStabilizersSelectedLink,
     removeStabilizersSelectedLink,
-  ] = useBooleanList([false]);
-  const oneStabilizer = useMemo(() => stabilizers.length === 1, [stabilizers]);
-  const maxStabilizers = useMemo(() => stabilizers.length >= 3, [stabilizers]);
-  const removeStabilizer = useCallback(
-    (index: number) => {
-      if (oneStabilizer) return;
-      removeStabilizersSelectedLink(index);
-      removeStabilizers(index);
-    },
-    [oneStabilizer, removeStabilizers, removeStabilizersSelectedLink],
-  );
-  const addNewStabilizer = useCallback(() => {
-    if (maxSwitches) return;
-    addStabilizers(DEFAULT_ITEMS[0]);
-    addStabilizersSelectedLink();
-  }, [addStabilizers, addStabilizersSelectedLink, maxSwitches]);
-
+    addNewStabilizer,
+    removeStabilizer,
+    oneStabilizer,
+    maxStabilizers,
+  ] = useKeyboardItem(DEFAULT_ITEMS, itemsValidation, nameValidation, linkValidation, [false]);
   // Using function references for dependency withdrawal when updating stabilizers if kit is selected
   const updateStabilizersRef = useRef(updateStabilizers);
   useEffect(() => {
@@ -288,30 +263,16 @@ export const AddKeyboardContextProvider = ({ children }: AddKeyboardContextProps
     removeKeycaps,
     validKeycaps,
     validKeycapsMap,
-  ] = useObjectsValidator<ItemType>(DEFAULT_ITEMS, itemsValidation, nameValidation, linkValidation);
-  const [
     keycapsSelectedLink,
     setKeycapsSelectedLink,
     addKeycapsSelectedLink,
     toggleKeycapsSelectedLink,
     removeKeycapsSelectedLink,
-  ] = useBooleanList([false]);
-  const oneKeycap = useMemo(() => keycaps.length === 1, [keycaps]);
-  const maxKeycaps = useMemo(() => keycaps.length >= 3, [keycaps]);
-  const removeKeycap = useCallback(
-    (index: number) => {
-      if (oneKeycap) return;
-      removeKeycapsSelectedLink(index);
-      removeKeycaps(index);
-    },
-    [oneKeycap, removeKeycaps, removeKeycapsSelectedLink],
-  );
-  const addNewKeycap = useCallback(() => {
-    if (maxKeycaps) return;
-    addKeycaps(DEFAULT_ITEMS[0]);
-    addKeycapsSelectedLink();
-  }, [addKeycaps, addKeycapsSelectedLink, maxKeycaps]);
-
+    addNewKeycap,
+    removeKeycap,
+    oneKeycap,
+    maxKeycaps,
+  ] = useKeyboardItem(DEFAULT_ITEMS, itemsValidation, nameValidation, linkValidation, [false]);
   // Using function references for dependency withdrawal when updating keycaps if kit is selected
   const updateKeycapsRef = useRef(updateKeycaps);
   useEffect(() => {
