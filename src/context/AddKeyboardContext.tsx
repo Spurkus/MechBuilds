@@ -139,9 +139,13 @@ export interface AddKeyboardContextType {
   oneKeycap: boolean;
   maxKeycaps: boolean;
 
+  currentMod: string;
+  setCurrentMod: React.Dispatch<React.SetStateAction<string>>;
+  validCurrentMod: boolean;
   mods: string[];
   setMods: React.Dispatch<React.SetStateAction<string[]>>;
   validMods: boolean;
+  maxMods: boolean;
 
   images: File[];
   setImages: React.Dispatch<React.SetStateAction<File[]>>;
@@ -318,8 +322,11 @@ export const AddKeyboardContextProvider = ({ children }: AddKeyboardContextProps
   }, [kitKeycaps, kitSelected, setKeycaps, kitName]);
 
   // Check mods
-  const modsValidation = (mods: string[]) => mods.every((mod) => KEYBOARD_MOD_REGEX.test(mod));
+  const modValidation = (mod: string) => KEYBOARD_MOD_REGEX.test(mod);
+  const [currentMod, setCurrentMod, validCurrentMod] = useInputValidator<string>("", modValidation);
+  const modsValidation = (mods: string[]) => mods.every((mod) => modValidation(mod));
   const [mods, setMods, validMods] = useInputValidator<string[]>([], modsValidation);
+  const maxMods = useMemo(() => mods.length >= 10, [mods]);
 
   // Check images
   const [images, setImages] = useState<File[]>([]);
@@ -497,9 +504,13 @@ export const AddKeyboardContextProvider = ({ children }: AddKeyboardContextProps
         removeKeycap,
         oneKeycap,
         maxKeycaps,
+        currentMod,
+        setCurrentMod,
+        validCurrentMod,
         mods,
         setMods,
         validMods,
+        maxMods,
         images,
         setImages,
       }}

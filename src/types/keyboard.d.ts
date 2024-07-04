@@ -25,9 +25,8 @@ export interface KeyboardType {
   switches: MaxLengthArray<ItemType, 3>;
   stabilizers: MaxLengthArray<ItemType, 3>;
   keycaps: MaxLengthArray<ItemType, 3>;
-  mods: string[];
+  mods: MaxLengthArray<string, 10>;
   images: string[];
   createdAt: Date;
-  draft: boolean;
   visible: boolean;
 }

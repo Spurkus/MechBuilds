@@ -9,6 +9,7 @@ import { useMemo, useState } from "react";
 import ScreenOne from "./ScreenOne";
 import ScreenTwo from "./ScreenTwo";
 import ScreenThree from "./ScreenThree";
+import ScreenFour from "./ScreenFour";
 
 interface AddKeyboardModalProps {
   open: boolean;
@@ -65,6 +66,7 @@ const AddKeyboardForm = ({ closeKeyboardModal }: AddKeyboardFormProps) => {
         {screen === 1 && <ScreenOne />}
         {screen === 2 && <ScreenTwo />}
         {screen === 3 && <ScreenThree />}
+        {screen === 4 && <ScreenFour />}
       </div>
       <form method="dialog" className="flex w-full grow flex-row justify-between px-24 py-2">
         {screen === 1 ? (

@@ -98,9 +98,9 @@ const KeycapsField = () => {
         </button>
       </div>
       <div className="flex w-full grow flex-row justify-between">
-        {keycaps.map((keycap, index) => {
-          return <KeycapField key={index} keycap={keycap} index={index} />;
-        })}
+        {keycaps.map((keycap, index) => (
+          <KeycapField key={index} keycap={keycap} index={index} />
+        ))}
       </div>
     </div>
   );
@@ -186,9 +186,9 @@ const StabilizersField = () => {
         </button>
       </div>
       <div className="flex w-full grow flex-row justify-between">
-        {stabilizers.map((stabilizer, index) => {
-          return <StabilizerField key={index} stabilizer={stabilizer} index={index} />;
-        })}
+        {stabilizers.map((stabilizer, index) => (
+          <StabilizerField key={index} stabilizer={stabilizer} index={index} />
+        ))}
       </div>
     </div>
   );
@@ -264,9 +264,9 @@ const SwitchesField = () => {
         </button>
       </div>
       <div className="flex w-full grow flex-row justify-between">
-        {switches.map((switchItem, index) => {
-          return <SwitchField key={index} switchItem={switchItem} index={index} />;
-        })}
+        {switches.map((switchItem, index) => (
+          <SwitchField key={index} switchItem={switchItem} index={index} />
+        ))}
       </div>
     </div>
   );
