@@ -36,7 +36,7 @@ const AddKeyboardButton = () => {
 };
 
 const AddKeyboardForm = ({ closeKeyboardModal }: AddKeyboardFormProps) => {
-  const { screen, setScreen, validScreenOne, validScreenTwo, validScreenThree } =
+  const { screen, setScreen, validScreenOne, validScreenTwo, validScreenThree, isSavable } =
     useAddKeyboardContext();
 
   const canIncrement = useMemo(() => {
@@ -79,7 +79,10 @@ const AddKeyboardForm = ({ closeKeyboardModal }: AddKeyboardFormProps) => {
           </button>
         )}
         {screen === 4 ? (
-          <button className={`btn btn-success btn-sm`} onClick={() => {}}>
+          <button
+            className={`btn btn-success btn-sm ${!isSavable && "btn-disabled"}`}
+            onClick={() => {}}
+          >
             save changes
           </button>
         ) : (

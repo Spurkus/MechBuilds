@@ -1,5 +1,53 @@
 import { useAddKeyboardContext } from "@/src/context/AddKeyboardContext";
 import { InputNameField } from "./InputFields";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+
+interface ModFieldProps {
+  mod: string;
+  index: number;
+}
+
+const DescriptionField = () => {
+  const { description, setDescription, validDescription } = useAddKeyboardContext();
+  return (
+    <div className="flex grow flex-col py-1">
+      <label className="label py-0 text-xl font-bold">Description</label>
+      <textarea
+        placeholder="A nice simple description of your keyboard :)"
+        maxLength={1000}
+        className={`grow resize-none rounded-lg border border-gray-400 p-1 pl-2.5 text-sm focus:border-white ${
+          validDescription || !description ? "bg-base-200" : "bg-input-error"
+        }`}
+        id="description"
+        autoComplete="off"
+        onChange={(e) => setDescription(e.target.value)}
+        value={description}
+      />
+    </div>
+  );
+};
+
+const ModField = ({ mod, index }: ModFieldProps) => {
+  const { mods, setMods, modValidation } = useAddKeyboardContext();
+  const validMod = modValidation(mod);
+  const handleRemove = () => {
+    setMods(mods.filter((_, i) => i !== index));
+  };
+  return (
+    <div
+      className={`badge badge-lg space-x-0.5 py-3 pr-1 ${validMod ? "badge-neutral" : "badge-error"}`}
+    >
+      <span className="mb-0.5 truncate">{mod}</span>
+      <button
+        className="btn btn-circle btn-ghost btn-xs max-h-[1.125rem] min-h-0 w-[1.125rem] self-center"
+        onClick={handleRemove}
+      >
+        <FontAwesomeIcon icon={faTimes} />
+      </button>
+    </div>
+  );
+};
 
 const ModsField = () => {
   const { mods, setMods, maxMods, validMods, currentMod, setCurrentMod, validCurrentMod } =
@@ -11,8 +59,9 @@ const ModsField = () => {
     setCurrentMod(e.target.value);
   };
 
+  const noSubmit = noInput || !validCurrentMod || !currentMod;
   const handleSubmit = () => {
-    if (noInput || validCurrentMod) return;
+    if (noSubmit) return;
     setMods([...mods, currentMod]);
     setCurrentMod("");
   };
@@ -31,21 +80,16 @@ const ModsField = () => {
           noInput={noInput}
         />
         <button
-          className={`btn btn-outline btn-neutral btn-xs self-center px-3 pb-[1.8rem] ${noInput && "btn-disabled"}`}
-          disabled={noInput}
+          className={`btn btn-outline btn-neutral btn-xs self-center px-3 pb-[1.8rem] ${noSubmit && "btn-disabled"}`}
+          disabled={noSubmit}
           onClick={handleSubmit}
         >
           <span className="mt-1 text-sm">Add Mod</span>
         </button>
       </div>
-      <div className="flex w-full grow flex-row justify-between">
-        {mods.map((mod) => (
-          <div key={mod} className="flex w-full flex-row items-center justify-between">
-            <span className="text-lg">{mod}</span>
-            <button className="btn-danger btn btn-outline btn-xs self-center px-3 pb-[1.8rem]">
-              <span className="mt-1 text-sm">Remove</span>
-            </button>
-          </div>
+      <div className="flex w-full flex-row space-x-2 overflow-x-auto overflow-y-hidden py-2">
+        {mods.map((mod, index) => (
+          <ModField key={index} mod={mod} index={index} />
         ))}
       </div>
     </div>
@@ -56,6 +100,8 @@ const ScreenFour = () => {
   return (
     <>
       <ModsField />
+      <hr className="border-t border-gray-700" />
+      <DescriptionField />
     </>
   );
 };

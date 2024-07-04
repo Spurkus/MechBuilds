@@ -29,6 +29,7 @@ export interface AddKeyboardContextType {
   validScreenOne: boolean;
   validScreenTwo: boolean;
   validScreenThree: boolean;
+  isSavable: boolean;
 
   name: string;
   setName: React.Dispatch<React.SetStateAction<string>>;
@@ -146,6 +147,7 @@ export interface AddKeyboardContextType {
   setMods: React.Dispatch<React.SetStateAction<string[]>>;
   validMods: boolean;
   maxMods: boolean;
+  modValidation: (mod: string) => boolean;
 
   images: File[];
   setImages: React.Dispatch<React.SetStateAction<File[]>>;
@@ -396,6 +398,14 @@ export const AddKeyboardContextProvider = ({ children }: AddKeyboardContextProps
   const validScreenThree = useMemo(() => {
     return validSwitches && validStabilizers && validKeycaps;
   }, [validKeycaps, validStabilizers, validSwitches]);
+  const validScreenFour = useMemo(() => {
+    return validMods && validDescription;
+  }, [validDescription, validMods]);
+
+  // Check if the keyboard can be saved
+  const isSavable = useMemo(() => {
+    return validScreenOne && validScreenTwo && validScreenThree && validScreenFour;
+  }, [validScreenFour, validScreenOne, validScreenThree, validScreenTwo]);
 
   return (
     <AddKeyboardContext.Provider
@@ -405,6 +415,7 @@ export const AddKeyboardContextProvider = ({ children }: AddKeyboardContextProps
         validScreenOne,
         validScreenTwo,
         validScreenThree,
+        isSavable,
         name,
         setName,
         validName,
@@ -511,6 +522,7 @@ export const AddKeyboardContextProvider = ({ children }: AddKeyboardContextProps
         setMods,
         validMods,
         maxMods,
+        modValidation,
         images,
         setImages,
       }}
