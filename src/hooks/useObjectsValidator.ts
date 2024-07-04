@@ -1,4 +1,3 @@
-import { set } from "firebase/database";
 import { useState, useEffect, useRef, useCallback } from "react";
 
 type ValidatorFunction<T> = (value: T[]) => boolean;
@@ -46,12 +45,9 @@ const useObjectsValidator = <T extends object>(
     setValues([...values, element]);
     setValidationMap([...validationMap, validateObject(element)]);
   };
-  const updateElement = (index: number, newValue: T) => {
+  const updateElement = (index: number, newValue: T) =>
     setValues(values.map((value, i) => (i === index ? newValue : value)));
-  };
-  const removeElement = (index: number) => {
-    setValues(values.filter((_, i) => i !== index));
-  };
+  const removeElement = (index: number) => setValues(values.filter((_, i) => i !== index));
 
   // Validate the objects when the values change
   useEffect(() => {
