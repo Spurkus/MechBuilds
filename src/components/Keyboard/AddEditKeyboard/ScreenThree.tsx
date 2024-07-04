@@ -50,7 +50,9 @@ const KeycapField = ({ keycap, index }: KeycapFieldProps) => {
       onMouseLeave={() => setHover(false)}
     >
       <div className="flex flex-row items-end justify-between">
-        <label className="label justify-normal pb-0 pt-1 text-sm font-bold">
+        <label
+          className={`label justify-normal pb-0 pt-1 text-sm font-bold ${isKit && "text-gray-500"}`}
+        >
           <span className="mr-1 text-gray-500">{index + 1}</span>
           {keycapsSelectedLink[index] ? "Link (optional)" : "Keycap Name"}
         </label>
