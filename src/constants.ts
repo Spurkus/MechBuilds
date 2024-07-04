@@ -31,6 +31,7 @@ export const KEYBOARD_MOD_REGEX = /^[A-Za-z0-9-_ \(\)\[\]]{2,25}$/;
 export const KEYBOARD_KIT_ITEMS = ["case", "pcb", "plate", "stabilizers", "keycaps"];
 export const KEYBOARD_SIZES = ["100% (Full Size)", "80% (TKL)", "75%", "65%", "60%"];
 export const KEYBOARD_PLATES = ["Polycarbonate (PC)", "FR4", "POM", "Aluminium", "Acrylic"];
+export const KEYBOARD_MODS = ["Tempest Mod", "Foam Mod", "Holee Mod", "Krytox205g0 Lube"];
 export const DEFAULT_ITEMS: ItemType[] = [{ name: "", link: undefined }];
 export const DEFAULT_KEYBOARD_IMAGE = defaultKeyboardImage;
 

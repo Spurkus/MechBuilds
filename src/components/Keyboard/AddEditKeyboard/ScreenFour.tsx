@@ -1,7 +1,8 @@
 import { useAddKeyboardContext } from "@/src/context/AddKeyboardContext";
-import { InputNameField } from "./InputFields";
+import { InputNameDropdownField, InputNameField } from "./InputFields";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { KEYBOARD_MODS } from "@/src/constants";
 
 interface ModFieldProps {
   mod: string;
@@ -69,15 +70,18 @@ const ModsField = () => {
   return (
     <div className="flex flex-col">
       <label className="label pb-0 text-xl font-bold">Mods</label>
-      <div className="flex flex-row items-end justify-between">
-        <InputNameField
+      <div className="flex flex-row items-end justify-between space-x-2.5">
+        <InputNameDropdownField
           type="mod"
           name={currentMod}
+          setName={setCurrentMod}
           validName={validCurrentMod}
           namePlaceholder="Tempest Mod"
           nameMaxLength={25}
           nameChange={nameChange}
           noInput={noInput}
+          dropdown={true}
+          list={KEYBOARD_MODS}
         />
         <button
           className={`btn btn-outline btn-neutral btn-xs self-center px-3 pb-[1.8rem] ${noSubmit && "btn-disabled"}`}
