@@ -37,9 +37,9 @@ const ModField = ({ mod, index }: ModFieldProps) => {
   };
   return (
     <div
-      className={`badge badge-lg space-x-0.5 py-3 pr-1 ${validMod ? "badge-neutral" : "badge-error"}`}
+      className={`badge badge-lg space-x-1 py-3 pr-1 ${validMod ? "badge-neutral" : "badge-error"}`}
     >
-      <span className="mb-0.5 truncate">{mod}</span>
+      <span className="mb-[0.1rem] truncate text-sm font-bold">{mod}</span>
       <button
         className="btn btn-circle btn-ghost btn-xs max-h-[1.125rem] min-h-0 w-[1.125rem] self-center"
         onClick={handleRemove}
