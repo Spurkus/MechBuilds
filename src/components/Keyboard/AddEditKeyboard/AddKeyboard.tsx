@@ -16,10 +16,6 @@ interface AddKeyboardModalProps {
   setAddKeyboard: (value: boolean) => void;
 }
 
-interface AddKeyboardFormProps {
-  closeKeyboardModal: () => void;
-}
-
 const AddKeyboardButton = () => {
   const [addKeyboard, setAddKeyboard] = useState(false);
   return (
@@ -35,21 +31,34 @@ const AddKeyboardButton = () => {
   );
 };
 
-const AddKeyboardForm = ({ closeKeyboardModal }: AddKeyboardFormProps) => {
-  const { screen, setScreen, validScreenOne, validScreenTwo, validScreenThree, isSavable } =
-    useAddKeyboardContext();
+const AddKeyboardForm = () => {
+  const {
+    screen,
+    setScreen,
+    validScreenOne,
+    validScreenTwo,
+    validScreenThree,
+    isSavable,
+    handleCancel,
+  } = useAddKeyboardContext();
 
   const canIncrement = useMemo(() => {
     return screen === 1 ? validScreenOne : screen === 2 ? validScreenTwo : validScreenThree;
   }, [screen, validScreenOne, validScreenTwo, validScreenThree]);
 
-  const incrementScreen = (e: any) => {
+  // Button click handling
+  const handleCancelButton = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    handleCancel();
+  };
+
+  const incrementScreen = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (!canIncrement) return;
     setScreen(screen + 1);
   };
 
-  const decrementScreen = (e: any) => {
+  const decrementScreen = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setScreen(screen - 1);
   };
@@ -70,7 +79,7 @@ const AddKeyboardForm = ({ closeKeyboardModal }: AddKeyboardFormProps) => {
       </div>
       <form method="dialog" className="flex w-full grow flex-row justify-between px-24 py-2">
         {screen === 1 ? (
-          <button className="btn btn-neutral btn-sm" onClick={closeKeyboardModal}>
+          <button className="btn btn-neutral btn-sm" onClick={handleCancelButton}>
             cancel
           </button>
         ) : (
@@ -99,13 +108,13 @@ const AddKeyboardForm = ({ closeKeyboardModal }: AddKeyboardFormProps) => {
 };
 
 const AddKeyboardModal = ({ open, setAddKeyboard }: AddKeyboardModalProps) => {
-  const closeKeyboardModal = () => closeModal("addkeyboardmodal", () => setAddKeyboard(false));
+  const toggleAddKeyboard = () => setAddKeyboard(!open);
   return (
     <dialog id="addkeyboardmodal" className="modal modal-middle" open={open}>
       <div className="modal-box flex w-[36rem] max-w-none flex-col bg-base-200 pb-4 pt-4">
         <h2 className="text-center font-clashgrotesk text-2xl font-medium">Add Keyboard</h2>
-        <AddKeyboardContextProvider>
-          <AddKeyboardForm closeKeyboardModal={closeKeyboardModal} />
+        <AddKeyboardContextProvider toggleAddKeyboard={toggleAddKeyboard} open={open}>
+          <AddKeyboardForm />
         </AddKeyboardContextProvider>
       </div>
     </dialog>

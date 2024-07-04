@@ -9,7 +9,7 @@ import {
   useRef,
 } from "react";
 import { ItemType, KeyboardType, KitType } from "@/src/types/keyboard";
-import { linkValidation } from "@/src/helper/helperFunctions";
+import { linkValidation, closeModal } from "@/src/helper/helperFunctions";
 import {
   KEYBOARD_NAME_REGEX,
   KEYBOARD_DESCRIPTION_REGEX,
@@ -150,15 +150,24 @@ export interface AddKeyboardContextType {
 
   images: File[];
   setImages: React.Dispatch<React.SetStateAction<File[]>>;
+
+  handleCancel: () => void;
 }
 
 export interface AddKeyboardContextProps {
   children: React.ReactNode;
+  toggleAddKeyboard: () => void;
+  open: boolean;
 }
 
 export const AddKeyboardContext = createContext<AddKeyboardContextType | null>(null);
 
-export const AddKeyboardContextProvider = ({ children }: AddKeyboardContextProps) => {
+export const AddKeyboardContextProvider = ({
+  children,
+  toggleAddKeyboard,
+  open,
+}: AddKeyboardContextProps) => {
+  const { handleModal, handleModalError } = useGlobalModalContext();
   // Check name
   const nameValidation = (name: string) => KEYBOARD_NAME_REGEX.test(name);
   const [name, setName, validName] = useInputValidator<string>("", nameValidation);
@@ -368,6 +377,110 @@ export const AddKeyboardContextProvider = ({ children }: AddKeyboardContextProps
     return validScreenOne && validScreenTwo && validScreenThree && validScreenFour;
   }, [validScreenFour, validScreenOne, validScreenThree, validScreenTwo]);
 
+  // Setting default states
+  const setDefault = useCallback(() => {
+    // Default name and description
+    setName("");
+    setDescription("");
+
+    // Default kit
+    setKitName("");
+    setKitSelected(null);
+    setKitCase(false);
+    setKitPcb(false);
+    setKitPlate(false);
+    setKitStabilizers(false);
+    setKitKeycaps(false);
+    setKitLink("");
+    setKitSelectedLink(false);
+
+    // Default case
+    setCaseName("");
+    setCaseLink("");
+    setCaseSelectedLink(false);
+
+    // Default PCB
+    setPcbName("");
+    setPcbLink("");
+    setPcbSelectedLink(false);
+
+    // Default plate
+    setPlateName("");
+    setPlateLink("");
+    setPlateSelectedLink(false);
+
+    // default size
+    setSize("");
+
+    // Default switches
+    setSwitches(DEFAULT_ITEMS);
+    setSwitchesSelectedLink([false]);
+
+    // Default stabilizers
+    setStabilizers(DEFAULT_ITEMS);
+    setSwitchesSelectedLink([false]);
+
+    // Default keycaps
+    setKeycaps(DEFAULT_ITEMS);
+    setKeycapsSelectedLink([false]);
+
+    // Default mods
+    setMods([]);
+    setCurrentMod("");
+  }, [
+    setCaseLink,
+    setCaseName,
+    setCurrentMod,
+    setDescription,
+    setKeycaps,
+    setKeycapsSelectedLink,
+    setKitLink,
+    setKitName,
+    setMods,
+    setName,
+    setPcbLink,
+    setPcbName,
+    setPlateLink,
+    setPlateName,
+    setSize,
+    setStabilizers,
+    setSwitches,
+    setSwitchesSelectedLink,
+  ]);
+
+  const handleCancel = useCallback(() => {
+    const closeGlobalModal = () => {
+      closeModal("globalmodal");
+    };
+
+    const discardAndClose = () => {
+      setDefault();
+      closeModal("addkeyboardmodal");
+      toggleAddKeyboard();
+    };
+
+    if (validScreenOne) {
+      handleModal("Discard Changes", "Are you sure you want to discard the changes?", "error", [
+        { text: "Discard", type: "error", onClick: discardAndClose },
+        { text: "Cancel", type: "neutral", onClick: closeGlobalModal },
+      ]);
+    } else {
+      discardAndClose();
+    }
+  }, [handleModal, setDefault, toggleAddKeyboard, validScreenOne]);
+
+  // Handle escape key
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && open) {
+        handleCancel();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown); // Add event listener
+    return () => document.removeEventListener("keydown", handleKeyDown); // Remove on cleanup
+  }, [handleCancel, open]);
+
   return (
     <AddKeyboardContext.Provider
       value={{
@@ -486,6 +599,7 @@ export const AddKeyboardContextProvider = ({ children }: AddKeyboardContextProps
         modValidation,
         images,
         setImages,
+        handleCancel,
       }}
     >
       {children}
