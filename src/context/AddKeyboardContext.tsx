@@ -29,7 +29,6 @@ export interface AddKeyboardContextType {
   validScreenOne: boolean;
   validScreenTwo: boolean;
   validScreenThree: boolean;
-  setValidScreenThree: React.Dispatch<React.SetStateAction<boolean>>;
 
   name: string;
   setName: React.Dispatch<React.SetStateAction<string>>;
@@ -387,7 +386,9 @@ export const AddKeyboardContextProvider = ({ children }: AddKeyboardContextProps
     validPlateName,
     validSize,
   ]);
-  const [validScreenThree, setValidScreenThree] = useState(false);
+  const validScreenThree = useMemo(() => {
+    return validSwitches && validStabilizers && validKeycaps;
+  }, [validKeycaps, validStabilizers, validSwitches]);
 
   return (
     <AddKeyboardContext.Provider
@@ -397,7 +398,6 @@ export const AddKeyboardContextProvider = ({ children }: AddKeyboardContextProps
         validScreenOne,
         validScreenTwo,
         validScreenThree,
-        setValidScreenThree,
         name,
         setName,
         validName,
