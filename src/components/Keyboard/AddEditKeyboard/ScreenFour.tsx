@@ -80,7 +80,6 @@ const ModsField = () => {
           nameMaxLength={25}
           nameChange={nameChange}
           noInput={noInput}
-          dropdown={true}
           list={KEYBOARD_MODS}
         />
         <button

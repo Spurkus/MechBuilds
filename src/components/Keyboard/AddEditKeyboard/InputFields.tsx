@@ -30,7 +30,6 @@ interface InputNameDropdownFieldProps {
   nameMaxLength: number;
   noInput: boolean;
   nameChange: (e: any) => void;
-  dropdown?: boolean;
   list?: string[];
 }
 
@@ -122,7 +121,6 @@ export const InputNameDropdownField = ({
   nameMaxLength,
   noInput,
   nameChange,
-  dropdown = false,
   list = [],
 }: InputNameDropdownFieldProps) => {
   const nameListChange = (nameList: string) => {
@@ -143,18 +141,16 @@ export const InputNameDropdownField = ({
           nameChange={nameChange}
         />
       </div>
-      {dropdown && (
-        <ul
-          tabIndex={0}
-          className={`${noInput && "hidden"} menu dropdown-content menu-sm z-[3] mt-2 w-full rounded-xl border border-white bg-base-100 p-[0.3rem] shadow`}
-        >
-          {list.map((nameList, index) => (
-            <li key={index} onClick={() => nameListChange(nameList)}>
-              <a className="w-full font-bold">{nameList}</a>
-            </li>
-          ))}
-        </ul>
-      )}
+      <ul
+        tabIndex={0}
+        className={`${noInput && "hidden"} menu dropdown-content menu-sm z-[3] mt-2 w-full rounded-xl border border-white bg-base-100 p-[0.3rem] shadow`}
+      >
+        {list.map((nameList, index) => (
+          <li key={index} onClick={() => nameListChange(nameList)}>
+            <a className="w-full font-bold">{nameList}</a>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
@@ -238,7 +234,6 @@ export const InputNameLinkField = ({
           nameMaxLength={nameMaxLength}
           noInput={noInput}
           nameChange={nameChange}
-          dropdown={dropdown}
           list={list}
         />
       ) : (

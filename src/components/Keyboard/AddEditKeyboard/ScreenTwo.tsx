@@ -141,7 +141,6 @@ const SizeField = () => {
           if (kitInitial) return;
           setSize(e.target.value);
         }}
-        dropdown={true}
         list={KEYBOARD_SIZES}
       />
     </div>
