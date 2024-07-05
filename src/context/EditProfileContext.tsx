@@ -212,21 +212,21 @@ export const EditProfileContextProvider = ({
         handleModal("Profile Picture", "Image size must be less than 5MB", "error");
         setSelectedProfilePicture(null);
       } else {
-        const imageUrl = URL.createObjectURL(selectedProfilePicture);
+        const imageURL = URL.createObjectURL(selectedProfilePicture);
         const img = new Image();
         img.onload = () => {
           if (img.width < 250 || img.height < 250) {
             handleModal("Profile Picture", "Image size must be bigger than 250x250px", "error");
             setSelectedProfilePicture(null);
           }
-          URL.revokeObjectURL(imageUrl); // Clean up
+          URL.revokeObjectURL(imageURL); // Clean up
         };
         img.onerror = () => {
           handleModal("Error", "Could not load the image", "error");
           setSelectedProfilePicture(null);
-          URL.revokeObjectURL(imageUrl); // Clean up
+          URL.revokeObjectURL(imageURL); // Clean up
         };
-        img.src = imageUrl;
+        img.src = imageURL;
       }
     }
   }, [selectedProfilePicture, setSelectedProfilePicture, handleModal]);
