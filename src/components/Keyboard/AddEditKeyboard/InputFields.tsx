@@ -123,6 +123,9 @@ export const InputNameDropdownField = ({
   nameChange,
   list = [],
 }: InputNameDropdownFieldProps) => {
+  const filteredList = list.filter((nameList) =>
+    nameList.toLowerCase().startsWith(name.toLowerCase()),
+  );
   const nameListChange = (nameList: string) => {
     if (noInput) return;
     setName(nameList);
@@ -141,16 +144,18 @@ export const InputNameDropdownField = ({
           nameChange={nameChange}
         />
       </div>
-      <ul
-        tabIndex={0}
-        className={`${noInput && "hidden"} menu dropdown-content menu-sm z-[3] mt-2 w-full rounded-xl border border-white bg-base-100 p-[0.3rem] shadow`}
-      >
-        {list.map((nameList, index) => (
-          <li key={index} onClick={() => nameListChange(nameList)}>
-            <a className="w-full font-bold">{nameList}</a>
-          </li>
-        ))}
-      </ul>
+      {filteredList.length !== 0 && (
+        <ul
+          tabIndex={0}
+          className={`${noInput && "hidden"} menu dropdown-content menu-sm z-[3] mt-2 w-full rounded-xl border border-white bg-base-100 p-[0.3rem] shadow`}
+        >
+          {filteredList.map((nameList, index) => (
+            <li key={index} onClick={() => nameListChange(nameList)}>
+              <a className="w-full font-bold">{nameList}</a>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };
