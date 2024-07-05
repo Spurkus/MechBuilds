@@ -208,6 +208,13 @@ export const EditProfileContextProvider = ({
   // Validate profile picture
   useEffect(() => {
     if (selectedProfilePicture) {
+      // Check if the file is an image
+      if (!selectedProfilePicture.type.startsWith("image/")) {
+        handleModal("Uploading File", "Please upload an image file", "error");
+        setSelectedProfilePicture(null);
+        return;
+      }
+
       if (selectedProfilePicture.size > MAXIMUM_IMAGE_SIZE) {
         handleModal("Profile Picture", "Image size must be less than 5MB", "error");
         setSelectedProfilePicture(null);
