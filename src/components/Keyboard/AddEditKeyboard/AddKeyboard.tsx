@@ -92,7 +92,7 @@ const AddKeyboardForm = () => {
             className={`btn btn-success btn-sm ${!isSavable && "btn-disabled"}`}
             onClick={() => {}}
           >
-            save changes
+            publish keyboard
           </button>
         ) : (
           <button
