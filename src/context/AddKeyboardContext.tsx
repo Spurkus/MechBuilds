@@ -148,8 +148,12 @@ export interface AddKeyboardContextType {
   maxMods: boolean;
   modValidation: (mod: string) => boolean;
 
-  images: File[];
-  setImages: React.Dispatch<React.SetStateAction<File[]>>;
+  contentIndex: number;
+  setContentIndex: React.Dispatch<React.SetStateAction<number>>;
+  imageVideoList: File[];
+  setImageVideoList: React.Dispatch<React.SetStateAction<File[]>>;
+  mediaURL: string;
+  setMediaURL: React.Dispatch<React.SetStateAction<string>>;
 
   handleCancel: () => void;
 }
@@ -300,8 +304,10 @@ export const AddKeyboardContextProvider = ({
   const [mods, setMods, validMods] = useInputValidator<string[]>([], modsValidation);
   const maxMods = useMemo(() => mods.length >= 10, [mods]);
 
-  // Check images
-  const [images, setImages] = useState<File[]>([]);
+  // Check content
+  const [contentIndex, setContentIndex] = useState(0);
+  const [imageVideoList, setImageVideoList] = useState<File[]>([]);
+  const [mediaURL, setMediaURL] = useState("");
 
   // Screen state
   const [screen, setScreen] = useState(1);
@@ -427,6 +433,11 @@ export const AddKeyboardContextProvider = ({
     // Default mods
     setMods([]);
     setCurrentMod("");
+
+    // Default content
+    setContentIndex(0);
+    setImageVideoList([]);
+    setMediaURL("");
   }, [
     setCaseLink,
     setCaseName,
@@ -597,8 +608,12 @@ export const AddKeyboardContextProvider = ({
         validMods,
         maxMods,
         modValidation,
-        images,
-        setImages,
+        contentIndex,
+        setContentIndex,
+        imageVideoList,
+        setImageVideoList,
+        mediaURL,
+        setMediaURL,
         handleCancel,
       }}
     >

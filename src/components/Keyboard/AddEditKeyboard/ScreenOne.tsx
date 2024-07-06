@@ -29,7 +29,24 @@ const NameField = () => {
 };
 
 const KeyboardContent = () => {
-  return <SubmitImagesVideo />;
+  const {
+    contentIndex,
+    setContentIndex,
+    imageVideoList,
+    setImageVideoList,
+    mediaURL,
+    setMediaURL,
+  } = useAddKeyboardContext();
+  return (
+    <SubmitImagesVideo
+      index={contentIndex}
+      setIndex={setContentIndex}
+      imageVideoList={imageVideoList}
+      setImageVideoList={setImageVideoList}
+      mediaURL={mediaURL}
+      setMediaURL={setMediaURL}
+    />
+  );
 };
 
 const ScreenOne = () => {

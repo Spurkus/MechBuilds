@@ -1,4 +1,4 @@
-import { useState, useMemo, forwardRef, useRef, useEffect } from "react";
+import { useState, useMemo } from "react";
 import {
   DEFAULT_KEYBOARD_IMAGE,
   DEFAULT_KEYBOARD_IMAGE_WIDTH,
@@ -18,12 +18,25 @@ import {
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 
-const SubmitImagesVideo = () => {
+interface SubmitImagesVideoProps {
+  index: number;
+  setIndex: React.Dispatch<React.SetStateAction<number>>;
+  imageVideoList: File[];
+  setImageVideoList: React.Dispatch<React.SetStateAction<File[]>>;
+  mediaURL: string;
+  setMediaURL: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const SubmitImagesVideo = ({
+  index,
+  setIndex,
+  imageVideoList,
+  setImageVideoList,
+  mediaURL,
+  setMediaURL,
+}: SubmitImagesVideoProps) => {
   const { handleModal } = useGlobalModalContext();
   const [isHovering, setIsHovering] = useState(false);
-  const [index, setIndex] = useState(0);
-  const [imageVideoList, setImageVideoList] = useState<File[]>([]);
-  const [mediaURL, setMediaURL] = useState("");
   const isUploaded = useMemo(() => imageVideoList.length !== 0, [imageVideoList]);
   const firstIndex = useMemo(() => index === 0, [index]);
   const lastIndex = useMemo(() => index === imageVideoList.length - 1, [index, imageVideoList]);
@@ -115,26 +128,19 @@ const SubmitImagesVideo = () => {
     }
   };
 
-  const InputImageVideo = forwardRef(
-    (props: React.HTMLProps<HTMLInputElement>, ref: React.Ref<HTMLInputElement>) => {
-      return (
-        <input
-          ref={ref}
-          type="file"
-          accept="image/*,video/*"
-          className="hidden"
-          onChange={(e) => {
-            addFile(e.target.files?.[0]);
-            e.target.value = ""; // Reset the input value
-          }}
-          {...props}
-        />
-      );
-    },
-  );
-
-  InputImageVideo.displayName = "InputImageVideo";
-  const inputRef = useRef<HTMLInputElement>(null);
+  const InputImageVideo = () => {
+    return (
+      <input
+        type="file"
+        accept="image/*,video/*"
+        className="inset-0 hidden"
+        onChange={(e) => {
+          addFile(e.target.files?.[0]);
+          e.target.files = null;
+        }}
+      />
+    );
+  };
 
   return (
     <div
@@ -144,18 +150,17 @@ const SubmitImagesVideo = () => {
     >
       {isUploaded && isHovering && (
         <>
-          <button
-            className="btn btn-sm absolute left-3 top-3.5 z-10 flex rounded-2xl border-0 bg-gray-200 bg-opacity-10 hover:bg-gray-200 hover:bg-opacity-15"
-            onClick={() => inputRef.current?.click()}
-          >
+          <label className="btn btn-sm absolute left-3 top-3.5 z-10 flex rounded-2xl border-0 bg-gray-200 bg-opacity-10 hover:bg-gray-200 hover:bg-opacity-15">
+            <InputImageVideo />
             <FontAwesomeIcon icon={faPhotoFilm} className="h-5 w-5 text-white" />
             <span className="mt-0.5 font-bold">Add</span>
-          </button>
+          </label>
           <button
             className="btn btn-sm absolute right-3 top-3.5 z-10 flex rounded-2xl border-0 bg-gray-200 bg-opacity-10 hover:bg-gray-200 hover:bg-opacity-15"
             onClick={removeElement}
           >
             <FontAwesomeIcon icon={faTrashAlt} className="h-5 w-5 text-error" />
+            <span className="mt-0.5 font-bold">Delete</span>
           </button>
         </>
       )}
@@ -180,14 +185,12 @@ const SubmitImagesVideo = () => {
         </>
       )}
       <label className={`relative w-full grow ${!isUploaded && "cursor-pointer"}`}>
-        {isHovering && !isUploaded && (
-          <button
-            className="absolute inset-0 flex items-center justify-center rounded-[1.5rem] bg-black bg-opacity-60"
-            onClick={() => inputRef.current?.click()}
-          >
-            <span className="text font-bold text-white">Add Images or Videos</span>
-          </button>
-        )}
+        {!isUploaded && <InputImageVideo />}
+        <div
+          className={`${isHovering && !isUploaded ? "flex" : "hidden"} absolute inset-0 items-center justify-center rounded-[1.5rem] bg-black bg-opacity-60`}
+        >
+          <span className="text font-bold text-white">Add Image or Video</span>
+        </div>
         {isUploaded && imageVideoList.length !== 1 && (
           <div className="badge badge-neutral absolute bottom-0 left-0 right-0 z-20 mx-auto mb-2 space-x-1.5">
             {imageVideoList.map((_, indexList) => (
@@ -233,7 +236,6 @@ const SubmitImagesVideo = () => {
           />
         )}
       </label>
-      <InputImageVideo ref={inputRef} />
     </div>
   );
 };
