@@ -128,16 +128,19 @@ const SubmitImagesVideo = ({
     }
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+    addFile(e.target.files[0]);
+  };
+
   const InputImageVideo = () => {
     return (
       <input
         type="file"
         accept="image/*,video/*"
         className="inset-0 hidden"
-        onChange={(e) => {
-          addFile(e.target.files?.[0]);
-          e.target.files = null;
-        }}
+        onClick={(e) => e.stopPropagation()}
+        onChange={handleChange}
       />
     );
   };
@@ -153,14 +156,14 @@ const SubmitImagesVideo = ({
           <label className="btn btn-sm absolute left-3 top-3.5 z-10 flex rounded-2xl border-0 bg-gray-200 bg-opacity-10 hover:bg-gray-200 hover:bg-opacity-15">
             <InputImageVideo />
             <FontAwesomeIcon icon={faPhotoFilm} className="h-5 w-5 text-white" />
-            <span className="mt-0.5 font-bold">Add</span>
+            <span className="mt-0.5 font-bold text-white">Add</span>
           </label>
           <button
             className="btn btn-sm absolute right-3 top-3.5 z-10 flex rounded-2xl border-0 bg-gray-200 bg-opacity-10 hover:bg-gray-200 hover:bg-opacity-15"
             onClick={removeElement}
           >
             <FontAwesomeIcon icon={faTrashAlt} className="h-5 w-5 text-error" />
-            <span className="mt-0.5 font-bold">Delete</span>
+            <span className="mt-0.5 font-bold text-white">Delete</span>
           </button>
         </>
       )}
