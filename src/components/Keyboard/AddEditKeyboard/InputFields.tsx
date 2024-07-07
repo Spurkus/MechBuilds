@@ -4,11 +4,23 @@ import { useGlobalThemeContext } from "@/src/context/GlobalTheme";
 import { formatSocialLink, closeDropdown } from "@/src/helper/helperFunctions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLink } from "@fortawesome/free-solid-svg-icons";
+import Loading from "@/src/components/Loading";
 
 interface CheckBoxFieldProps {
   name: string;
   checked: boolean;
   setChecked: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+interface InputNameLoadingFieldProps {
+  type: string;
+  name: string;
+  nameLoading: boolean;
+  validName: boolean;
+  namePlaceholder: string;
+  nameMaxLength: number;
+  noInput: boolean;
+  nameChange: (e: any) => void;
 }
 
 interface InputNameFieldProps {
@@ -86,6 +98,46 @@ export const CheckBoxField = ({ name, checked, setChecked }: CheckBoxFieldProps)
   );
 };
 
+export const InputNameLoadingField = ({
+  type,
+  name,
+  nameLoading,
+  validName,
+  namePlaceholder,
+  nameMaxLength,
+  noInput,
+  nameChange,
+}: InputNameLoadingFieldProps) => {
+  const { theme } = useGlobalThemeContext();
+  const [focus, setFocus] = useState(false);
+  return (
+    <label
+      className={`flex grow flex-row truncate rounded-lg p-1 pl-2.5 text-sm outline ${noInput && "input-disabled"} ${name && "font-medium"} ${validName || !name ? "bg-base-200" : "bg-input-error"} ${
+        focus
+          ? theme === "dark"
+            ? "outline-[1.5px] outline-white"
+            : "outline-2 outline-black"
+          : "outline-1 outline-gray-400"
+      } `}
+      onFocus={() => setFocus(true)}
+      onBlur={() => setFocus(false)}
+    >
+      <input
+        type="text"
+        placeholder={namePlaceholder}
+        maxLength={nameMaxLength}
+        className="w-full bg-transparent outline-none"
+        disabled={noInput}
+        id={`${type}name`}
+        autoComplete="off"
+        onChange={nameChange}
+        value={name}
+      />
+      {nameLoading && <Loading height={15} width={15} />}
+    </label>
+  );
+};
+
 export const InputNameField = ({
   type,
   name,
@@ -100,7 +152,7 @@ export const InputNameField = ({
       type="text"
       placeholder={namePlaceholder}
       maxLength={nameMaxLength}
-      className={`grow truncate rounded-lg border border-gray-400 p-1 pl-2.5 text-sm focus:border-white ${
+      className={`grow truncate rounded-lg border border-gray-400 p-1 pl-2.5 text-sm ${
         noInput && "input-disabled"
       } ${name && "font-medium"} ${validName || !name ? "bg-base-200" : "bg-input-error"}`}
       disabled={noInput}
