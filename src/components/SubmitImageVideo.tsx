@@ -153,13 +153,13 @@ const SubmitImageVideo = ({
     >
       {isUploaded && isHovering && (
         <>
-          <label className="btn btn-sm absolute left-3 top-3.5 z-10 flex rounded-2xl border-0 bg-gray-200 bg-opacity-10 hover:bg-gray-200 hover:bg-opacity-15">
+          <label className="btn btn-sm absolute left-3 top-3.5 z-10 flex rounded-2xl border-0 bg-gray-800 bg-opacity-60 hover:bg-gray-800 hover:bg-opacity-75">
             <InputImageVideo />
             <FontAwesomeIcon icon={faPhotoFilm} className="h-5 w-5 text-white" />
             <span className="mt-0.5 font-bold text-white">Add</span>
           </label>
           <button
-            className="btn btn-sm absolute right-3 top-3.5 z-10 flex rounded-2xl border-0 bg-gray-200 bg-opacity-10 hover:bg-gray-200 hover:bg-opacity-15"
+            className="btn btn-sm absolute right-3 top-3.5 z-10 flex rounded-2xl border-0 bg-gray-800 bg-opacity-60 hover:bg-gray-800 hover:bg-opacity-75"
             onClick={removeElement}
           >
             <FontAwesomeIcon icon={faTrashAlt} className="h-5 w-5 text-error" />
@@ -171,7 +171,7 @@ const SubmitImageVideo = ({
         <>
           {!firstIndex && (
             <button
-              className="btn btn-circle btn-sm absolute left-2 top-32 z-20 flex rounded-2xl border-0 bg-gray-200 bg-opacity-10 hover:bg-gray-200 hover:bg-opacity-15"
+              className="btn btn-circle btn-sm absolute left-2 top-32 z-20 flex rounded-2xl border-0 bg-gray-800 bg-opacity-60 hover:bg-gray-800 hover:bg-opacity-75"
               onClick={moveLeft}
             >
               <FontAwesomeIcon icon={faChevronLeft} className="h-5 w-5 text-white" />
@@ -179,7 +179,7 @@ const SubmitImageVideo = ({
           )}
           {!lastIndex && (
             <button
-              className="btn btn-circle btn-sm absolute right-2 top-32 z-20 flex rounded-2xl border-0 bg-gray-200 bg-opacity-10 hover:bg-gray-200 hover:bg-opacity-15"
+              className="btn btn-circle btn-sm absolute right-2 top-32 z-20 flex rounded-2xl border-0 bg-gray-800 bg-opacity-60 hover:bg-gray-800 hover:bg-opacity-75"
               onClick={moveRight}
             >
               <FontAwesomeIcon icon={faChevronRight} className="h-5 w-5 text-white" />
