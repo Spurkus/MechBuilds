@@ -290,7 +290,7 @@ const CancelAndSaveButtons = () => {
 };
 
 const EditProfileForm = () => {
-  const { loading, handleCancel } = useEditProfileContext();
+  const { loading } = useEditProfileContext();
 
   // Saving profile loading state
   if (loading)
