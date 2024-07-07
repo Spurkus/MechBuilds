@@ -1,6 +1,4 @@
-import { useState } from "react";
 import { useAddKeyboardContext } from "@/src/context/AddKeyboardContext";
-import Loading from "@/src/components/Loading";
 import SubmitImagesVideo from "../../SubmitImagesVideo";
 import { InputNameLoadingField } from "./InputFields";
 
