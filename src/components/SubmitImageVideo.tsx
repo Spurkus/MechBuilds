@@ -27,7 +27,7 @@ interface SubmitImagesVideoProps {
   setMediaURL: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const SubmitImagesVideo = ({
+const SubmitImageVideo = ({
   index,
   setIndex,
   imageVideoList,
@@ -243,4 +243,4 @@ const SubmitImagesVideo = ({
   );
 };
 
-export default SubmitImagesVideo;
+export default SubmitImageVideo;

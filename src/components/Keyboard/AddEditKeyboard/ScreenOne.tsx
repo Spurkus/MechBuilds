@@ -1,5 +1,5 @@
 import { useAddKeyboardContext } from "@/src/context/AddKeyboardContext";
-import SubmitImagesVideo from "../../SubmitImagesVideo";
+import SubmitImageVideo from "@/src/components/SubmitImageVideo";
 import { InputNameLoadingField } from "./InputFields";
 
 const NameField = () => {
@@ -32,7 +32,7 @@ const KeyboardContent = () => {
     setMediaURL,
   } = useAddKeyboardContext();
   return (
-    <SubmitImagesVideo
+    <SubmitImageVideo
       index={contentIndex}
       setIndex={setContentIndex}
       imageVideoList={imageVideoList}
