@@ -1,6 +1,6 @@
 import Loading from "@/src/components/Loading";
 import NextImage from "next/image";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { formatSocialLink, closeDropdown } from "@/src/helper/helperFunctions";
 import { useAuthContext } from "@/src/context/Authentication";
 import { DEFAULT_IMAGE_SIZE, DEFAULT_PRONOUNS } from "@/src/constants";
