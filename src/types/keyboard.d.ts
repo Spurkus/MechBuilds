@@ -26,7 +26,8 @@ export interface KeyboardType {
   stabilizers: MaxLengthArray<ItemType, 3>;
   keycaps: MaxLengthArray<ItemType, 3>;
   mods: MaxLengthArray<string, 10>;
-  content: string[];
+  media: string[];
+  isMediaVideo: boolean[];
   createdAt: Date;
   status: KeyboardStatusType;
   visible: boolean;

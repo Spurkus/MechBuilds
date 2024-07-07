@@ -530,7 +530,8 @@ export const AddKeyboardContextProvider = ({
     if (!isSavable || loading || !userProfile) return;
     setLoading(true);
     try {
-      const content = !imageVideoList.length
+      const isMediaVideo = imageVideoList.map((file) => file.type.startsWith("video/"));
+      const media = !imageVideoList.length
         ? [await getDefaultKeyboardImage()]
         : imageVideoList.map(
             async (file, index) =>
@@ -562,7 +563,8 @@ export const AddKeyboardContextProvider = ({
         stabilizers: stabilizers,
         keycaps: keycaps,
         mods: mods,
-        content: await Promise.all(content),
+        media: await Promise.all(media),
+        isMediaVideo: isMediaVideo,
         createdAt: new Date(),
         status: "public",
         visible: true,
