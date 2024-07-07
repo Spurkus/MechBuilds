@@ -4,7 +4,7 @@ import {
   AddKeyboardContextProvider,
   useAddKeyboardContext,
 } from "@/src/context/AddKeyboardContext";
-import { closeModal, showModal, closeDropdown } from "@/src/helper/helperFunctions";
+import { showModal } from "@/src/helper/helperFunctions";
 import { useMemo, useState } from "react";
 import ScreenOne from "./ScreenOne";
 import ScreenTwo from "./ScreenTwo";
@@ -33,6 +33,7 @@ const AddKeyboardButton = () => {
 
 const AddKeyboardForm = () => {
   const {
+    loading,
     screen,
     setScreen,
     validScreenOne,
@@ -40,6 +41,7 @@ const AddKeyboardForm = () => {
     validScreenThree,
     isSavable,
     handleCancel,
+    handleSave,
   } = useAddKeyboardContext();
 
   const canIncrement = useMemo(() => {
@@ -50,6 +52,11 @@ const AddKeyboardForm = () => {
   const handleCancelButton = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     handleCancel();
+  };
+
+  const handleSaveButton = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    handleSave();
   };
 
   const incrementScreen = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -63,8 +70,19 @@ const AddKeyboardForm = () => {
     setScreen(screen - 1);
   };
 
+  if (loading)
+    return (
+      <div className="mb-2 flex h-48 w-full flex-grow flex-col">
+        <h2 className="text-center font-clashgrotesk text-5xl font-medium">Publishing Keyboard</h2>
+        <div className="flex h-full w-full justify-center">
+          <Loading height={60} width={60} />
+        </div>
+      </div>
+    );
+
   return (
     <div className="flex grow flex-col items-center pt-2">
+      <h2 className="text-center font-clashgrotesk text-2xl font-medium">Add Keyboard</h2>
       <ul className="steps text-sm font-medium">
         <li className="step step-success">Name and Imagery</li>
         <li className={`step ${screen >= 2 && "step-success"}`}>Kit Details</li>
@@ -90,7 +108,7 @@ const AddKeyboardForm = () => {
         {screen === 4 ? (
           <button
             className={`btn btn-success btn-sm ${!isSavable && "btn-disabled"}`}
-            onClick={() => {}}
+            onClick={handleSaveButton}
           >
             publish keyboard
           </button>
@@ -112,7 +130,6 @@ const AddKeyboardModal = ({ open, setAddKeyboard }: AddKeyboardModalProps) => {
   return (
     <dialog id="addkeyboardmodal" className="modal modal-middle" open={open}>
       <div className="modal-box flex w-[36rem] max-w-none flex-col bg-base-200 pb-4 pt-4">
-        <h2 className="text-center font-clashgrotesk text-2xl font-medium">Add Keyboard</h2>
         <AddKeyboardContextProvider toggleAddKeyboard={toggleAddKeyboard} open={open}>
           <AddKeyboardForm />
         </AddKeyboardContextProvider>

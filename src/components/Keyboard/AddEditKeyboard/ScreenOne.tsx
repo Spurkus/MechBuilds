@@ -1,28 +1,24 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useAddKeyboardContext } from "@/src/context/AddKeyboardContext";
-import {
-  DEFAULT_KEYBOARD_IMAGE,
-  DEFAULT_KEYBOARD_IMAGE_WIDTH,
-  DEFAULT_KEYBOARD_IMAGE_HEIGHT,
-} from "@/src/constants";
-import NextImage from "next/image";
-import { InputNameField } from "./InputFields";
+import Loading from "@/src/components/Loading";
 import SubmitImagesVideo from "../../SubmitImagesVideo";
+import { InputNameLoadingField } from "./InputFields";
 
 const NameField = () => {
-  const { name, setName, validName } = useAddKeyboardContext();
+  const { name, setName, validName, nameLoading } = useAddKeyboardContext();
   const nameChange = (e: any) => setName(e.target.value);
   return (
     <div className="flex flex-col">
       <label className="label pb-0 font-bold">Keyboard Name</label>
-      <InputNameField
-        type="name"
+      <InputNameLoadingField
+        type="keyboard"
         name={name}
+        nameLoading={nameLoading}
         namePlaceholder="Rainy 75"
         nameMaxLength={50}
+        nameChange={nameChange}
         validName={validName}
         noInput={false}
-        nameChange={nameChange}
       />
     </div>
   );

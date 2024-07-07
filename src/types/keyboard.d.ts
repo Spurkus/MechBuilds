@@ -4,8 +4,8 @@ type KitKeys = (typeof KIT_KEYS)[number];
 
 export type KitType = Partial<Pick<KeyboardType, KitKeys>>;
 
-export type ItemType = { name: string; link?: string };
-export type ItemValidity = { name: boolean; link?: boolean };
+export type ItemType = { name: string; link: string };
+export type KeyboardStatusType = "public" | "private" | "banned";
 
 export interface KeyboardType {
   id: string;
@@ -14,19 +14,20 @@ export interface KeyboardType {
   description: string;
   kitName: string;
   kit: KitType;
-  kitLink?: string;
+  kitLink: string;
   case: string;
-  caseLink?: string;
+  caseLink: string;
   pcb: string;
-  pcbLink?: string;
+  pcbLink: string;
   plate: string;
-  plateLink?: string;
+  plateLink: string;
   size: string;
   switches: MaxLengthArray<ItemType, 3>;
   stabilizers: MaxLengthArray<ItemType, 3>;
   keycaps: MaxLengthArray<ItemType, 3>;
   mods: MaxLengthArray<string, 10>;
-  images: string[];
+  content: string[];
   createdAt: Date;
+  status: KeyboardStatusType;
   visible: boolean;
 }

@@ -20,9 +20,17 @@ import {
 } from "@/src/constants";
 import { useGlobalModalContext } from "./GlobalModal";
 import useInputValidator from "@/src/hooks/useInputValidator";
-import useKeyboardItem from "../hooks/useKeyboardItem";
+import useKeyboardItem from "@/src/hooks/useKeyboardItem";
+import {
+  getDefaultKeyboardImage,
+  uploadKeyboardContent,
+  createKeyboard,
+  isKeyboardNameTaken,
+} from "@/src/helper/firestoreFunctions";
+import { useAuthContext } from "./Authentication";
 
 export interface AddKeyboardContextType {
+  loading: boolean;
   screen: number;
   setScreen: React.Dispatch<React.SetStateAction<number>>;
   validScreenOne: boolean;
@@ -30,6 +38,7 @@ export interface AddKeyboardContextType {
   validScreenThree: boolean;
   isSavable: boolean;
 
+  nameLoading: boolean;
   name: string;
   setName: React.Dispatch<React.SetStateAction<string>>;
   validName: boolean;
@@ -156,6 +165,7 @@ export interface AddKeyboardContextType {
   setMediaURL: React.Dispatch<React.SetStateAction<string>>;
 
   handleCancel: () => void;
+  handleSave: () => void;
 }
 
 export interface AddKeyboardContextProps {
@@ -172,9 +182,44 @@ export const AddKeyboardContextProvider = ({
   open,
 }: AddKeyboardContextProps) => {
   const { handleModal, handleModalError } = useGlobalModalContext();
+  const { userProfile } = useAuthContext();
+
   // Check name
   const nameValidation = (name: string) => KEYBOARD_NAME_REGEX.test(name);
-  const [name, setName, validName] = useInputValidator<string>("", nameValidation);
+
+  const [nameLoading, setNameLoading] = useState(false);
+  const nameRef = useRef(0);
+  const keyboardNameValidation = useCallback(
+    async (name: string): Promise<boolean> => {
+      if (!userProfile) return false;
+      const currentNameRef = ++nameRef.current; // Increment reference for tracking keyboard name
+      setNameLoading(true); // Set loading states
+
+      // Check if the name is nothing or invalid
+      if (!name || !nameValidation(name)) {
+        setNameLoading(false);
+        return false;
+      }
+
+      // Check if the name is taken
+      const nameTaken = await isKeyboardNameTaken(userProfile.uid, name)
+        .then((result) => {
+          if (currentNameRef !== nameRef.current) return false;
+          setNameLoading(false);
+          return result;
+        })
+        .catch((error) => {
+          if (currentNameRef !== nameRef.current) return false;
+          handleModalError(error);
+          setNameLoading(false);
+          return false;
+        });
+      setNameLoading(false);
+      return !nameTaken;
+    },
+    [userProfile, handleModalError],
+  );
+  const [name, setName, validName] = useInputValidator<string>("", keyboardNameValidation);
 
   // Check description
   const descriptionValidation = (desc: string) => KEYBOARD_DESCRIPTION_REGEX.test(desc);
@@ -261,7 +306,7 @@ export const AddKeyboardContextProvider = ({
   useEffect(() => {
     if (kitSelected && kitStabilizers) {
       setStabilizers(DEFAULT_ITEMS);
-      updateStabilizersRef.current(0, { name: kitName });
+      updateStabilizersRef.current(0, { name: kitName, link: "" });
     } else if (kitSelected === null) {
       setStabilizers(DEFAULT_ITEMS);
     }
@@ -291,7 +336,7 @@ export const AddKeyboardContextProvider = ({
   useEffect(() => {
     if (kitSelected && kitKeycaps) {
       setKeycaps(DEFAULT_ITEMS);
-      updateKeycapsRef.current(0, { name: kitName });
+      updateKeycapsRef.current(0, { name: kitName, link: "" });
     } else if (kitSelected === null) {
       setKeycaps(DEFAULT_ITEMS);
     }
@@ -311,7 +356,8 @@ export const AddKeyboardContextProvider = ({
 
   // Screen state
   const [screen, setScreen] = useState(1);
-  const validScreenOne = useMemo(() => validName, [validName]);
+  const [loading, setLoading] = useState(false);
+  const validScreenOne = useMemo(() => validName && !nameLoading, [validName, nameLoading]);
   const validScreenTwo = useMemo(() => {
     // Kit checkboxes can only be selected if the user has selected a kit
     const validKitCheckBox = kitSelected
@@ -480,6 +526,61 @@ export const AddKeyboardContextProvider = ({
     }
   }, [handleModal, setDefault, toggleAddKeyboard, validScreenOne]);
 
+  const handleSave = async () => {
+    if (!isSavable || loading || !userProfile) return;
+    setLoading(true);
+    try {
+      const content = !imageVideoList.length
+        ? [await getDefaultKeyboardImage()]
+        : imageVideoList.map(
+            async (file, index) =>
+              await uploadKeyboardContent(file, `${userProfile.uid}_${name}_${index}`),
+          );
+      const kitComponents = [];
+      if (kitCase) kitComponents.push("kit");
+      if (kitPcb) kitComponents.push("pcb");
+      if (kitPlate) kitComponents.push("plate");
+      if (kitStabilizers) kitComponents.push("stabilizers");
+      if (kitKeycaps) kitComponents.push("keycaps");
+
+      const keyboard: KeyboardType = {
+        id: `${userProfile.uid}_${name}`,
+        uid: userProfile.uid,
+        name: name,
+        description: description,
+        kitName: kitName,
+        kit: kitComponents,
+        kitLink: kitLink,
+        case: caseName,
+        caseLink: caseLink,
+        pcb: pcbName,
+        pcbLink: pcbLink,
+        plate: plateName,
+        plateLink: plateLink,
+        size: size,
+        switches: switches,
+        stabilizers: stabilizers,
+        keycaps: keycaps,
+        mods: mods,
+        content: await Promise.all(content),
+        createdAt: new Date(),
+        status: "public",
+        visible: true,
+      };
+      const message = await createKeyboard(keyboard);
+      handleModal(message.title, message.message, message.theme);
+    } catch (error: any) {
+      handleModalError(error);
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+        closeModal("editprofilemodal");
+        setDefault();
+        toggleAddKeyboard();
+      }, 1500);
+    }
+  };
+
   // Handle escape key
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -495,12 +596,14 @@ export const AddKeyboardContextProvider = ({
   return (
     <AddKeyboardContext.Provider
       value={{
+        loading,
         screen,
         setScreen,
         validScreenOne,
         validScreenTwo,
         validScreenThree,
         isSavable,
+        nameLoading,
         name,
         setName,
         validName,
@@ -615,6 +718,7 @@ export const AddKeyboardContextProvider = ({
         mediaURL,
         setMediaURL,
         handleCancel,
+        handleSave,
       }}
     >
       {children}
