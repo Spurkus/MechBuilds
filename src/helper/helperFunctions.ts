@@ -1,4 +1,5 @@
 import { isUsernameTaken } from "./firestoreFunctions";
+import { Timestamp } from "firebase/firestore";
 import { LINK_REGEX } from "@/src/constants";
 
 export const closeDropdown = () => {
@@ -80,3 +81,6 @@ export const closeModal = (elementID: string, toggleChange?: () => void) => {
 };
 
 export const linkValidation = (link: string) => !link || LINK_REGEX.test(link);
+
+export const formatDate = (date: Date) =>
+  new Date((date as unknown as Timestamp).toDate()).toLocaleDateString();

@@ -6,6 +6,7 @@ import { Timestamp } from "firebase/firestore";
 import {
   adjustImageURL,
   ensureHttpsLink,
+  formatDate,
   formatPronouns,
   formatSocialLink,
   showModal,
@@ -71,8 +72,6 @@ const ProfileExtraDetails = () => {
       </div>
     );
 
-  const joinedDate = new Date((userProfile.joinedDate as unknown as Timestamp).toDate());
-
   return (
     <div className="flex flex-col space-y-2">
       {userProfile.bio && <p className="font-light leading-5">{userProfile.bio}</p>}
@@ -100,7 +99,7 @@ const ProfileExtraDetails = () => {
       <div className="flex w-full grow flex-col items-center">
         <h3 className="font-bold">User Joined</h3>
         <span className="text-sm font-bold leading-3 text-gray-500">
-          {joinedDate.toLocaleDateString()}
+          {formatDate(userProfile.joinedDate)}
         </span>
       </div>
     </div>
