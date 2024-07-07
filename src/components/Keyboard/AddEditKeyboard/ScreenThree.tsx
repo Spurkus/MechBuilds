@@ -155,7 +155,7 @@ const StabilizerField = ({ stabilizer, index }: StabilizerFieldProps) => {
         toggleSelectedLink={() => toggleStabilizersSelectedLink(index)}
         name={stabilizer.name}
         setName={nameChange}
-        namePlaceholder="Durock V2 Stabilizer"
+        namePlaceholder="Durock V2 Stabilizers"
         nameMaxLength={50}
         validName={validStabilizersMap[index].name === true}
         link={stabilizer.link ? stabilizer.link : ""}
