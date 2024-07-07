@@ -538,7 +538,7 @@ export const AddKeyboardContextProvider = ({
               await uploadKeyboardContent(file, `${userProfile.uid}_${name}_${index}`),
           );
       const kitComponents = [];
-      if (kitCase) kitComponents.push("kit");
+      if (kitCase) kitComponents.push("case");
       if (kitPcb) kitComponents.push("pcb");
       if (kitPlate) kitComponents.push("plate");
       if (kitStabilizers) kitComponents.push("stabilizers");
