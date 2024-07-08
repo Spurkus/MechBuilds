@@ -8,7 +8,7 @@ import {
   useCallback,
   useRef,
 } from "react";
-import { ItemType, KeyboardType, KitType } from "@/src/types/keyboard";
+import { ItemType, KeyboardStatusType, KeyboardType, KitType } from "@/src/types/keyboard";
 import { linkValidation, closeModal } from "@/src/helper/helperFunctions";
 import {
   KEYBOARD_NAME_REGEX,
@@ -163,6 +163,9 @@ export interface AddKeyboardContextType {
   setImageVideoList: React.Dispatch<React.SetStateAction<File[]>>;
   mediaURL: string;
   setMediaURL: React.Dispatch<React.SetStateAction<string>>;
+
+  status: KeyboardStatusType | null;
+  setStatus: React.Dispatch<React.SetStateAction<KeyboardStatusType | null>>;
 
   handleCancel: () => void;
   handleSave: () => void;
@@ -354,6 +357,14 @@ export const AddKeyboardContextProvider = ({
   const [imageVideoList, setImageVideoList] = useState<File[]>([]);
   const [mediaURL, setMediaURL] = useState("");
 
+  // Check status
+  const statusValidation = (status: string | null) =>
+    status === "public" || status === "private" || status === "unlisted";
+  const [status, setStatus, validStatus] = useInputValidator<KeyboardStatusType | null>(
+    null,
+    statusValidation,
+  );
+
   // Screen state
   const [screen, setScreen] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -421,8 +432,8 @@ export const AddKeyboardContextProvider = ({
     return validSwitches && validStabilizers && validKeycaps;
   }, [validKeycaps, validStabilizers, validSwitches]);
   const validScreenFour = useMemo(() => {
-    return validMods && validDescription;
-  }, [validDescription, validMods]);
+    return validMods && validDescription && validStatus;
+  }, [validDescription, validMods, validStatus]);
 
   // Check if the keyboard can be saved
   const isSavable = useMemo(() => {
@@ -484,6 +495,9 @@ export const AddKeyboardContextProvider = ({
     setContentIndex(0);
     setImageVideoList([]);
     setMediaURL("");
+
+    // Default status
+    setStatus(null);
   }, [
     setCaseLink,
     setCaseName,
@@ -503,6 +517,7 @@ export const AddKeyboardContextProvider = ({
     setStabilizers,
     setSwitches,
     setSwitchesSelectedLink,
+    setStatus,
   ]);
 
   const handleCancel = useCallback(() => {
@@ -527,7 +542,7 @@ export const AddKeyboardContextProvider = ({
   }, [handleModal, setDefault, toggleAddKeyboard, validScreenOne]);
 
   const handleSave = async () => {
-    if (!isSavable || loading || !userProfile) return;
+    if (!isSavable || loading || !userProfile || !status) return;
     setLoading(true);
     try {
       const isMediaVideo = imageVideoList.map((file) => file.type.startsWith("video/"));
@@ -537,7 +552,7 @@ export const AddKeyboardContextProvider = ({
             async (file, index) =>
               await uploadKeyboardContent(file, `${userProfile.uid}_${name}_${index}`),
           );
-      const kitComponents = [];
+      const kitComponents: Partial<Pick<KeyboardType, any>> = [];
       if (kitCase) kitComponents.push("case");
       if (kitPcb) kitComponents.push("pcb");
       if (kitPlate) kitComponents.push("plate");
@@ -566,7 +581,7 @@ export const AddKeyboardContextProvider = ({
         media: await Promise.all(media),
         isMediaVideo: isMediaVideo,
         createdAt: new Date(),
-        status: "public",
+        status: status,
         visible: true,
       };
       const message = await createKeyboard(keyboard);
@@ -719,6 +734,8 @@ export const AddKeyboardContextProvider = ({
         setImageVideoList,
         mediaURL,
         setMediaURL,
+        status,
+        setStatus,
         handleCancel,
         handleSave,
       }}

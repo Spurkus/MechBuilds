@@ -5,7 +5,7 @@ type KitKeys = (typeof KIT_KEYS)[number];
 export type KitType = Partial<Pick<KeyboardType, KitKeys>>;
 
 export type ItemType = { name: string; link: string };
-export type KeyboardStatusType = "public" | "private" | "banned";
+export type KeyboardStatusType = "public" | "private" | "unlisted" | "banned";
 
 export interface KeyboardType {
   id: string;
