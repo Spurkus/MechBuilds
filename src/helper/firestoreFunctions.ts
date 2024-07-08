@@ -90,3 +90,10 @@ export const createKeyboard = async (
     };
   });
 };
+
+export const getAllKeyboardsFromUser = async (uid: string): Promise<KeyboardType[]> => {
+  const keyboardsCollectionRef = collection(db, "keyboards");
+  const q = query(keyboardsCollectionRef, where("uid", "==", uid));
+  const querySnapshot = await getDocs(q);
+  return querySnapshot.docs.map((doc) => doc.data() as KeyboardType);
+};
