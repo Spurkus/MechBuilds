@@ -1,5 +1,14 @@
 import { db } from "@/firebase";
-import { collection, setDoc, doc, updateDoc, query, where, getDocs } from "firebase/firestore";
+import {
+  collection,
+  setDoc,
+  doc,
+  updateDoc,
+  query,
+  where,
+  getDocs,
+  deleteDoc,
+} from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { UserProfileType, EditUserProfileType } from "@/src/types/user";
 import { KeyboardType } from "@/src/types/keyboard";
@@ -96,4 +105,9 @@ export const getAllKeyboardsFromUser = async (uid: string): Promise<KeyboardType
   const q = query(keyboardsCollectionRef, where("uid", "==", uid));
   const querySnapshot = await getDocs(q);
   return querySnapshot.docs.map((doc) => doc.data() as KeyboardType);
+};
+
+export const deleteKeyboard = async (keyboardID: string) => {
+  const keyboardsCollectionRef = collection(db, "keyboards");
+  await deleteDoc(doc(keyboardsCollectionRef, keyboardID));
 };

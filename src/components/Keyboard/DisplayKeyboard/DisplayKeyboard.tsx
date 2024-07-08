@@ -1,24 +1,62 @@
 "use client";
 import { useState } from "react";
 import { ItemType, KeyboardType } from "@/src/types/keyboard";
-import DisplayImageVideo from "@/src/components/DisplayImageVideo";
-import { formatDate, truncateString } from "@/src/helper/helperFunctions";
+import { formatDate, truncateString, closeModal } from "@/src/helper/helperFunctions";
 import { deleteKeyboard } from "@/src/helper/firestoreFunctions";
+import { useGlobalModalContext } from "@/src/context/GlobalModal";
+import DisplayImageVideo from "@/src/components/DisplayImageVideo";
 
 const DisplayKeyboard = ({ keyboard }: { keyboard: KeyboardType }) => {
+  const { handleModal, toggleModal } = useGlobalModalContext();
   const [index, setIndex] = useState(0);
   const [hover, setHover] = useState(false);
+
+  const handleDeleteKeyboard = async (keyboardName: string, id: string) => {
+    handleModal("Deleting Keyboard", `Are you sure you want to delete "${keyboardName}?"`, "fail", [
+      {
+        text: "Delete",
+        type: "error",
+        onClick: () => {
+          deleteKeyboard(id);
+          closeModal("globalmodal");
+          toggleModal();
+        },
+      },
+      {
+        text: "Cancel",
+        type: "neutral",
+        onClick: () => {
+          closeModal("globalmodal");
+          toggleModal();
+        },
+      },
+    ]);
+  };
+
   return (
     <div
-      className="flex w-[40rem] grow flex-col rounded-[1.2rem] px-4 py-3 hover:bg-base-300"
+      className="flex w-[40rem] grow flex-col rounded-[1.2rem] px-4 pb-3 hover:bg-base-300"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
       <div className="mx-1 flex grow flex-row justify-between">
-        <h2 className="self-end truncate font-clashgrotesk text-4xl font-medium">
+        <h2 className="self-end truncate pt-6 font-clashgrotesk text-4xl font-medium">
           {keyboard.name}
         </h2>
         <div className="flex flex-col justify-end">
+          <div className="flex grow justify-end space-x-1.5">
+            <button
+              className={`btn btn-outline btn-info btn-xs self-end pb-6 ${!hover && "hidden"}`}
+            >
+              <span className="mt-1.5">Edit Keyboard</span>
+            </button>
+            <button
+              className={`btn btn-outline btn-error btn-xs self-end pb-6 ${!hover && "hidden"}`}
+              onClick={() => handleDeleteKeyboard(keyboard.name, keyboard.id)}
+            >
+              <span className="mt-1.5">Delete</span>
+            </button>
+          </div>
           <span className="self-end text-lg font-bold text-gray-500">
             {formatDate(keyboard.createdAt)}
           </span>
@@ -30,7 +68,7 @@ const DisplayKeyboard = ({ keyboard }: { keyboard: KeyboardType }) => {
         imageVideoList={keyboard.media}
         isMediaVideo={keyboard.isMediaVideo}
       />
-      <div className="flex w-full flex-row justify-between space-x-4 truncate pt-2">
+      <div className="flex w-full flex-row truncate pt-2">
         {keyboard.mods.length > 0 && (
           <div className="flex grow flex-row space-x-2 overflow-x-auto overflow-y-hidden">
             {keyboard.mods.map((mod: string, index: number) => (
@@ -40,14 +78,6 @@ const DisplayKeyboard = ({ keyboard }: { keyboard: KeyboardType }) => {
             ))}
           </div>
         )}
-        <div className="flex grow justify-end space-x-3">
-          <button className={`btn btn-outline btn-info btn-xs pb-6 ${!hover && "hidden"}`}>
-            <span className="mt-1.5">Edit Keyboard</span>
-          </button>
-          <button className={`btn btn-outline btn-error btn-xs pb-6 ${!hover && "hidden"}`}>
-            <span className="mt-1.5">Delete</span>
-          </button>
-        </div>
       </div>
       <div className="mx-1.5 flex grow flex-wrap justify-between gap-1 pt-2">
         {keyboard.kit.length === 0 ? (
