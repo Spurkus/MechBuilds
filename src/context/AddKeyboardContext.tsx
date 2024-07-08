@@ -200,6 +200,7 @@ export const AddKeyboardContextProvider = ({
 
       // Check if the name is nothing or invalid
       if (!name || !nameValidation(name)) {
+        if (currentNameRef !== nameRef.current) return false;
         setNameLoading(false);
         return false;
       }
@@ -217,6 +218,8 @@ export const AddKeyboardContextProvider = ({
           setNameLoading(false);
           return false;
         });
+
+      if (currentNameRef !== nameRef.current) return false;
       setNameLoading(false);
       return !nameTaken;
     },

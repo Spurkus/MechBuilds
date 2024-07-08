@@ -41,6 +41,7 @@ const ChangeUsernameForm = ({
 
       // Check if the username is the same as the current user's username or if it is invalid
       if (name === userProfile.username || !USERNAME_REGEX.test(name)) {
+        if (currentUsernameRef !== usernameRef.current) return false;
         setIsSavable(false);
         setUsernameLoading(false);
         return name === userProfile.username;
@@ -49,7 +50,7 @@ const ChangeUsernameForm = ({
       // Check if the username is taken
       const usernameTaken = await isUsernameTaken(name)
         .then((result) => {
-          if (currentUsernameRef !== usernameRef.current) return !result;
+          if (currentUsernameRef !== usernameRef.current) return false;
           setUsernameTaken(result);
           setIsSavable(!result);
           return !result;
@@ -60,6 +61,8 @@ const ChangeUsernameForm = ({
           handleModalError(error);
           return false;
         });
+
+      if (currentUsernameRef !== usernameRef.current) return false;
       setUsernameLoading(false);
       return usernameTaken;
     },
