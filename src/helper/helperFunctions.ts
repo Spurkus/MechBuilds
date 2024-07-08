@@ -1,6 +1,7 @@
 import { isUsernameTaken } from "./firestoreFunctions";
 import { Timestamp } from "firebase/firestore";
 import { LINK_REGEX } from "@/src/constants";
+import confetti from "canvas-confetti";
 
 export const closeDropdown = () => {
   const elem = document.activeElement as HTMLElement;
@@ -84,3 +85,25 @@ export const linkValidation = (link: string) => !link || LINK_REGEX.test(link);
 
 export const formatDate = (date: Date) =>
   new Date((date as unknown as Timestamp).toDate()).toLocaleDateString();
+
+export const triggerConfetti = () => {
+  const defaults = {
+    zIndex: 10000000,
+    spread: 360,
+    ticks: 50,
+    decay: 0.94,
+    startVelocity: 30,
+  };
+
+  confetti({
+    ...defaults,
+    particleCount: 45,
+    scalar: 2,
+  });
+
+  confetti({
+    ...defaults,
+    particleCount: 20,
+    scalar: 0.75,
+  });
+};
