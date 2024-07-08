@@ -11,25 +11,21 @@ const DisplayKeyboard = ({ keyboard }: { keyboard: KeyboardType }) => {
   const [index, setIndex] = useState(0);
   const [hover, setHover] = useState(false);
 
-  const handleDeleteKeyboard = async (keyboardName: string, id: string) => {
-    handleModal("Deleting Keyboard", `Are you sure you want to delete "${keyboardName}?"`, "fail", [
-      {
-        text: "Delete",
-        type: "error",
-        onClick: () => {
-          deleteKeyboard(id);
-          closeModal("globalmodal");
-          toggleModal();
-        },
-      },
-      {
-        text: "Cancel",
-        type: "neutral",
-        onClick: () => {
-          closeModal("globalmodal");
-          toggleModal();
-        },
-      },
+  const handleDelete = (id: string) => {
+    deleteKeyboard(id);
+    closeModal("globalmodal");
+    toggleModal();
+  };
+
+  const handleCancelDelete = () => {
+    closeModal("globalmodal");
+    toggleModal();
+  };
+
+  const handleDeleteKeyboard = async (name: string, id: string) => {
+    handleModal("Deleting Keyboard", `Are you sure you want to delete "${name}?"`, "error", [
+      { text: "Delete", type: "error", onClick: () => handleDelete(id) },
+      { text: "Cancel", type: "neutral", onClick: handleCancelDelete },
     ]);
   };
 
