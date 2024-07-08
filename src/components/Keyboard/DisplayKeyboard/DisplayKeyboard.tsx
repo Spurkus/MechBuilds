@@ -1,17 +1,25 @@
+"use client";
 import { useState } from "react";
 import { ItemType, KeyboardType } from "@/src/types/keyboard";
-import DisplayImageVideo from "../../DisplayImageVideo";
+import DisplayImageVideo from "@/src/components/DisplayImageVideo";
 import { formatDate } from "@/src/helper/helperFunctions";
 
 const DisplayKeyboard = ({ keyboard }: { keyboard: KeyboardType }) => {
   const [index, setIndex] = useState(0);
+  const [hover, setHover] = useState(false);
   return (
-    <div className="flex w-[40rem] grow flex-col rounded-[1.2rem] px-4 py-3 hover:bg-base-300">
+    <div
+      className="flex w-[40rem] grow flex-col rounded-[1.2rem] px-4 py-3 hover:bg-base-300"
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+    >
       <div className="mx-1 flex grow flex-row justify-between">
-        <h2 className="font-clashgrotesk text-3xl font-medium">{keyboard.name}</h2>
-        <span className="self-end text-lg font-bold text-gray-500">
-          {formatDate(keyboard.createdAt)}
-        </span>
+        <h2 className="self-end font-clashgrotesk text-4xl font-medium">{keyboard.name}</h2>
+        <div className="flex flex-col justify-end">
+          <span className="self-end text-lg font-bold text-gray-500">
+            {formatDate(keyboard.createdAt)}
+          </span>
+        </div>
       </div>
       <DisplayImageVideo
         index={index}
@@ -19,16 +27,26 @@ const DisplayKeyboard = ({ keyboard }: { keyboard: KeyboardType }) => {
         imageVideoList={keyboard.media}
         isMediaVideo={keyboard.isMediaVideo}
       />
-      {keyboard.mods.length > 0 && (
-        <div className="flex w-full flex-row space-x-2 overflow-x-auto overflow-y-hidden pt-1.5">
-          {keyboard.mods.map((mod: string, index: number) => (
-            <div key={index} className="badge badge-neutral badge-lg space-x-1 py-3">
-              <span className="mb-[0.1rem] truncate text-sm font-bold">{mod}</span>
-            </div>
-          ))}
+      <div className="flex w-full flex-row justify-between pt-2">
+        {keyboard.mods.length > 0 && (
+          <div className="flex grow flex-row space-x-2 overflow-x-auto overflow-y-hidden">
+            {keyboard.mods.map((mod: string, index: number) => (
+              <div key={index} className="badge badge-neutral badge-lg space-x-1 py-3">
+                <span className="mb-[0.1rem] truncate text-sm font-bold">{mod}</span>
+              </div>
+            ))}
+          </div>
+        )}
+        <div className="flex grow justify-end space-x-3">
+          <button className={`btn btn-outline btn-info btn-xs pb-6 ${!hover && "hidden"}`}>
+            <span className="mt-1.5">Edit Keyboard</span>
+          </button>
+          <button className={`btn btn-outline btn-error btn-xs pb-6 ${!hover && "hidden"}`}>
+            <span className="mt-1.5">Delete</span>
+          </button>
         </div>
-      )}
-      <div className="mx-1.5 flex grow flex-row justify-between pt-2">
+      </div>
+      <div className="mx-1.5 flex grow flex-wrap justify-between gap-1 pt-2">
         {keyboard.kit.length === 0 ? (
           <div className="flex flex-col">
             <p className="font-bold leading-3 text-gray-300">Case</p>
@@ -42,27 +60,31 @@ const DisplayKeyboard = ({ keyboard }: { keyboard: KeyboardType }) => {
         )}
         <div className="flex flex-col">
           <p className="font-bold leading-3 text-gray-300">Switches</p>
-          {keyboard.switches.map((switches: ItemType, index: number) => (
-            <p key={index} className="text-gray-300">
-              {switches.name}
-            </p>
-          ))}
+          <div className="flex flex-wrap gap-3">
+            {keyboard.switches.map((switches: ItemType, index: number) => (
+              <p key={index} className="text-gray-300">
+                {switches.name}
+              </p>
+            ))}
+          </div>
         </div>
         <div className="flex flex-col">
           <p className="font-bold leading-3 text-gray-300">Keycaps</p>
-          {keyboard.keycaps.map((keycaps: ItemType, index: number) => {
-            if (index === 0 && keyboard.kit.includes("keycaps"))
+          <div className="flex flex-wrap gap-3">
+            {keyboard.keycaps.map((keycaps: ItemType, index: number) => {
+              if (index === 0 && keyboard.kit.includes("keycaps"))
+                return (
+                  <p key={index} className="text-gray-300">
+                    Default
+                  </p>
+                );
               return (
                 <p key={index} className="text-gray-300">
-                  Default
+                  {keycaps.name}
                 </p>
               );
-            return (
-              <p key={index} className="text-gray-300">
-                {keycaps.name}
-              </p>
-            );
-          })}
+            })}
+          </div>
         </div>
         <div className="flex flex-col">
           <p className="self-end font-bold leading-3 text-gray-300">Size</p>
