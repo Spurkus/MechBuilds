@@ -2,7 +2,8 @@
 import { useState } from "react";
 import { ItemType, KeyboardType } from "@/src/types/keyboard";
 import DisplayImageVideo from "@/src/components/DisplayImageVideo";
-import { formatDate } from "@/src/helper/helperFunctions";
+import { formatDate, truncateString } from "@/src/helper/helperFunctions";
+import { deleteKeyboard } from "@/src/helper/firestoreFunctions";
 
 const DisplayKeyboard = ({ keyboard }: { keyboard: KeyboardType }) => {
   const [index, setIndex] = useState(0);
@@ -14,7 +15,9 @@ const DisplayKeyboard = ({ keyboard }: { keyboard: KeyboardType }) => {
       onMouseLeave={() => setHover(false)}
     >
       <div className="mx-1 flex grow flex-row justify-between">
-        <h2 className="self-end font-clashgrotesk text-4xl font-medium">{keyboard.name}</h2>
+        <h2 className="self-end truncate font-clashgrotesk text-4xl font-medium">
+          {keyboard.name}
+        </h2>
         <div className="flex flex-col justify-end">
           <span className="self-end text-lg font-bold text-gray-500">
             {formatDate(keyboard.createdAt)}
@@ -27,7 +30,7 @@ const DisplayKeyboard = ({ keyboard }: { keyboard: KeyboardType }) => {
         imageVideoList={keyboard.media}
         isMediaVideo={keyboard.isMediaVideo}
       />
-      <div className="flex w-full flex-row justify-between pt-2">
+      <div className="flex w-full flex-row justify-between space-x-4 truncate pt-2">
         {keyboard.mods.length > 0 && (
           <div className="flex grow flex-row space-x-2 overflow-x-auto overflow-y-hidden">
             {keyboard.mods.map((mod: string, index: number) => (
@@ -50,27 +53,27 @@ const DisplayKeyboard = ({ keyboard }: { keyboard: KeyboardType }) => {
         {keyboard.kit.length === 0 ? (
           <div className="flex flex-col">
             <p className="font-bold leading-3 text-gray-300">Case</p>
-            <p className="text-gray-300">{keyboard.case}</p>
+            <p className="text-gray-300">{truncateString(keyboard.case, 16)}</p>
           </div>
         ) : (
           <div className="flex flex-col">
             <p className="font-bold leading-3 text-gray-300">Kit</p>
-            <p className="text-gray-300">{keyboard.kitName}</p>
+            <p className="text-gray-300">{truncateString(keyboard.kitName, 16)}</p>
           </div>
         )}
         <div className="flex flex-col">
           <p className="font-bold leading-3 text-gray-300">Switches</p>
-          <div className="flex flex-wrap gap-3">
+          <div className={`flex ${keyboard.switches.length > 2 ? "flex-col" : "flex-row gap-3"}`}>
             {keyboard.switches.map((switches: ItemType, index: number) => (
               <p key={index} className="text-gray-300">
-                {switches.name}
+                {truncateString(switches.name, 16)}
               </p>
             ))}
           </div>
         </div>
         <div className="flex flex-col">
           <p className="font-bold leading-3 text-gray-300">Keycaps</p>
-          <div className="flex flex-wrap gap-3">
+          <div className={`flex ${keyboard.keycaps.length > 2 ? "flex-col" : "flex-row gap-3"}`}>
             {keyboard.keycaps.map((keycaps: ItemType, index: number) => {
               if (index === 0 && keyboard.kit.includes("keycaps"))
                 return (
@@ -80,7 +83,7 @@ const DisplayKeyboard = ({ keyboard }: { keyboard: KeyboardType }) => {
                 );
               return (
                 <p key={index} className="text-gray-300">
-                  {keycaps.name}
+                  {truncateString(keycaps.name, 16)}
                 </p>
               );
             })}
@@ -88,7 +91,7 @@ const DisplayKeyboard = ({ keyboard }: { keyboard: KeyboardType }) => {
         </div>
         <div className="flex flex-col">
           <p className="self-end font-bold leading-3 text-gray-300">Size</p>
-          <p className="text-gray-300">{keyboard.size}</p>
+          <p className="text-gray-300">{truncateString(keyboard.size, 16)}</p>
         </div>
       </div>
     </div>
