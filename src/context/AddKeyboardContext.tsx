@@ -9,7 +9,7 @@ import {
   useRef,
 } from "react";
 import { ItemType, KeyboardStatusType, KeyboardType, KitType } from "@/src/types/keyboard";
-import { linkValidation, closeModal } from "@/src/helper/helperFunctions";
+import { linkValidation, closeModal, triggerConfetti } from "@/src/helper/helperFunctions";
 import {
   KEYBOARD_NAME_REGEX,
   KEYBOARD_DESCRIPTION_REGEX,
@@ -520,17 +520,18 @@ export const AddKeyboardContextProvider = ({
     setStatus,
   ]);
 
+  const closeGlobalModal = useCallback(() => {
+    closeModal("globalmodal");
+  }, []);
+
+  const discardAndClose = useCallback(() => {
+    setDefault();
+    closeModal("globalmodal");
+    closeModal("addkeyboardmodal");
+    toggleAddKeyboard();
+  }, [setDefault, toggleAddKeyboard]);
+
   const handleCancel = useCallback(() => {
-    const closeGlobalModal = () => {
-      closeModal("globalmodal");
-    };
-
-    const discardAndClose = () => {
-      setDefault();
-      closeModal("addkeyboardmodal");
-      toggleAddKeyboard();
-    };
-
     if (validScreenOne) {
       handleModal("Discard Changes", "Are you sure you want to discard the changes?", "error", [
         { text: "Discard", type: "error", onClick: discardAndClose },
@@ -539,7 +540,7 @@ export const AddKeyboardContextProvider = ({
     } else {
       discardAndClose();
     }
-  }, [handleModal, setDefault, toggleAddKeyboard, validScreenOne]);
+  }, [closeGlobalModal, discardAndClose, handleModal, validScreenOne]);
 
   const handleSave = async () => {
     if (!isSavable || loading || !userProfile || !status) return;
@@ -554,7 +555,7 @@ export const AddKeyboardContextProvider = ({
             async (file, index) =>
               await uploadKeyboardContent(file, `${userProfile.uid}_${name}_${index}`),
           );
-      const kitComponents: Partial<Pick<KeyboardType, any>> = [];
+      const kitComponents: KitType = [];
       if (kitCase) kitComponents.push("case");
       if (kitPcb) kitComponents.push("pcb");
       if (kitPlate) kitComponents.push("plate");
@@ -586,17 +587,23 @@ export const AddKeyboardContextProvider = ({
         status: status,
         visible: true,
       };
-      const message = await createKeyboard(keyboard);
-      handleModal(message.title, message.message, message.theme);
+      await createKeyboard(keyboard).then((message) => {
+        setTimeout(triggerConfetti, 0);
+        setTimeout(triggerConfetti, 50);
+        setTimeout(triggerConfetti, 100);
+        setTimeout(triggerConfetti, 200);
+        setTimeout(triggerConfetti, 300);
+        handleModal(message.title, message.message, message.theme, [
+          { text: "yay!", type: "success", onClick: discardAndClose },
+        ]);
+      });
     } catch (error: any) {
       handleModalError(error);
     } finally {
-      setTimeout(() => {
-        setLoading(false);
-        closeModal("editprofilemodal");
-        setDefault();
-        toggleAddKeyboard();
-      }, 1500);
+      closeModal("editprofilemodal");
+      setDefault();
+      setLoading(false);
+      toggleAddKeyboard();
     }
   };
 
