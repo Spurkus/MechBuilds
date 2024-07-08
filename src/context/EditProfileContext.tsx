@@ -276,6 +276,7 @@ export const EditProfileContextProvider = ({
 
     const discardAndClose = () => {
       setDefault();
+      closeModal("globalmodal");
       closeModal("editprofilemodal");
       toggleEditProfile();
     };
