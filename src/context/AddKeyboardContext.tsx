@@ -184,7 +184,7 @@ export const AddKeyboardContextProvider = ({
   toggleAddKeyboard,
   open,
 }: AddKeyboardContextProps) => {
-  const { handleModal, handleModalError } = useGlobalModalContext();
+  const { handleModal, handleModalError, toggleModal } = useGlobalModalContext();
   const { userProfile } = useAuthContext();
 
   // Check name
@@ -445,6 +445,9 @@ export const AddKeyboardContextProvider = ({
 
   // Setting default states
   const setDefault = useCallback(() => {
+    // Default screen
+    setScreen(1);
+
     // Default name and description
     setName("");
     setDescription("");
@@ -523,27 +526,23 @@ export const AddKeyboardContextProvider = ({
     setStatus,
   ]);
 
-  const closeGlobalModal = useCallback(() => {
-    closeModal("globalmodal");
-  }, []);
-
   const discardAndClose = useCallback(() => {
-    setDefault();
-    closeModal("globalmodal");
+    toggleModal();
     closeModal("addkeyboardmodal");
     toggleAddKeyboard();
-  }, [setDefault, toggleAddKeyboard]);
+    setDefault();
+  }, [setDefault, toggleAddKeyboard, toggleModal]);
 
   const handleCancel = useCallback(() => {
     if (validScreenOne) {
       handleModal("Discard Changes", "Are you sure you want to discard the changes?", "error", [
         { text: "Discard", type: "error", onClick: discardAndClose },
-        { text: "Cancel", type: "neutral", onClick: closeGlobalModal },
+        { text: "Cancel", type: "neutral", onClick: toggleModal },
       ]);
     } else {
       discardAndClose();
     }
-  }, [closeGlobalModal, discardAndClose, handleModal, validScreenOne]);
+  }, [discardAndClose, handleModal, validScreenOne, toggleModal]);
 
   const handleSave = async () => {
     if (!isSavable || loading || !userProfile || !status) return;
@@ -597,16 +596,16 @@ export const AddKeyboardContextProvider = ({
         setTimeout(triggerConfetti, 200);
         setTimeout(triggerConfetti, 300);
         handleModal(message.title, message.message, message.theme, [
-          { text: "yay!", type: "success", onClick: discardAndClose },
+          { text: "yay!", type: "success", onClick: toggleModal },
         ]);
       });
     } catch (error: any) {
       handleModalError(error);
     } finally {
-      closeModal("editprofilemodal");
+      closeModal("addkeyboardmodal");
+      toggleAddKeyboard();
       setDefault();
       setLoading(false);
-      toggleAddKeyboard();
     }
   };
 
