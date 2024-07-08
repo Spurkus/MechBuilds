@@ -545,7 +545,9 @@ export const AddKeyboardContextProvider = ({
     if (!isSavable || loading || !userProfile || !status) return;
     setLoading(true);
     try {
-      const isMediaVideo = imageVideoList.map((file) => file.type.startsWith("video/"));
+      const isMediaVideo = !imageVideoList.length
+        ? [false]
+        : imageVideoList.map((file) => file.type.startsWith("video/"));
       const media = !imageVideoList.length
         ? [await getDefaultKeyboardImage()]
         : imageVideoList.map(
