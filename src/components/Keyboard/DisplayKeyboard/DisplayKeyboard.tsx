@@ -72,46 +72,36 @@ const DisplayKeyboard = ({ keyboard }: { keyboard: KeyboardType }) => {
       <div className="mx-1.5 flex grow flex-wrap justify-between gap-1 pt-2">
         {keyboard.kit.length === 0 ? (
           <div className="flex flex-col">
-            <p className="font-bold leading-3 text-gray-300">Case</p>
-            <p className="text-gray-300">{truncateString(keyboard.case, 16)}</p>
+            <p className="font-bold leading-3">Case</p>
+            <p>{truncateString(keyboard.case, 16)}</p>
           </div>
         ) : (
           <div className="flex flex-col">
-            <p className="font-bold leading-3 text-gray-300">Kit</p>
-            <p className="text-gray-300">{truncateString(keyboard.kitName, 16)}</p>
+            <p className="font-bold leading-3">Kit</p>
+            <p>{truncateString(keyboard.kitName, 16)}</p>
           </div>
         )}
         <div className="flex flex-col">
-          <p className="font-bold leading-3 text-gray-300">Switches</p>
+          <p className="font-bold leading-3">Switches</p>
           <div className={`flex ${keyboard.switches.length > 2 ? "flex-col" : "flex-row gap-3"}`}>
             {keyboard.switches.map((switches: ItemType, index: number) => (
-              <p key={index} className="text-gray-300">
-                {truncateString(switches.name, 16)}
-              </p>
+              <p key={index}>{truncateString(switches.name, 16)}</p>
             ))}
           </div>
         </div>
         <div className="flex flex-col">
-          <p className="font-bold leading-3 text-gray-300">Keycaps</p>
+          <p className="font-bold leading-3">Keycaps</p>
           <div className={`flex ${keyboard.keycaps.length > 2 ? "flex-col" : "flex-row gap-3"}`}>
             {keyboard.keycaps.map((keycaps: ItemType, index: number) => {
               if (index === 0 && keyboard.kit.includes("keycaps"))
-                return (
-                  <p key={index} className="text-gray-300">
-                    Default
-                  </p>
-                );
-              return (
-                <p key={index} className="text-gray-300">
-                  {truncateString(keycaps.name, 16)}
-                </p>
-              );
+                return <p key={index}>Default</p>;
+              return <p key={index}>{truncateString(keycaps.name, 16)}</p>;
             })}
           </div>
         </div>
         <div className="flex flex-col">
-          <p className="self-end font-bold leading-3 text-gray-300">Size</p>
-          <p className="text-gray-300">{truncateString(keyboard.size, 16)}</p>
+          <p className="self-end font-bold leading-3">Size</p>
+          <p>{truncateString(keyboard.size, 16)}</p>
         </div>
       </div>
     </div>
