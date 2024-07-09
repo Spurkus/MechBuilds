@@ -526,17 +526,20 @@ export const AddKeyboardContextProvider = ({
     setStatus,
   ]);
 
-  const discardAndClose = useCallback(() => {
-    toggleModal();
-    closeModal("addkeyboardmodal");
-    toggleAddKeyboard();
-    setDefault();
-  }, [setDefault, toggleAddKeyboard, toggleModal]);
+  const discardAndClose = useCallback(
+    (globalModal?: boolean) => {
+      if (globalModal) toggleModal();
+      closeModal("addkeyboardmodal");
+      toggleAddKeyboard();
+      setDefault();
+    },
+    [setDefault, toggleAddKeyboard, toggleModal],
+  );
 
   const handleCancel = useCallback(() => {
     if (validScreenOne) {
       handleModal("Discard Changes", "Are you sure you want to discard the changes?", "error", [
-        { text: "Discard", type: "error", onClick: discardAndClose },
+        { text: "Discard", type: "error", onClick: () => discardAndClose(false) },
         { text: "Cancel", type: "neutral", onClick: toggleModal },
       ]);
     } else {
