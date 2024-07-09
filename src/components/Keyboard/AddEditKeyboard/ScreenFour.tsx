@@ -1,5 +1,5 @@
-import { useAddKeyboardContext } from "@/src/context/AddKeyboardContext";
-import { InputNameDropdownField, InputNameField } from "./InputFields";
+import { useAddEditKeyboardContext } from "@/src/context/AddEditKeyboardContext";
+import { InputNameDropdownField } from "./InputFields";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { KEYBOARD_MODS } from "@/src/constants";
@@ -11,7 +11,7 @@ interface ModFieldProps {
 }
 
 const DescriptionField = () => {
-  const { description, setDescription, validDescription } = useAddKeyboardContext();
+  const { description, setDescription, validDescription } = useAddEditKeyboardContext();
   return (
     <div className="flex grow flex-col py-1">
       <label className="label py-0 text-xl font-bold">Description</label>
@@ -31,7 +31,7 @@ const DescriptionField = () => {
 };
 
 const ModField = ({ mod, index }: ModFieldProps) => {
-  const { mods, setMods, modValidation } = useAddKeyboardContext();
+  const { mods, setMods, modValidation } = useAddEditKeyboardContext();
   const validMod = modValidation(mod);
   const handleRemove = () => {
     setMods(mods.filter((_, i) => i !== index));
@@ -53,7 +53,7 @@ const ModField = ({ mod, index }: ModFieldProps) => {
 
 const ModsField = () => {
   const { mods, setMods, maxMods, validMods, currentMod, setCurrentMod, validCurrentMod } =
-    useAddKeyboardContext();
+    useAddEditKeyboardContext();
 
   const noInput = maxMods || !validMods;
   const nameChange = (e: any) => {
@@ -88,7 +88,7 @@ const ModsField = () => {
           disabled={noSubmit}
           onClick={handleSubmit}
         >
-          <span className="mt-1 text-sm">Add Mod</span>
+          <span className="mt-1 text-sm">AddEdit Mod</span>
         </button>
       </div>
       <div className="flex w-full flex-row space-x-2 overflow-x-auto overflow-y-hidden py-2">
@@ -101,7 +101,7 @@ const ModsField = () => {
 };
 
 const StatusField = () => {
-  const { status, setStatus } = useAddKeyboardContext();
+  const { status, setStatus } = useAddEditKeyboardContext();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setStatus(event.target.value as KeyboardStatusType);

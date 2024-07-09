@@ -29,7 +29,7 @@ import {
 } from "@/src/helper/firestoreFunctions";
 import { useAuthContext } from "./Authentication";
 
-export interface AddKeyboardContextType {
+export interface AddEditKeyboardContextType {
   loading: boolean;
   screen: number;
   setScreen: React.Dispatch<React.SetStateAction<number>>;
@@ -171,19 +171,19 @@ export interface AddKeyboardContextType {
   handleSave: () => void;
 }
 
-export interface AddKeyboardContextProps {
+export interface AddEditKeyboardContextProps {
   children: React.ReactNode;
-  toggleAddKeyboard: () => void;
+  toggleAddEditKeyboard: () => void;
   open: boolean;
 }
 
-export const AddKeyboardContext = createContext<AddKeyboardContextType | null>(null);
+export const AddEditKeyboardContext = createContext<AddEditKeyboardContextType | null>(null);
 
-export const AddKeyboardContextProvider = ({
+export const AddEditKeyboardContextProvider = ({
   children,
-  toggleAddKeyboard,
+  toggleAddEditKeyboard,
   open,
-}: AddKeyboardContextProps) => {
+}: AddEditKeyboardContextProps) => {
   const { handleModal, handleModalError, toggleModal } = useGlobalModalContext();
   const { userProfile } = useAuthContext();
 
@@ -529,11 +529,11 @@ export const AddKeyboardContextProvider = ({
   const discardAndClose = useCallback(
     (globalModal?: boolean) => {
       if (globalModal) toggleModal();
-      closeModal("addkeyboardmodal");
-      toggleAddKeyboard();
+      closeModal("addeditkeyboardmodal");
+      toggleAddEditKeyboard();
       setDefault();
     },
-    [setDefault, toggleAddKeyboard, toggleModal],
+    [setDefault, toggleAddEditKeyboard, toggleModal],
   );
 
   const handleCancel = useCallback(() => {
@@ -605,8 +605,8 @@ export const AddKeyboardContextProvider = ({
     } catch (error: any) {
       handleModalError(error);
     } finally {
-      closeModal("addkeyboardmodal");
-      toggleAddKeyboard();
+      closeModal("addeditkeyboardmodal");
+      toggleAddEditKeyboard();
       setDefault();
       setLoading(false);
     }
@@ -625,7 +625,7 @@ export const AddKeyboardContextProvider = ({
   }, [handleCancel, open]);
 
   return (
-    <AddKeyboardContext.Provider
+    <AddEditKeyboardContext.Provider
       value={{
         loading,
         screen,
@@ -755,14 +755,14 @@ export const AddKeyboardContextProvider = ({
       }}
     >
       {children}
-    </AddKeyboardContext.Provider>
+    </AddEditKeyboardContext.Provider>
   );
 };
 
-export const useAddKeyboardContext = () => {
-  const context = useContext(AddKeyboardContext);
+export const useAddEditKeyboardContext = () => {
+  const context = useContext(AddEditKeyboardContext);
   if (!context) {
-    throw new Error("useAddKeyboardContext must be used within an AddKeyboardProvider");
+    throw new Error("useAddEditKeyboardContext must be used within an AddEditKeyboardProvider");
   }
   return context;
 };

@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { InputNameLinkField } from "./InputFields";
-import { useAddKeyboardContext } from "@/src/context/AddKeyboardContext";
+import { useAddEditKeyboardContext } from "@/src/context/AddEditKeyboardContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { ItemType } from "@/src/types/keyboard";
@@ -29,7 +29,7 @@ const KeycapField = ({ keycap, index }: KeycapFieldProps) => {
     updateKeycaps,
     removeKeycap,
     oneKeycap,
-  } = useAddKeyboardContext();
+  } = useAddEditKeyboardContext();
   const isKit = useMemo(() => kitKeycaps && index === 0, [kitKeycaps, index]);
   const [hover, setHover] = useState(false);
 
@@ -83,7 +83,7 @@ const KeycapField = ({ keycap, index }: KeycapFieldProps) => {
 };
 
 const KeycapsField = () => {
-  const { keycaps, maxKeycaps, addNewKeycap } = useAddKeyboardContext();
+  const { keycaps, maxKeycaps, addNewKeycap } = useAddEditKeyboardContext();
 
   return (
     <div className="flex flex-col">
@@ -115,7 +115,7 @@ const StabilizerField = ({ stabilizer, index }: StabilizerFieldProps) => {
     updateStabilizers,
     removeStabilizer,
     oneStabilizer,
-  } = useAddKeyboardContext();
+  } = useAddEditKeyboardContext();
   const isKit = useMemo(() => kitStabilizers && index === 0, [kitStabilizers, index]);
   const [hover, setHover] = useState(false);
 
@@ -171,7 +171,7 @@ const StabilizerField = ({ stabilizer, index }: StabilizerFieldProps) => {
 };
 
 const StabilizersField = () => {
-  const { stabilizers, maxStabilizers, addNewStabilizer } = useAddKeyboardContext();
+  const { stabilizers, maxStabilizers, addNewStabilizer } = useAddEditKeyboardContext();
 
   return (
     <div className="flex flex-col">
@@ -202,7 +202,7 @@ const SwitchField = ({ switchItem, index }: SwitchFieldProps) => {
     updateSwitches,
     removeSwitch,
     oneSwitch,
-  } = useAddKeyboardContext();
+  } = useAddEditKeyboardContext();
   const [hover, setHover] = useState(false);
 
   // Change the name and link of the switch
@@ -249,7 +249,7 @@ const SwitchField = ({ switchItem, index }: SwitchFieldProps) => {
 };
 
 const SwitchesField = () => {
-  const { switches, maxSwitches, addNewSwitch } = useAddKeyboardContext();
+  const { switches, maxSwitches, addNewSwitch } = useAddEditKeyboardContext();
 
   return (
     <div className="flex flex-col">

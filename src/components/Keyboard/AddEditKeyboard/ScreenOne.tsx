@@ -1,9 +1,9 @@
-import { useAddKeyboardContext } from "@/src/context/AddKeyboardContext";
+import { useAddEditKeyboardContext } from "@/src/context/AddEditKeyboardContext";
 import SubmitImageVideo from "@/src/components/SubmitImageVideo";
 import { InputNameLoadingField } from "./InputFields";
 
 const NameField = () => {
-  const { name, setName, validName, nameLoading } = useAddKeyboardContext();
+  const { name, setName, validName, nameLoading } = useAddEditKeyboardContext();
   const nameChange = (e: any) => setName(e.target.value);
   return (
     <div className="flex flex-col">
@@ -30,7 +30,7 @@ const KeyboardContent = () => {
     setImageVideoList,
     mediaURL,
     setMediaURL,
-  } = useAddKeyboardContext();
+  } = useAddEditKeyboardContext();
   return (
     <SubmitImageVideo
       index={contentIndex}

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useAddKeyboardContext } from "@/src/context/AddKeyboardContext";
+import { useAddEditKeyboardContext } from "@/src/context/AddEditKeyboardContext";
 import { useGlobalThemeContext } from "@/src/context/GlobalTheme";
 import { formatSocialLink, closeDropdown } from "@/src/helper/helperFunctions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -65,7 +65,7 @@ interface InputNameLinkFieldProps {
 }
 
 export const CheckBoxField = ({ name, checked, setChecked }: CheckBoxFieldProps) => {
-  const { kitSelected } = useAddKeyboardContext();
+  const { kitSelected } = useAddEditKeyboardContext();
   const { theme } = useGlobalThemeContext();
   const isLight = theme === "light";
   const kitNoInput = !kitSelected || kitSelected === null;
@@ -230,7 +230,7 @@ export const InputNameLinkField = ({
   dropdown = false,
   list = [],
 }: InputNameLinkFieldProps) => {
-  const { kitSelected, kitName } = useAddKeyboardContext();
+  const { kitSelected, kitName } = useAddEditKeyboardContext();
   const [linkFocused, setLinkFocused] = useState(false);
   const buttonError = (selectedLink && !validName && name) || (!selectedLink && !validLink && link);
 

@@ -1,9 +1,9 @@
 "use client";
 import Loading from "@/src/components/Loading";
 import {
-  AddKeyboardContextProvider,
-  useAddKeyboardContext,
-} from "@/src/context/AddKeyboardContext";
+  AddEditKeyboardContextProvider,
+  useAddEditKeyboardContext,
+} from "@/src/context/AddEditKeyboardContext";
 import { showModal } from "@/src/helper/helperFunctions";
 import { useMemo, useState } from "react";
 import ScreenOne from "./ScreenOne";
@@ -11,27 +11,27 @@ import ScreenTwo from "./ScreenTwo";
 import ScreenThree from "./ScreenThree";
 import ScreenFour from "./ScreenFour";
 
-interface AddKeyboardModalProps {
+interface AddEditKeyboardModalProps {
   open: boolean;
-  setAddKeyboard: (value: boolean) => void;
+  setAddEditKeyboard: (value: boolean) => void;
 }
 
-const AddKeyboardButton = () => {
-  const [addKeyboard, setAddKeyboard] = useState(false);
+const AddEditKeyboardButton = () => {
+  const [addEditKeyboard, setAddEditKeyboard] = useState(false);
   return (
     <>
       <button
         className="btn btn-outline btn-info btn-sm mr-2 self-center rounded-xl px-5 pb-10 text-base"
-        onClick={() => showModal("addkeyboardmodal", () => setAddKeyboard(true))}
+        onClick={() => showModal("addeditkeyboardmodal", () => setAddEditKeyboard(true))}
       >
         <span className="mt-2">Add Keyboard</span>
       </button>
-      <AddKeyboardModal open={addKeyboard} setAddKeyboard={setAddKeyboard} />
+      <AddEditKeyboardModal open={addEditKeyboard} setAddEditKeyboard={setAddEditKeyboard} />
     </>
   );
 };
 
-const AddKeyboardForm = () => {
+const AddEditKeyboardForm = () => {
   const {
     loading,
     screen,
@@ -42,7 +42,7 @@ const AddKeyboardForm = () => {
     isSavable,
     handleCancel,
     handleSave,
-  } = useAddKeyboardContext();
+  } = useAddEditKeyboardContext();
 
   const canIncrement = useMemo(() => {
     return screen === 1 ? validScreenOne : screen === 2 ? validScreenTwo : validScreenThree;
@@ -125,17 +125,17 @@ const AddKeyboardForm = () => {
   );
 };
 
-const AddKeyboardModal = ({ open, setAddKeyboard }: AddKeyboardModalProps) => {
-  const toggleAddKeyboard = () => setAddKeyboard(!open);
+const AddEditKeyboardModal = ({ open, setAddEditKeyboard }: AddEditKeyboardModalProps) => {
+  const toggleAddEditKeyboard = () => setAddEditKeyboard(!open);
   return (
-    <dialog id="addkeyboardmodal" className="modal modal-middle" open={open}>
+    <dialog id="addeditkeyboardmodal" className="modal modal-middle" open={open}>
       <div className="modal-box flex w-[36rem] max-w-none flex-col bg-base-200 pb-4 pt-4">
-        <AddKeyboardContextProvider toggleAddKeyboard={toggleAddKeyboard} open={open}>
-          <AddKeyboardForm />
-        </AddKeyboardContextProvider>
+        <AddEditKeyboardContextProvider toggleAddEditKeyboard={toggleAddEditKeyboard} open={open}>
+          <AddEditKeyboardForm />
+        </AddEditKeyboardContextProvider>
       </div>
     </dialog>
   );
 };
 
-export default AddKeyboardButton;
+export default AddEditKeyboardButton;

@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
-import { useAddKeyboardContext } from "@/src/context/AddKeyboardContext";
+import { useAddEditKeyboardContext } from "@/src/context/AddEditKeyboardContext";
 import { CheckBoxField, InputNameDropdownField, InputNameLinkField } from "./InputFields";
 import { closeDropdown } from "@/src/helper/helperFunctions";
 import { KEYBOARD_SIZES, KEYBOARD_PLATES } from "@/src/constants";
@@ -17,7 +17,7 @@ const KitCheckBoxField = () => {
     setKitStabilizers,
     kitKeycaps,
     setKitKeycaps,
-  } = useAddKeyboardContext();
+  } = useAddEditKeyboardContext();
   return (
     <div className="flex flex-row justify-between space-x-1.5 py-0.5">
       <CheckBoxField name="Case" checked={kitCase} setChecked={setKitCase} />
@@ -30,7 +30,7 @@ const KitCheckBoxField = () => {
 };
 
 const KitDropdownField = () => {
-  const { kitSelected, setKitSelected } = useAddKeyboardContext();
+  const { kitSelected, setKitSelected } = useAddEditKeyboardContext();
   const kitInitial = kitSelected === null;
   const kitMenuMessage = kitInitial
     ? "Do you have a Keyboard Kit?"
@@ -84,7 +84,7 @@ const KitField = () => {
     kitSelectedLink,
     setKitSelectedLink,
     kitSelected,
-  } = useAddKeyboardContext();
+  } = useAddEditKeyboardContext();
   const kitInitial = kitSelected === null;
   const kitNoInput = !kitSelected || kitInitial;
   return (
@@ -123,7 +123,7 @@ const KitField = () => {
 };
 
 const SizeField = () => {
-  const { size, setSize, validSize, kitSelected } = useAddKeyboardContext();
+  const { size, setSize, validSize, kitSelected } = useAddEditKeyboardContext();
   const kitInitial = kitSelected === null;
   return (
     <div className="flex w-2/5 flex-col">
@@ -158,7 +158,7 @@ const PlateField = () => {
     plateSelectedLink,
     setPlateSelectedLink,
     kitSelected,
-  } = useAddKeyboardContext();
+  } = useAddEditKeyboardContext();
   const kitInitial = kitSelected === null;
   return (
     <div className="flex w-3/5 flex-col">
@@ -198,7 +198,7 @@ const CaseField = () => {
     caseSelectedLink,
     setCaseSelectedLink,
     kitSelected,
-  } = useAddKeyboardContext();
+  } = useAddEditKeyboardContext();
   const kitInitial = kitSelected === null;
   return (
     <div className="flex flex-col">
@@ -236,7 +236,7 @@ const PcbField = () => {
     pcbSelectedLink,
     setPcbSelectedLink,
     kitSelected,
-  } = useAddKeyboardContext();
+  } = useAddEditKeyboardContext();
   const kitInitial = kitSelected === null;
 
   return (
