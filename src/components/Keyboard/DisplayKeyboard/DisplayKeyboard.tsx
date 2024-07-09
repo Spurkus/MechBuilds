@@ -13,19 +13,13 @@ const DisplayKeyboard = ({ keyboard }: { keyboard: KeyboardType }) => {
 
   const handleDelete = (id: string) => {
     deleteKeyboard(id);
-    closeModal("globalmodal");
-    toggleModal();
-  };
-
-  const handleCancelDelete = () => {
-    closeModal("globalmodal");
     toggleModal();
   };
 
   const handleDeleteKeyboard = async (name: string, id: string) => {
     handleModal("Deleting Keyboard", `Are you sure you want to delete "${name}?"`, "error", [
       { text: "Delete", type: "error", onClick: () => handleDelete(id) },
-      { text: "Cancel", type: "neutral", onClick: handleCancelDelete },
+      { text: "Cancel", type: "neutral", onClick: toggleModal },
     ]);
   };
 
