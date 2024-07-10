@@ -35,11 +35,7 @@ const ThemeToggleButton = () => {
   return (
     <button onClick={toggleMode} className="btn btn-circle btn-sm flex px-5 pb-10">
       <div className="mt-2.5">
-        {theme === "dark" ? (
-          <BrightnessIcon />
-        ) : (
-          <FontAwesomeIcon icon={faMoon} className="h-5 w-5" />
-        )}
+        {theme === "dark" ? <BrightnessIcon /> : <FontAwesomeIcon icon={faMoon} className="h-5 w-5" />}
       </div>
     </button>
   );

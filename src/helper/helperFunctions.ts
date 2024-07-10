@@ -16,10 +16,7 @@ export const isPronounsEmpty = ([first, second]: [string, string]) => {
   return !first && !second;
 };
 
-export const formatPronouns = (
-  pronouns: [string, string] | null,
-  includeParentheses: boolean = false,
-) => {
+export const formatPronouns = (pronouns: [string, string] | null, includeParentheses: boolean = false) => {
   if (!pronouns || isPronounsEmpty(pronouns)) return "";
   const formattedPronouns = pronouns.join("/");
   return includeParentheses ? `(${formattedPronouns})` : formattedPronouns;
@@ -31,9 +28,7 @@ export const formatSocialLink = (link: string) => {
 
 export const formatUsername = (username: string) => {
   const formattedUsername = username.toLowerCase().replace(/[^a-z]/g, "");
-  return formattedUsername.length > 15
-    ? formattedUsername.substring(0, 15)
-    : formattedUsername.padEnd(2, "x");
+  return formattedUsername.length > 15 ? formattedUsername.substring(0, 15) : formattedUsername.padEnd(2, "x");
 };
 
 export const formatDefaultUsername = async (username: string) => {
@@ -49,9 +44,7 @@ export const formatDefaultUsername = async (username: string) => {
 
 export const formatDisplayName = (displayName: string): string => {
   const formattedDisplayName = displayName.replace(/[^A-Za-z0-9À-ÖØ-öø-ÿ'-. @&#:_]/g, "");
-  return formattedDisplayName.length > 15
-    ? formattedDisplayName.substring(0, 15)
-    : formattedDisplayName.padEnd(2, "_");
+  return formattedDisplayName.length > 15 ? formattedDisplayName.substring(0, 15) : formattedDisplayName.padEnd(2, "_");
 };
 
 export const ensureHttpsLink = (link: string): string => {
@@ -62,8 +55,7 @@ export const ensureHttpsLink = (link: string): string => {
 };
 
 export const areArraysEqual = <T>(arrayOne: T[], arrayTwo: T[]) =>
-  arrayOne.length === arrayTwo.length &&
-  arrayOne.every((element, index) => element === arrayTwo[index]);
+  arrayOne.length === arrayTwo.length && arrayOne.every((element, index) => element === arrayTwo[index]);
 
 export const showModal = (elementID: string, toggleChange?: () => void) => {
   const element = document.getElementById(elementID);
@@ -83,8 +75,7 @@ export const closeModal = (elementID: string, toggleChange?: () => void) => {
 
 export const linkValidation = (link: string) => !link || LINK_REGEX.test(link);
 
-export const formatDate = (date: Date) =>
-  new Date((date as unknown as Timestamp).toDate()).toLocaleDateString();
+export const formatDate = (date: Date) => new Date((date as unknown as Timestamp).toDate()).toLocaleDateString();
 
 export const triggerConfetti = () => {
   const defaults = {

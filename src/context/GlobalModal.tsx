@@ -18,12 +18,7 @@ export interface GlobalModalType {
   setModalButtons: React.Dispatch<React.SetStateAction<ModalButtonType[]>>;
   toggleModal: () => void;
   handleModalError: (error: Error | string) => void;
-  handleModal: (
-    title: string,
-    message: string,
-    theme?: ModalThemeType,
-    buttons?: ModalButtonType[],
-  ) => void;
+  handleModal: (title: string, message: string, theme?: ModalThemeType, buttons?: ModalButtonType[]) => void;
 }
 
 export interface GlobalModalProps {

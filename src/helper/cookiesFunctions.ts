@@ -51,9 +51,7 @@ export const saveDisplayName = (name: string) => {
 
 export const getDisplayName = async () => {
   const cookieStore = cookies();
-  const name = cookieStore.get("displayName")
-    ? cookieStore.get("displayName")!.value
-    : DEFAULT_USERNAME;
+  const name = cookieStore.get("displayName") ? cookieStore.get("displayName")!.value : DEFAULT_USERNAME;
 
   return name;
 };
@@ -79,9 +77,7 @@ export const saveProfilePicture = (profilePicture: string) => {
 
 export const getProfilePicture = async () => {
   const cookieStore = cookies();
-  const profilePicture = cookieStore.get("profilePicture")
-    ? cookieStore.get("profilePicture")!.value
-    : "";
+  const profilePicture = cookieStore.get("profilePicture") ? cookieStore.get("profilePicture")!.value : "";
 
   return profilePicture;
 };

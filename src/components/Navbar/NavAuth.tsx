@@ -71,10 +71,7 @@ const NavProfileMenu = ({ profilePicture = null, displayName = null }: NavProfil
         <span>{name}</span>
         <FontAwesomeIcon icon={faCaretDown} className="h-4 w-4" />
       </div>
-      <ul
-        tabIndex={0}
-        className="menu dropdown-content z-[1] mt-2 w-52 rounded-box bg-base-200 p-2 shadow-xl"
-      >
+      <ul tabIndex={0} className="menu dropdown-content z-[1] mt-2 w-52 rounded-box bg-base-200 p-2 shadow-xl">
         <li onClick={closeDropdown}>
           <Link href="/profile">Profile</Link>
         </li>

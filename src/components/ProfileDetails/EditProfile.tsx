@@ -7,10 +7,7 @@ import { DEFAULT_IMAGE_SIZE, DEFAULT_PRONOUNS } from "@/src/constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown, faLink } from "@fortawesome/free-solid-svg-icons";
 import { formatPronouns } from "@/src/helper/helperFunctions";
-import {
-  EditProfileContextProvider,
-  useEditProfileContext,
-} from "@/src/context/EditProfileContext";
+import { EditProfileContextProvider, useEditProfileContext } from "@/src/context/EditProfileContext";
 
 interface EditProfileProps {
   open: boolean;
@@ -18,8 +15,7 @@ interface EditProfileProps {
 }
 
 const ProfilePictureField = () => {
-  const { setSelectedProfilePicture, setRemovedProfilePicture, imageSource } =
-    useEditProfileContext();
+  const { setSelectedProfilePicture, setRemovedProfilePicture, imageSource } = useEditProfileContext();
   const [isHovering, setIsHovering] = useState(false);
   return (
     <div className="flex w-full grow flex-col space-y-2">
@@ -53,10 +49,7 @@ const ProfilePictureField = () => {
           />
         </label>
       </div>
-      <button
-        className="btn btn-outline btn-error btn-sm rounded-xl"
-        onClick={() => setRemovedProfilePicture(true)}
-      >
+      <button className="btn btn-outline btn-error btn-sm rounded-xl" onClick={() => setRemovedProfilePicture(true)}>
         remove profile picture
       </button>
     </div>
@@ -160,9 +153,7 @@ const PronounsField = () => {
           role="button"
           className="btn btn-sm flex w-full grow flex-col items-center rounded-lg border border-gray-400 pl-2.5 text-sm hover:border-white focus:border-white"
         >
-          <p className="self-start">
-            {isCustom ? "custom" : formatPronouns(pronouns) || "Select Pronouns"}
-          </p>
+          <p className="self-start">{isCustom ? "custom" : formatPronouns(pronouns) || "Select Pronouns"}</p>
           <FontAwesomeIcon icon={faCaretDown} className="h-4 w-4 self-end" />
         </div>
         <ul
@@ -179,9 +170,7 @@ const PronounsField = () => {
                 closeDropdown();
               }}
             >
-              <a>
-                {pronoun[0] === "" && pronoun[1] === "" ? "don't specify" : formatPronouns(pronoun)}
-              </a>
+              <a>{pronoun[0] === "" && pronoun[1] === "" ? "don't specify" : formatPronouns(pronoun)}</a>
             </li>
           ))}
           <li
@@ -279,10 +268,7 @@ const CancelAndSaveButtons = () => {
       <button className="btn btn-neutral btn-sm" onClick={handleCancelButton}>
         cancel
       </button>
-      <button
-        className={`btn btn-success btn-sm ${isSavable ? "" : "btn-disabled"}`}
-        onClick={handleSave}
-      >
+      <button className={`btn btn-success btn-sm ${isSavable ? "" : "btn-disabled"}`} onClick={handleSave}>
         save profile
       </button>
     </form>
@@ -324,11 +310,7 @@ const EditProfile = ({ open, toggleEditProfile }: EditProfileProps) => {
     <dialog id="editprofilemodal" className="modal modal-middle" open={open}>
       <div className="modal-box flex w-80 flex-col bg-base-200 pb-4 pt-4">
         {userProfile ? (
-          <EditProfileContextProvider
-            userProfile={userProfile}
-            toggleEditProfile={toggleEditProfile}
-            open={open}
-          >
+          <EditProfileContextProvider userProfile={userProfile} toggleEditProfile={toggleEditProfile} open={open}>
             <EditProfileForm />
           </EditProfileContextProvider>
         ) : (

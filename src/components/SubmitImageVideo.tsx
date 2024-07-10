@@ -10,13 +10,7 @@ import NextImage from "next/image";
 import ReactPlayer from "react-player";
 import { useGlobalModalContext } from "../context/GlobalModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCircle,
-  faPhotoFilm,
-  faTrashAlt,
-  faChevronLeft,
-  faChevronRight,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCircle, faPhotoFilm, faTrashAlt, faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
 interface SubmitImagesVideoProps {
   index: number;
@@ -40,10 +34,7 @@ const SubmitImageVideo = ({
   const isUploaded = useMemo(() => imageVideoList.length !== 0, [imageVideoList]);
   const firstIndex = useMemo(() => index === 0, [index]);
   const lastIndex = useMemo(() => index === imageVideoList.length - 1, [index, imageVideoList]);
-  const isCurrentMediaVideo = useMemo(
-    () => imageVideoList[index]?.type.startsWith("video/"),
-    [imageVideoList, index],
-  );
+  const isCurrentMediaVideo = useMemo(() => imageVideoList[index]?.type.startsWith("video/"), [imageVideoList, index]);
 
   const moveLeft = () => {
     if (firstIndex) return;

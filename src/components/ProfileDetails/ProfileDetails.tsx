@@ -29,9 +29,7 @@ const ProfileBaseDetails = () => {
     return <Loading />;
   }
 
-  const toggleEditProfile = () => {
-    setEditProfile(!editProfile);
-  };
+  const toggleEditProfile = () => setEditProfile(!editProfile);
 
   return (
     <div className="flex flex-col space-y-2">
@@ -98,9 +96,7 @@ const ProfileExtraDetails = () => {
       )}
       <div className="flex w-full grow flex-col items-center">
         <h3 className="font-bold">User Joined</h3>
-        <span className="text-sm font-bold leading-3 text-gray-500">
-          {formatDate(userProfile.joinedDate)}
-        </span>
+        <span className="text-sm font-bold leading-3 text-gray-500">{formatDate(userProfile.joinedDate)}</span>
       </div>
     </div>
   );

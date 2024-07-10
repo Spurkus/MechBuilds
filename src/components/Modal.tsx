@@ -11,29 +11,28 @@ export interface ModalType {
 }
 
 const RenderButton = (button: ModalButtonType, index: number, toggleModal: () => void) => {
-  if (typeof button === "string") {
+  if (typeof button === "string")
     return (
       <button key={index} className="btn" onClick={toggleModal}>
         {button}
       </button>
     );
-  } else {
-    return (
-      <button
-        key={index}
-        className={classNames("btn", "btn-sm", "pb-10", {
-          "btn-info": button.type === "info",
-          "btn-success": button.type === "success",
-          "btn-warning": button.type === "warning",
-          "btn-error": button.type === "error",
-          "btn-neutral": button.type === "neutral",
-        })}
-        onClick={button.onClick}
-      >
-        <span className="mt-[0.8rem]">{button.text}</span>
-      </button>
-    );
-  }
+
+  return (
+    <button
+      key={index}
+      className={classNames("btn", "btn-sm", "pb-10", {
+        "btn-info": button.type === "info",
+        "btn-success": button.type === "success",
+        "btn-warning": button.type === "warning",
+        "btn-error": button.type === "error",
+        "btn-neutral": button.type === "neutral",
+      })}
+      onClick={button.onClick}
+    >
+      <span className="mt-[0.8rem]">{button.text}</span>
+    </button>
+  );
 };
 
 const Modal = ({ open, title, message, theme, buttons, toggleModal }: ModalType) => {

@@ -12,12 +12,7 @@ interface DisplayImageVideoProps {
   isMediaVideo: boolean[];
 }
 
-const DisplayImageVideo = ({
-  index,
-  setIndex,
-  imageVideoList,
-  isMediaVideo,
-}: DisplayImageVideoProps) => {
+const DisplayImageVideo = ({ index, setIndex, imageVideoList, isMediaVideo }: DisplayImageVideoProps) => {
   const firstIndex = useMemo(() => index === 0, [index]);
   const lastIndex = useMemo(() => index === imageVideoList.length - 1, [index, imageVideoList]);
   const isCurrentMediaVideo = useMemo(() => isMediaVideo[index], [isMediaVideo, index]);

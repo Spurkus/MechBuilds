@@ -1,14 +1,5 @@
 import { db } from "@/firebase";
-import {
-  collection,
-  setDoc,
-  doc,
-  updateDoc,
-  query,
-  where,
-  getDocs,
-  deleteDoc,
-} from "firebase/firestore";
+import { collection, setDoc, doc, updateDoc, query, where, getDocs, deleteDoc } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { UserProfileType, EditUserProfileType } from "@/src/types/user";
 import { KeyboardType } from "@/src/types/keyboard";
@@ -70,11 +61,7 @@ export const getDefaultKeyboardImage = async () => {
 
 export const isKeyboardNameTaken = async (uid: string, keyboardName: string): Promise<boolean> => {
   const keyboardsCollectionRef = collection(db, "keyboards");
-  const q = query(
-    keyboardsCollectionRef,
-    where("uid", "==", uid),
-    where("name", "==", keyboardName),
-  );
+  const q = query(keyboardsCollectionRef, where("uid", "==", uid), where("name", "==", keyboardName));
   const querySnapshot = await getDocs(q);
   return !querySnapshot.empty; // Returns true if the keyboard name is taken, false otherwise
 };

@@ -20,13 +20,12 @@ const NeedsAuthentication = ({ children }: NeedsAuthenticationProps) => {
   }, [authenticated, router]);
 
   // Show loading screen while checking authentication
-  if (!authenticated) {
+  if (!authenticated)
     return (
       <div className="flex w-full items-center justify-center">
         <Loading />
       </div>
     );
-  }
 
   return <>{children}</>;
 };

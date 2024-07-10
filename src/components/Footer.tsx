@@ -48,8 +48,7 @@ const Footer = () => {
       </div>
       <aside className="flex">
         <span className="text-base">
-          A keyboard management app for custom mechanical keyboard enthusiasts{" "}
-          <span className="font-sans">:3</span>
+          A keyboard management app for custom mechanical keyboard enthusiasts <span className="font-sans">:3</span>
         </span>
       </aside>
     </footer>

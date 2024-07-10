@@ -17,9 +17,7 @@ const Navbar = () => {
           </li>
           <li>
             <Link href="/explore" className="btn-nav-link btn shadow-none">
-              <p className="text-base font-normal shadow-nav-text-contour text-shadow-lg">
-                Explore
-              </p>
+              <p className="text-base font-normal shadow-nav-text-contour text-shadow-lg">Explore</p>
             </Link>
           </li>
           <li>
@@ -47,9 +45,7 @@ const Navbar = () => {
       </div>
       <div className="navbar-center">
         <Link href="/" className="btn-nav-link btn shadow-none">
-          <p className="font-clashgrotesk text-3xl font-medium shadow-nav-text-contour text-shadow-lg">
-            MechBuilds
-          </p>
+          <p className="font-clashgrotesk text-3xl font-medium shadow-nav-text-contour text-shadow-lg">MechBuilds</p>
         </Link>
       </div>
       <div className="navbar-end flex">

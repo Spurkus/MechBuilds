@@ -12,7 +12,6 @@ import {
   savePronouns,
 } from "@/src/helper/cookiesFunctions";
 import { UserProfileType, EditUserProfileType } from "@/src/types/user";
-import { DEFAULT_PROFILE_PICTURE } from "@/src/constants";
 import { createUserProfile, getDefaultProfilePictureURL } from "@/src/helper/firestoreFunctions";
 import { formatDisplayName, formatDefaultUsername } from "@/src/helper/helperFunctions";
 
@@ -149,10 +148,7 @@ export const AuthContextProvider = ({
     );
   };
 
-  const updateUserProfileState = async (
-    currentUserProfile: UserProfileType,
-    currentUser: UserCredential,
-  ) => {
+  const updateUserProfileState = async (currentUserProfile: UserProfileType, currentUser: UserCredential) => {
     await updateUserState(
       currentUser.user,
       currentUserProfile,

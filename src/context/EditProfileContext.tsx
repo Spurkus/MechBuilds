@@ -1,17 +1,8 @@
 "use client";
 import { useState, useEffect, useMemo, createContext, useContext, useCallback } from "react";
 import useInputValidator from "@/src/hooks/useInputValidator";
-import {
-  areArraysEqual,
-  adjustImageURL,
-  linkValidation,
-  closeModal,
-} from "@/src/helper/helperFunctions";
-import {
-  editUserProfile,
-  uploadProfilePicture,
-  getDefaultProfilePictureURL,
-} from "@/src/helper/firestoreFunctions";
+import { areArraysEqual, adjustImageURL, linkValidation, closeModal } from "@/src/helper/helperFunctions";
+import { editUserProfile, uploadProfilePicture, getDefaultProfilePictureURL } from "@/src/helper/firestoreFunctions";
 import { UserProfileType, EditUserProfileType } from "@/src/types/user";
 import {
   DEFAULT_PRONOUNS,
@@ -119,12 +110,8 @@ export const EditProfileContextProvider = ({
   const [customOne, setCustomOne] = useState(isCustom ? userProfile.pronouns[0] : "");
   const [customTwo, setCustomTwo] = useState(isCustom ? userProfile.pronouns[1] : "");
 
-  const pronounsValidation = () =>
-    isCustom ? PRONOUNS_REGEX.test(customOne) && PRONOUNS_REGEX.test(customTwo) : true;
-  const [pronouns, setPronouns, validPronouns] = useInputValidator(
-    userProfile.pronouns,
-    pronounsValidation,
-  );
+  const pronounsValidation = () => (isCustom ? PRONOUNS_REGEX.test(customOne) && PRONOUNS_REGEX.test(customTwo) : true);
+  const [pronouns, setPronouns, validPronouns] = useInputValidator(userProfile.pronouns, pronounsValidation);
 
   // Check social links
   const socialLinksValidation = (links: string[]) => links.every((link) => LINK_REGEX.test(link));
@@ -163,15 +150,7 @@ export const EditProfileContextProvider = ({
       !!selectedProfilePicture ||
       removedProfilePicture
     );
-  }, [
-    displayName,
-    bio,
-    pronouns,
-    socialLinks,
-    selectedProfilePicture,
-    removedProfilePicture,
-    userProfile,
-  ]);
+  }, [displayName, bio, pronouns, socialLinks, selectedProfilePicture, removedProfilePicture, userProfile]);
 
   // Check if profile is savable
   const isSavable = useMemo(() => {
