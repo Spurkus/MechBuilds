@@ -499,15 +499,15 @@ export const AddEditKeyboardContextProvider = ({
     setSize(edit ? edit.size : "");
 
     // Default switches
-    setSwitches(edit ? edit.switches : DEFAULT_ITEMS);
+    setSwitches(edit ? edit.switches.map((item: ItemType) => ({ name: item.name, link: item.link })) : DEFAULT_ITEMS);
     setSwitchesSelectedLink([false]);
 
     // Default stabilizers
-    setStabilizers(edit ? edit.stabilizers : DEFAULT_ITEMS);
+    setStabilizers(edit ? edit.stabilizers.map((s: ItemType) => ({ name: s.name, link: s.link })) : DEFAULT_ITEMS);
     setSwitchesSelectedLink([false]);
 
     // Default keycaps
-    setKeycaps(edit ? edit.keycaps : DEFAULT_ITEMS);
+    setKeycaps(edit ? edit.keycaps.map((key: ItemType) => ({ name: key.name, link: key.link })) : DEFAULT_ITEMS);
     setKeycapsSelectedLink([false]);
 
     // Default mods
@@ -520,7 +520,7 @@ export const AddEditKeyboardContextProvider = ({
     setMediaURL("");
 
     // Default status
-    setStatus(null);
+    setStatus(edit ? edit.status : null);
   }, [
     setName,
     edit,
