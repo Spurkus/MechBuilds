@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 const useInputValidator = <T>(
   initialValue: T,
   validator: (value: T) => boolean | Promise<boolean>,
-): [T, React.Dispatch<React.SetStateAction<T>>, boolean] => {
+): [T, React.Dispatch<React.SetStateAction<T>>, boolean, React.Dispatch<React.SetStateAction<boolean>>] => {
   const [value, setValue] = useState(initialValue);
   const [isValid, setIsValid] = useState<boolean>(false);
 
@@ -16,7 +16,7 @@ const useInputValidator = <T>(
     validate();
   }, [value, validator]);
 
-  return [value, setValue, isValid];
+  return [value, setValue, isValid, setIsValid];
 };
 
 export default useInputValidator;
