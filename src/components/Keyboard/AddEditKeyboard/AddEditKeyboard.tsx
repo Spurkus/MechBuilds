@@ -14,6 +14,7 @@ interface AddEditKeyboardModalProps {
   open: boolean;
   setAddEditKeyboard: (value: boolean) => void;
   edit?: KeyboardType;
+  setEdit: (value: KeyboardType | undefined) => void;
 }
 
 interface EditKeyboardButtonProps {
@@ -140,12 +141,17 @@ const AddEditKeyboardForm = () => {
   );
 };
 
-export const AddEditKeyboardModal = ({ open, setAddEditKeyboard, edit }: AddEditKeyboardModalProps) => {
+export const AddEditKeyboardModal = ({ open, setAddEditKeyboard, edit, setEdit }: AddEditKeyboardModalProps) => {
   const toggleAddEditKeyboard = () => setAddEditKeyboard(!open);
   return (
     <dialog id="addeditkeyboardmodal" className="modal modal-middle" open={open}>
       <div className="modal-box flex w-[36rem] max-w-none flex-col bg-base-200 pb-4 pt-4">
-        <AddEditKeyboardContextProvider toggleAddEditKeyboard={toggleAddEditKeyboard} open={open} edit={edit}>
+        <AddEditKeyboardContextProvider
+          toggleAddEditKeyboard={toggleAddEditKeyboard}
+          open={open}
+          edit={edit}
+          setEdit={setEdit}
+        >
           <AddEditKeyboardForm />
         </AddEditKeyboardContextProvider>
       </div>

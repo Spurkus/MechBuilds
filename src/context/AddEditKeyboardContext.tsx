@@ -168,6 +168,7 @@ export interface AddEditKeyboardContextProps {
   toggleAddEditKeyboard: () => void;
   open: boolean;
   edit?: KeyboardType;
+  setEdit: (value: KeyboardType | undefined) => void;
 }
 
 export const AddEditKeyboardContext = createContext<AddEditKeyboardContextType | null>(null);
@@ -177,6 +178,7 @@ export const AddEditKeyboardContextProvider = ({
   toggleAddEditKeyboard,
   open,
   edit,
+  setEdit,
 }: AddEditKeyboardContextProps) => {
   const { handleModal, handleModalError, toggleModal } = useGlobalModalContext();
   const { userProfile } = useAuthContext();
@@ -194,6 +196,7 @@ export const AddEditKeyboardContextProvider = ({
 
       // Check if the name is the same as the current keyboard name
       if (edit && edit.name === name) {
+        if (currentNameRef !== nameRef.current) return false;
         setNameLoading(false);
         return true;
       }
@@ -219,7 +222,7 @@ export const AddEditKeyboardContextProvider = ({
           return false;
         });
 
-      if (currentNameRef !== nameRef.current) return !!edit;
+      if (currentNameRef !== nameRef.current) return false;
       setNameLoading(false);
       return !nameTaken;
     },
@@ -550,9 +553,10 @@ export const AddEditKeyboardContextProvider = ({
       if (globalModal) toggleModal();
       closeModal("addeditkeyboardmodal");
       toggleAddEditKeyboard();
+      setEdit(undefined);
       setDefault();
     },
-    [setDefault, toggleAddEditKeyboard, toggleModal],
+    [setDefault, toggleAddEditKeyboard, toggleModal, setEdit],
   );
 
   const handleCancel = useCallback(() => {
@@ -625,6 +629,7 @@ export const AddEditKeyboardContextProvider = ({
     } finally {
       closeModal("addeditkeyboardmodal");
       toggleAddEditKeyboard();
+      setEdit(undefined);
       setDefault();
       setLoading(false);
     }

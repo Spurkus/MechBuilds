@@ -8,6 +8,7 @@ const KeyboardModal = () => {
       open={addEditKeyboardModalOpen}
       setAddEditKeyboard={setAddEditKeyboardModalOpen}
       edit={edit}
+      setEdit={setEdit}
     />
   );
 };
