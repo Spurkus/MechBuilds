@@ -2,11 +2,11 @@
 import Loading from "@/src/components/Loading";
 import { AddEditKeyboardContextProvider, useAddEditKeyboardContext } from "@/src/context/AddEditKeyboardContext";
 import { showModal } from "@/src/helper/helperFunctions";
-import { useMemo, useState } from "react";
-import ScreenOne from "./ScreenOne";
-import ScreenTwo from "./ScreenTwo";
-import ScreenThree from "./ScreenThree";
-import ScreenFour from "./ScreenFour";
+import { useMemo } from "react";
+import ScreenOne from "./Screens/ScreenOne";
+import ScreenTwo from "./Screens/ScreenTwo";
+import ScreenThree from "./Screens/ScreenThree";
+import ScreenFour from "./Screens/ScreenFour";
 import { KeyboardType } from "@/src/types/keyboard";
 import { useAddEditKeyboardSelectContext } from "@/src/context/AddEditKeyboardSelectContext";
 

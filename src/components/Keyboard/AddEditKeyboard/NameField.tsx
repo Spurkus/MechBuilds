@@ -1,5 +1,4 @@
 import { useAddEditKeyboardContext } from "@/src/context/AddEditKeyboardContext";
-import SubmitImageVideo from "@/src/components/SubmitImageVideo";
 import { InputNameLoadingField } from "./InputFields";
 
 const NameField = () => {
@@ -22,34 +21,4 @@ const NameField = () => {
   );
 };
 
-const KeyboardContent = () => {
-  const {
-    contentIndex,
-    setContentIndex,
-    imageVideoList,
-    setImageVideoList,
-    mediaURL,
-    setMediaURL,
-  } = useAddEditKeyboardContext();
-  return (
-    <SubmitImageVideo
-      index={contentIndex}
-      setIndex={setContentIndex}
-      imageVideoList={imageVideoList}
-      setImageVideoList={setImageVideoList}
-      mediaURL={mediaURL}
-      setMediaURL={setMediaURL}
-    />
-  );
-};
-
-const ScreenOne = () => {
-  return (
-    <>
-      <NameField />
-      <KeyboardContent />
-    </>
-  );
-};
-
-export default ScreenOne;
+export default NameField;
