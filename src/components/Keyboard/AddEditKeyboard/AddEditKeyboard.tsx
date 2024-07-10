@@ -1,33 +1,54 @@
 "use client";
 import Loading from "@/src/components/Loading";
-import {
-  AddEditKeyboardContextProvider,
-  useAddEditKeyboardContext,
-} from "@/src/context/AddEditKeyboardContext";
+import { AddEditKeyboardContextProvider, useAddEditKeyboardContext } from "@/src/context/AddEditKeyboardContext";
 import { showModal } from "@/src/helper/helperFunctions";
 import { useMemo, useState } from "react";
 import ScreenOne from "./ScreenOne";
 import ScreenTwo from "./ScreenTwo";
 import ScreenThree from "./ScreenThree";
 import ScreenFour from "./ScreenFour";
+import { KeyboardType } from "@/src/types/keyboard";
+import { useAddEditKeyboardSelectContext } from "@/src/context/AddEditKeyboardSelectContext";
 
 interface AddEditKeyboardModalProps {
   open: boolean;
   setAddEditKeyboard: (value: boolean) => void;
+  edit?: KeyboardType;
 }
 
-const AddEditKeyboardButton = () => {
-  const [addEditKeyboard, setAddEditKeyboard] = useState(false);
+interface EditKeyboardButtonProps {
+  hover: boolean;
+  edit: KeyboardType;
+}
+
+export const EditKeyboardButton = ({ hover, edit }: EditKeyboardButtonProps) => {
+  const { setAddEditKeyboardModalOpen, setEdit } = useAddEditKeyboardSelectContext();
+  const handleClick = () => {
+    setEdit(edit);
+    showModal("addeditkeyboardmodal");
+    setAddEditKeyboardModalOpen(true);
+  };
   return (
-    <>
-      <button
-        className="btn btn-outline btn-info btn-sm mr-2 self-center rounded-xl px-5 pb-10 text-base"
-        onClick={() => showModal("addeditkeyboardmodal", () => setAddEditKeyboard(true))}
-      >
-        <span className="mt-2">Add Keyboard</span>
-      </button>
-      <AddEditKeyboardModal open={addEditKeyboard} setAddEditKeyboard={setAddEditKeyboard} />
-    </>
+    <button className={`btn btn-outline btn-info btn-xs self-end pb-6 ${!hover && "hidden"}`} onClick={handleClick}>
+      <span className="mt-1.5">Edit Keyboard</span>
+    </button>
+  );
+};
+
+export const AddKeyboardButton = () => {
+  const { setAddEditKeyboardModalOpen, setEdit } = useAddEditKeyboardSelectContext();
+  const handleClick = () => {
+    setEdit(undefined);
+    showModal("addeditkeyboardmodal");
+    setAddEditKeyboardModalOpen(true);
+  };
+  return (
+    <button
+      className="btn btn-outline btn-info btn-sm mr-2 self-center rounded-xl px-5 pb-10 text-base"
+      onClick={handleClick}
+    >
+      <span className="mt-2">Add Keyboard</span>
+    </button>
   );
 };
 
@@ -106,17 +127,11 @@ const AddEditKeyboardForm = () => {
           </button>
         )}
         {screen === 4 ? (
-          <button
-            className={`btn btn-success btn-sm ${!isSavable && "btn-disabled"}`}
-            onClick={handleSaveButton}
-          >
+          <button className={`btn btn-success btn-sm ${!isSavable && "btn-disabled"}`} onClick={handleSaveButton}>
             publish keyboard
           </button>
         ) : (
-          <button
-            className={`btn btn-success btn-sm ${!canIncrement && "btn-disabled"}`}
-            onClick={incrementScreen}
-          >
+          <button className={`btn btn-success btn-sm ${!canIncrement && "btn-disabled"}`} onClick={incrementScreen}>
             next page
           </button>
         )}
@@ -125,17 +140,15 @@ const AddEditKeyboardForm = () => {
   );
 };
 
-const AddEditKeyboardModal = ({ open, setAddEditKeyboard }: AddEditKeyboardModalProps) => {
+export const AddEditKeyboardModal = ({ open, setAddEditKeyboard, edit }: AddEditKeyboardModalProps) => {
   const toggleAddEditKeyboard = () => setAddEditKeyboard(!open);
   return (
     <dialog id="addeditkeyboardmodal" className="modal modal-middle" open={open}>
       <div className="modal-box flex w-[36rem] max-w-none flex-col bg-base-200 pb-4 pt-4">
-        <AddEditKeyboardContextProvider toggleAddEditKeyboard={toggleAddEditKeyboard} open={open}>
+        <AddEditKeyboardContextProvider toggleAddEditKeyboard={toggleAddEditKeyboard} open={open} edit={edit}>
           <AddEditKeyboardForm />
         </AddEditKeyboardContextProvider>
       </div>
     </dialog>
   );
 };
-
-export default AddEditKeyboardButton;

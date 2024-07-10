@@ -1,13 +1,5 @@
 "use client";
-import {
-  useState,
-  useEffect,
-  useMemo,
-  createContext,
-  useContext,
-  useCallback,
-  useRef,
-} from "react";
+import { useState, useEffect, useMemo, createContext, useContext, useCallback, useRef } from "react";
 import { ItemType, KeyboardStatusType, KeyboardType, KitType } from "@/src/types/keyboard";
 import { linkValidation, closeModal, triggerConfetti } from "@/src/helper/helperFunctions";
 import {
@@ -175,6 +167,7 @@ export interface AddEditKeyboardContextProps {
   children: React.ReactNode;
   toggleAddEditKeyboard: () => void;
   open: boolean;
+  edit?: KeyboardType;
 }
 
 export const AddEditKeyboardContext = createContext<AddEditKeyboardContextType | null>(null);
@@ -183,6 +176,7 @@ export const AddEditKeyboardContextProvider = ({
   children,
   toggleAddEditKeyboard,
   open,
+  edit,
 }: AddEditKeyboardContextProps) => {
   const { handleModal, handleModalError, toggleModal } = useGlobalModalContext();
   const { userProfile } = useAuthContext();
@@ -197,6 +191,12 @@ export const AddEditKeyboardContextProvider = ({
       if (!userProfile) return false;
       const currentNameRef = ++nameRef.current; // Increment reference for tracking keyboard name
       setNameLoading(true); // Set loading states
+
+      // Check if the name is the same as the current keyboard name
+      if (edit && edit.name === name) {
+        setNameLoading(false);
+        return true;
+      }
 
       // Check if the name is nothing or invalid
       if (!name || !nameValidation(name)) {
@@ -219,51 +219,52 @@ export const AddEditKeyboardContextProvider = ({
           return false;
         });
 
-      if (currentNameRef !== nameRef.current) return false;
+      if (currentNameRef !== nameRef.current) return true;
       setNameLoading(false);
       return !nameTaken;
     },
-    [userProfile, handleModalError],
+    [userProfile, handleModalError, edit],
   );
-  const [name, setName, validName] = useInputValidator<string>("", keyboardNameValidation);
+  const [name, setName, validName] = useInputValidator(edit ? edit.name : "", keyboardNameValidation);
 
   // Check description
   const descriptionValidation = (desc: string) => KEYBOARD_DESCRIPTION_REGEX.test(desc);
   const [description, setDescription, validDescription] = useInputValidator<string>(
-    "",
+    edit ? edit.description : "",
     descriptionValidation,
   );
 
   // Check kit
-  const [kitName, setKitName, validKitName] = useInputValidator<string>("", nameValidation);
-  const [kitSelected, setKitSelected] = useState<boolean | null>(null);
-  const [kitCase, setKitCase] = useState<boolean>(false);
-  const [kitPcb, setKitPcb] = useState<boolean>(false);
-  const [kitPlate, setKitPlate] = useState<boolean>(false);
-  const [kitStabilizers, setKitStabilizers] = useState<boolean>(false);
-  const [kitKeycaps, setKitKeycaps] = useState<boolean>(false);
-  const [kitLink, setKitLink, validKitLink] = useInputValidator<string>("", linkValidation);
-  const [kitSelectedLink, setKitSelectedLink] = useState<boolean>(false);
+  const [kitName, setKitName, validKitName] = useInputValidator(edit ? edit.kitName : "", nameValidation);
+  const [kitSelected, setKitSelected] = useState<boolean | null>(edit ? !!edit.kitName : null);
+  const defaultEditKitIncludes = useCallback((item: string): boolean => edit && edit.kit.includes(item), [edit]);
+  const [kitCase, setKitCase] = useState(defaultEditKitIncludes("case"));
+  const [kitPcb, setKitPcb] = useState(defaultEditKitIncludes("pcb"));
+  const [kitPlate, setKitPlate] = useState(defaultEditKitIncludes("plate"));
+  const [kitStabilizers, setKitStabilizers] = useState(defaultEditKitIncludes("stabilizers"));
+  const [kitKeycaps, setKitKeycaps] = useState(defaultEditKitIncludes("keycaps"));
+  const [kitLink, setKitLink, validKitLink] = useInputValidator(edit ? edit.kitLink : "", linkValidation);
+  const [kitSelectedLink, setKitSelectedLink] = useState(false);
 
   // Check case
-  const [caseName, setCaseName, validCaseName] = useInputValidator<string>("", nameValidation);
-  const [caseLink, setCaseLink, validCaseLink] = useInputValidator<string>("", linkValidation);
-  const [caseSelectedLink, setCaseSelectedLink] = useState<boolean>(false);
+  const [caseName, setCaseName, validCaseName] = useInputValidator(edit ? edit.case : "", nameValidation);
+  const [caseLink, setCaseLink, validCaseLink] = useInputValidator(edit ? edit.caseLink : "", linkValidation);
+  const [caseSelectedLink, setCaseSelectedLink] = useState(false);
 
   // Check PCB
-  const [pcbName, setPcbName, validPcbName] = useInputValidator<string>("", nameValidation);
-  const [pcbLink, setPcbLink, validPcbLink] = useInputValidator<string>("", linkValidation);
-  const [pcbSelectedLink, setPcbSelectedLink] = useState<boolean>(false);
+  const [pcbName, setPcbName, validPcbName] = useInputValidator(edit ? edit.pcb : "", nameValidation);
+  const [pcbLink, setPcbLink, validPcbLink] = useInputValidator(edit ? edit.pcbLink : "", linkValidation);
+  const [pcbSelectedLink, setPcbSelectedLink] = useState(false);
 
   // Check plate
   const plateValidation = (plate: string) => KEYBOARD_PLATE_REGEX.test(plate);
-  const [plateName, setPlateName, validPlateName] = useInputValidator<string>("", plateValidation);
-  const [plateLink, setPlateLink, validPlateLink] = useInputValidator<string>("", linkValidation);
-  const [plateSelectedLink, setPlateSelectedLink] = useState<boolean>(false);
+  const [plateName, setPlateName, validPlateName] = useInputValidator(edit ? edit.plate : "", plateValidation);
+  const [plateLink, setPlateLink, validPlateLink] = useInputValidator(edit ? edit.plateLink : "", linkValidation);
+  const [plateSelectedLink, setPlateSelectedLink] = useState(false);
 
   // Check size
   const sizeValidation = (size: string) => KEYBOARD_SIZE_REGEX.test(size);
-  const [size, setSize, validSize] = useInputValidator<string>("", sizeValidation);
+  const [size, setSize, validSize] = useInputValidator(edit ? edit.size : "", sizeValidation);
 
   // Validating multiple items
   const itemsValidation = (items: ItemType[]) => items.length <= 3;
@@ -286,7 +287,13 @@ export const AddEditKeyboardContextProvider = ({
     removeSwitch,
     oneSwitch,
     maxSwitches,
-  ] = useKeyboardItem(DEFAULT_ITEMS, itemsValidation, nameValidation, linkValidation, [false]);
+  ] = useKeyboardItem(
+    edit ? edit.switches : DEFAULT_ITEMS,
+    itemsValidation,
+    nameValidation,
+    linkValidation,
+    edit ? edit.switches.map(() => false) : [false],
+  );
 
   // Check stabilizers
   const [
@@ -306,7 +313,13 @@ export const AddEditKeyboardContextProvider = ({
     removeStabilizer,
     oneStabilizer,
     maxStabilizers,
-  ] = useKeyboardItem(DEFAULT_ITEMS, itemsValidation, nameValidation, linkValidation, [false]);
+  ] = useKeyboardItem(
+    edit ? edit.stabilizers : DEFAULT_ITEMS,
+    itemsValidation,
+    nameValidation,
+    linkValidation,
+    edit ? edit.stabilizers.map(() => false) : [false],
+  );
   // Using function references for dependency withdrawal when updating stabilizers if kit is selected
   const updateStabilizersRef = useRef(updateStabilizers);
   useEffect(() => {
@@ -336,7 +349,13 @@ export const AddEditKeyboardContextProvider = ({
     removeKeycap,
     oneKeycap,
     maxKeycaps,
-  ] = useKeyboardItem(DEFAULT_ITEMS, itemsValidation, nameValidation, linkValidation, [false]);
+  ] = useKeyboardItem(
+    edit ? edit.keycaps : DEFAULT_ITEMS,
+    itemsValidation,
+    nameValidation,
+    linkValidation,
+    edit ? edit.keycaps.map(() => false) : [false],
+  );
   // Using function references for dependency withdrawal when updating keycaps if kit is selected
   const updateKeycapsRef = useRef(updateKeycaps);
   useEffect(() => {
@@ -352,7 +371,7 @@ export const AddEditKeyboardContextProvider = ({
   const modValidation = (mod: string) => KEYBOARD_MOD_REGEX.test(mod);
   const [currentMod, setCurrentMod, validCurrentMod] = useInputValidator<string>("", modValidation);
   const modsValidation = (mods: string[]) => mods.every((mod) => modValidation(mod));
-  const [mods, setMods, validMods] = useInputValidator<string[]>([], modsValidation);
+  const [mods, setMods, validMods] = useInputValidator<string[]>(edit ? edit.mods : [], modsValidation);
   const maxMods = useMemo(() => mods.length >= 10, [mods]);
 
   // Check content
@@ -364,7 +383,7 @@ export const AddEditKeyboardContextProvider = ({
   const statusValidation = (status: string | null) =>
     status === "public" || status === "private" || status === "unlisted";
   const [status, setStatus, validStatus] = useInputValidator<KeyboardStatusType | null>(
-    null,
+    edit ? edit.status : null,
     statusValidation,
   );
 
@@ -374,9 +393,7 @@ export const AddEditKeyboardContextProvider = ({
   const validScreenOne = useMemo(() => validName && !nameLoading, [validName, nameLoading]);
   const validScreenTwo = useMemo(() => {
     // Kit checkboxes can only be selected if the user has selected a kit
-    const validKitCheckBox = kitSelected
-      ? true
-      : !(kitCase || kitPcb || kitPlate || kitStabilizers || kitKeycaps);
+    const validKitCheckBox = kitSelected ? true : !(kitCase || kitPcb || kitPlate || kitStabilizers || kitKeycaps);
 
     // Kit name must be the same as the selected kit if selected
     const validKitSelectedName =
@@ -449,52 +466,52 @@ export const AddEditKeyboardContextProvider = ({
     setScreen(1);
 
     // Default name and description
-    setName("");
-    setDescription("");
+    setName(edit ? edit.name : "");
+    setDescription(edit ? edit.description : "");
 
     // Default kit
-    setKitName("");
-    setKitSelected(null);
-    setKitCase(false);
-    setKitPcb(false);
-    setKitPlate(false);
-    setKitStabilizers(false);
-    setKitKeycaps(false);
-    setKitLink("");
+    setKitName(edit ? edit.kitName : "");
+    setKitSelected(edit ? !!edit.kitName : null);
+    setKitCase(defaultEditKitIncludes("case"));
+    setKitPcb(defaultEditKitIncludes("pcb"));
+    setKitPlate(defaultEditKitIncludes("plate"));
+    setKitStabilizers(defaultEditKitIncludes("stabilizers"));
+    setKitKeycaps(defaultEditKitIncludes("keycaps"));
+    setKitLink(edit ? edit.kitLink : "");
     setKitSelectedLink(false);
 
     // Default case
-    setCaseName("");
-    setCaseLink("");
+    setCaseName(edit ? edit.case : "");
+    setCaseLink(edit ? edit.caseLink : "");
     setCaseSelectedLink(false);
 
     // Default PCB
-    setPcbName("");
-    setPcbLink("");
+    setPcbName(edit ? edit.pcb : "");
+    setPcbLink(edit ? edit.pcbLink : "");
     setPcbSelectedLink(false);
 
     // Default plate
-    setPlateName("");
-    setPlateLink("");
+    setPlateName(edit ? edit.plate : "");
+    setPlateLink(edit ? edit.plateLink : "");
     setPlateSelectedLink(false);
 
     // default size
-    setSize("");
+    setSize(edit ? edit.size : "");
 
     // Default switches
-    setSwitches(DEFAULT_ITEMS);
+    setSwitches(edit ? edit.switches : DEFAULT_ITEMS);
     setSwitchesSelectedLink([false]);
 
     // Default stabilizers
-    setStabilizers(DEFAULT_ITEMS);
+    setStabilizers(edit ? edit.stabilizers : DEFAULT_ITEMS);
     setSwitchesSelectedLink([false]);
 
     // Default keycaps
-    setKeycaps(DEFAULT_ITEMS);
+    setKeycaps(edit ? edit.keycaps : DEFAULT_ITEMS);
     setKeycapsSelectedLink([false]);
 
     // Default mods
-    setMods([]);
+    setMods(edit ? edit.mods : []);
     setCurrentMod("");
 
     // Default content
@@ -505,24 +522,26 @@ export const AddEditKeyboardContextProvider = ({
     // Default status
     setStatus(null);
   }, [
-    setCaseLink,
-    setCaseName,
-    setCurrentMod,
-    setDescription,
-    setKeycaps,
-    setKeycapsSelectedLink,
-    setKitLink,
-    setKitName,
-    setMods,
     setName,
-    setPcbLink,
+    edit,
+    setDescription,
+    setKitName,
+    defaultEditKitIncludes,
+    setKitLink,
+    setCaseName,
+    setCaseLink,
     setPcbName,
-    setPlateLink,
+    setPcbLink,
     setPlateName,
+    setPlateLink,
     setSize,
-    setStabilizers,
     setSwitches,
     setSwitchesSelectedLink,
+    setStabilizers,
+    setKeycaps,
+    setKeycapsSelectedLink,
+    setMods,
+    setCurrentMod,
     setStatus,
   ]);
 
@@ -557,8 +576,7 @@ export const AddEditKeyboardContextProvider = ({
       const media = !imageVideoList.length
         ? [await getDefaultKeyboardImage()]
         : imageVideoList.map(
-            async (file, index) =>
-              await uploadKeyboardContent(file, `${userProfile.uid}_${name}_${index}`),
+            async (file, index) => await uploadKeyboardContent(file, `${userProfile.uid}_${name}_${index}`),
           );
       const kitComponents: KitType = [];
       if (kitCase) kitComponents.push("case");
@@ -623,6 +641,10 @@ export const AddEditKeyboardContextProvider = ({
     document.addEventListener("keydown", handleKeyDown); // Add event listener
     return () => document.removeEventListener("keydown", handleKeyDown); // Remove on cleanup
   }, [handleCancel, open]);
+
+  useEffect(() => {
+    setDefault();
+  }, [open, setDefault, edit]);
 
   return (
     <AddEditKeyboardContext.Provider

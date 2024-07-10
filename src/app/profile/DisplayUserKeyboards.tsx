@@ -30,7 +30,7 @@ const DisplayUserKeyboards = () => {
     );
 
   return (
-    <div className="flex w-full grow flex-col items-center space-y-2">
+    <div className="flex w-full grow flex-col items-center space-y-1">
       {keyboards.map((keyboard, index) => (
         <DisplayKeyboard key={index} keyboard={keyboard} />
       ))}

@@ -1,9 +1,10 @@
 "use client";
 import { useState } from "react";
 import { ItemType, KeyboardType } from "@/src/types/keyboard";
-import { formatDate, truncateString, closeModal } from "@/src/helper/helperFunctions";
+import { formatDate, truncateString } from "@/src/helper/helperFunctions";
 import { deleteKeyboard } from "@/src/helper/firestoreFunctions";
 import { useGlobalModalContext } from "@/src/context/GlobalModal";
+import { EditKeyboardButton } from "@/src/components/Keyboard/AddEditKeyboard/AddEditKeyboard";
 import DisplayImageVideo from "@/src/components/DisplayImageVideo";
 
 const DisplayKeyboard = ({ keyboard }: { keyboard: KeyboardType }) => {
@@ -30,16 +31,10 @@ const DisplayKeyboard = ({ keyboard }: { keyboard: KeyboardType }) => {
       onMouseLeave={() => setHover(false)}
     >
       <div className="mx-1 flex grow flex-row justify-between">
-        <h2 className="self-end truncate pt-6 font-clashgrotesk text-4xl font-medium">
-          {keyboard.name}
-        </h2>
+        <h2 className="self-end truncate pt-6 font-clashgrotesk text-4xl font-medium">{keyboard.name}</h2>
         <div className="flex flex-col justify-end">
           <div className="flex grow justify-end space-x-1.5">
-            <button
-              className={`btn btn-outline btn-info btn-xs self-end pb-6 ${!hover && "hidden"}`}
-            >
-              <span className="mt-1.5">Edit Keyboard</span>
-            </button>
+            <EditKeyboardButton hover={hover} edit={keyboard} />
             <button
               className={`btn btn-outline btn-error btn-xs self-end pb-6 ${!hover && "hidden"}`}
               onClick={() => handleDeleteKeyboard(keyboard.name, keyboard.id)}
@@ -47,9 +42,7 @@ const DisplayKeyboard = ({ keyboard }: { keyboard: KeyboardType }) => {
               <span className="mt-1.5">Delete</span>
             </button>
           </div>
-          <span className="self-end text-lg font-bold text-gray-500">
-            {formatDate(keyboard.createdAt)}
-          </span>
+          <span className="self-end text-lg font-bold text-gray-500">{formatDate(keyboard.createdAt)}</span>
         </div>
       </div>
       <DisplayImageVideo
@@ -93,8 +86,7 @@ const DisplayKeyboard = ({ keyboard }: { keyboard: KeyboardType }) => {
           <p className="font-bold leading-3">Keycaps</p>
           <div className={`flex ${keyboard.keycaps.length > 2 ? "flex-col" : "flex-row gap-3"}`}>
             {keyboard.keycaps.map((keycaps: ItemType, index: number) => {
-              if (index === 0 && keyboard.kit.includes("keycaps"))
-                return <p key={index}>Default</p>;
+              if (index === 0 && keyboard.kit.includes("keycaps")) return <p key={index}>Default</p>;
               return <p key={index}>{truncateString(keycaps.name, 16)}</p>;
             })}
           </div>

@@ -30,7 +30,12 @@ const useKeyboardItem = (
 ] => {
   // Objects validation
   const [items, setItems, addItems, updateItems, removeItems, validItems, validItemsMap] =
-    useObjectsValidator<ItemType>(initialItems, itemsValidation, nameValidation, linkValidation);
+    useObjectsValidator<ItemType>(
+      initialItems.map((item) => ({ name: item.name, link: item.link })),
+      itemsValidation,
+      nameValidation,
+      linkValidation,
+    );
 
   // Boolean list for selected link in items
   const [
