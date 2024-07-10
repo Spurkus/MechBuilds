@@ -219,7 +219,7 @@ export const AddEditKeyboardContextProvider = ({
           return false;
         });
 
-      if (currentNameRef !== nameRef.current) return true;
+      if (currentNameRef !== nameRef.current) return !!edit;
       setNameLoading(false);
       return !nameTaken;
     },
