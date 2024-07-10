@@ -5,12 +5,12 @@ const useBooleanList = (
 ): [
   boolean[],
   React.Dispatch<React.SetStateAction<boolean[]>>,
-  () => void,
+  (value?: boolean) => void,
   (index: number) => void,
   (index: number) => void,
 ] => {
   const [values, setValues] = useState<boolean[]>(initialValue);
-  const addElement = () => setValues([...values, false]);
+  const addElement = (value = false) => setValues([...values, value]);
   const toggleElement = (index: number) => {
     setValues(values.map((value, i) => (i === index ? !value : value)));
   };
