@@ -40,7 +40,9 @@ const useObjectsValidator = <T extends object>(
   // Setting states for object validation
   const [values, setValues] = useState<T[]>(initialValues);
   const [isValid, setIsValid] = useState<boolean>(false);
-  const [validationMap, setValidationMap] = useState<Partial<Record<keyof T, boolean>>[]>([]);
+  const [validationMap, setValidationMap] = useState<Partial<Record<keyof T, boolean>>[]>(
+    initialValues.map((obj: { [key: string]: any }) => validateObject(obj as T)),
+  );
   const addElement = (element: T) => {
     setValues([...values, element]);
     setValidationMap([...validationMap, validateObject(element)]);
@@ -52,10 +54,8 @@ const useObjectsValidator = <T extends object>(
   // Validate the objects when the values change
   useEffect(() => {
     // Create an array of objects with the validation results for each field
-    const newValidationResults: Partial<Record<keyof T, boolean>>[] = values.map(
-      (obj: { [key: string]: any }) => {
-        return validateObject(obj as T);
-      },
+    const newValidationResults: Partial<Record<keyof T, boolean>>[] = values.map((obj: { [key: string]: any }) =>
+      validateObject(obj as T),
     );
 
     setIsValid(
