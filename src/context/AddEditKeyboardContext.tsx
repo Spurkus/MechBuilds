@@ -555,15 +555,15 @@ export const AddEditKeyboardContextProvider = ({
 
     // Default switches
     setSwitches(edit ? edit.switches.map((item: ItemType) => ({ name: item.name, link: item.link })) : DEFAULT_ITEMS);
-    setSwitchesSelectedLink([false]);
+    setSwitchesSelectedLink(edit ? edit.switches.map(() => false) : [false]);
 
     // Default stabilizers
     setStabilizers(edit ? edit.stabilizers.map((s: ItemType) => ({ name: s.name, link: s.link })) : DEFAULT_ITEMS);
-    setSwitchesSelectedLink([false]);
+    setStabilizersSelectedLink(edit ? edit.stabilizers.map(() => false) : [false]);
 
     // Default keycaps
     setKeycaps(edit ? edit.keycaps.map((key: ItemType) => ({ name: key.name, link: key.link })) : DEFAULT_ITEMS);
-    setKeycapsSelectedLink([false]);
+    setKeycapsSelectedLink(edit ? edit.keycaps.map(() => false) : [false]);
 
     // Default mods
     setMods(edit ? edit.mods : []);
@@ -594,6 +594,7 @@ export const AddEditKeyboardContextProvider = ({
     setSwitches,
     setSwitchesSelectedLink,
     setStabilizers,
+    setStabilizersSelectedLink,
     setKeycaps,
     setKeycapsSelectedLink,
     setMods,
