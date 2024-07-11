@@ -18,6 +18,7 @@ import {
   createKeyboard,
   isKeyboardNameTaken,
   handleUploadKeyboardContent,
+  editKeyboard,
 } from "@/src/helper/firestoreFunctions";
 import { useAuthContext } from "./Authentication";
 import useBooleanList from "@/src/hooks/useBooleanList";
@@ -628,51 +629,104 @@ export const AddEditKeyboardContextProvider = ({
     if (!isSavable || loading || !userProfile || !status || !changed) return;
     setLoading(true);
     try {
-      const media = !imageVideoList.length
-        ? [await getDefaultKeyboardImage()]
-        : await handleUploadKeyboardContent(imageVideoList, `${userProfile.uid}_${name}`);
-      const kitComponents: KitType = [];
-      if (kitCase) kitComponents.push("case");
-      if (kitPcb) kitComponents.push("pcb");
-      if (kitPlate) kitComponents.push("plate");
-      if (kitStabilizers) kitComponents.push("stabilizers");
-      if (kitKeycaps) kitComponents.push("keycaps");
+      if (edit) {
+        const media = !imageVideoList.length
+          ? [await getDefaultKeyboardImage()]
+          : await handleUploadKeyboardContent(imageVideoList, edit.id);
+        const kitComponents: KitType = [];
+        if (kitCase) kitComponents.push("case");
+        if (kitPcb) kitComponents.push("pcb");
+        if (kitPlate) kitComponents.push("plate");
+        if (kitStabilizers) kitComponents.push("stabilizers");
+        if (kitKeycaps) kitComponents.push("keycaps");
 
-      const keyboard: KeyboardType = {
-        id: `${userProfile.uid}_${name}`,
-        uid: userProfile.uid,
-        name: name,
-        description: description,
-        kitName: kitName,
-        kit: kitComponents,
-        kitLink: kitLink,
-        case: caseName,
-        caseLink: caseLink,
-        pcb: pcbName,
-        pcbLink: pcbLink,
-        plate: plateName,
-        plateLink: plateLink,
-        size: size,
-        switches: switches,
-        stabilizers: stabilizers,
-        keycaps: keycaps,
-        mods: mods,
-        media: await Promise.all(media),
-        isMediaVideo: !imageVideoList.length ? [false] : isMediaVideo,
-        createdAt: new Date(),
-        status: status,
-        visible: true,
-      };
-      await createKeyboard(keyboard).then((message) => {
-        setTimeout(triggerConfetti, 0);
-        setTimeout(triggerConfetti, 50);
-        setTimeout(triggerConfetti, 100);
-        setTimeout(triggerConfetti, 200);
-        setTimeout(triggerConfetti, 300);
-        handleModal(message.title, message.message, message.theme, [
-          { text: "yay!", type: "success", onClick: toggleModal },
-        ]);
-      });
+        const editedKeyboard: Partial<KeyboardType> = {
+          ...(edit.id && { id: edit.id }),
+        };
+
+        // Only include fields that have changed
+        if (name !== edit.name) editedKeyboard.name = name;
+        if (description !== edit.description) editedKeyboard.description = description;
+        if (kitName !== edit.kitName) editedKeyboard.kitName = kitName;
+        if (JSON.stringify(kitComponents) !== JSON.stringify(edit.kit)) editedKeyboard.kit = kitComponents;
+        if (kitLink !== edit.kitLink) editedKeyboard.kitLink = kitLink;
+        if (caseName !== edit.case) editedKeyboard.case = caseName;
+        if (caseLink !== edit.caseLink) editedKeyboard.caseLink = caseLink;
+        if (pcbName !== edit.pcb) editedKeyboard.pcb = pcbName;
+        if (pcbLink !== edit.pcbLink) editedKeyboard.pcbLink = pcbLink;
+        if (plateName !== edit.plate) editedKeyboard.plate = plateName;
+        if (plateLink !== edit.plateLink) editedKeyboard.plateLink = plateLink;
+        if (size !== edit.size) editedKeyboard.size = size;
+        if (switches !== edit.switches) editedKeyboard.switches = switches;
+        if (stabilizers !== edit.stabilizers) editedKeyboard.stabilizers = stabilizers;
+        if (keycaps !== edit.keycaps) editedKeyboard.keycaps = keycaps;
+        if (mods !== edit.mods) editedKeyboard.mods = mods;
+
+        // Assuming media is always considered changed for simplicity
+        editedKeyboard.media = await Promise.all(media);
+        if (isMediaVideo !== edit.isMediaVideo) editedKeyboard.isMediaVideo = isMediaVideo;
+        if (status !== edit.status) editedKeyboard.status = status;
+
+        await editKeyboard(edit.id, editedKeyboard).then(() => {
+          setTimeout(triggerConfetti, 0);
+          setTimeout(triggerConfetti, 50);
+          setTimeout(triggerConfetti, 100);
+          setTimeout(triggerConfetti, 200);
+          setTimeout(triggerConfetti, 300);
+          handleModal("Success", "Keyboard edited successfully", "success", [
+            { text: "yay!", type: "success", onClick: toggleModal },
+          ]);
+        });
+      } else {
+        const kitComponents: KitType = [];
+        if (kitCase) kitComponents.push("case");
+        if (kitPcb) kitComponents.push("pcb");
+        if (kitPlate) kitComponents.push("plate");
+        if (kitStabilizers) kitComponents.push("stabilizers");
+        if (kitKeycaps) kitComponents.push("keycaps");
+
+        const keyboard: KeyboardType = {
+          id: "",
+          uid: userProfile.uid,
+          name: name,
+          description: description,
+          kitName: kitName,
+          kit: kitComponents,
+          kitLink: kitLink,
+          case: caseName,
+          caseLink: caseLink,
+          pcb: pcbName,
+          pcbLink: pcbLink,
+          plate: plateName,
+          plateLink: plateLink,
+          size: size,
+          switches: switches,
+          stabilizers: stabilizers,
+          keycaps: keycaps,
+          mods: mods,
+          media: [],
+          isMediaVideo: !imageVideoList.length ? [false] : isMediaVideo,
+          createdAt: new Date(),
+          status: status,
+          visible: true,
+        };
+        await createKeyboard(keyboard).then(async (id) => {
+          // Upload media and id fields after creating keyboard to get ID
+          const media = !imageVideoList.length
+            ? [await getDefaultKeyboardImage()]
+            : await handleUploadKeyboardContent(imageVideoList, id);
+          await editKeyboard(id, { id, media }).then(() => {
+            setTimeout(triggerConfetti, 0);
+            setTimeout(triggerConfetti, 50);
+            setTimeout(triggerConfetti, 100);
+            setTimeout(triggerConfetti, 200);
+            setTimeout(triggerConfetti, 300);
+            handleModal("Success", `Keyboard ${edit ? "edited" : "created"} successfully`, "success", [
+              { text: "yay!", type: "success", onClick: toggleModal },
+            ]);
+          });
+        });
+      }
     } catch (error: any) {
       handleModalError(error);
     } finally {

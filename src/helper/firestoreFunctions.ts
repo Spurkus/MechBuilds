@@ -91,18 +91,16 @@ export const handleUploadKeyboardContent = async (mediaList: (File | string)[], 
   return mediaURLList;
 };
 
-export const createKeyboard = async (
-  keyboard: KeyboardType,
-): Promise<{ title: string; message: string; theme: ModalThemeType }> => {
+export const createKeyboard = async (keyboard: KeyboardType) => {
   const keyboardsCollectionRef = collection(db, "keyboards");
+  const newKeyboardRef = doc(keyboardsCollectionRef);
+  await setDoc(newKeyboardRef, keyboard);
+  return newKeyboardRef.id;
+};
 
-  return await setDoc(doc(keyboardsCollectionRef, keyboard.id), keyboard).then(() => {
-    return {
-      title: "Success",
-      message: "Keyboard created successfully",
-      theme: "success",
-    };
-  });
+export const editKeyboard = async (keyboardID: string, fieldsToUpdate: Partial<KeyboardType>) => {
+  const keyboardsCollectionRef = collection(db, "keyboards");
+  await updateDoc(doc(keyboardsCollectionRef, keyboardID), fieldsToUpdate);
 };
 
 export const getAllKeyboardsFromUser = async (uid: string): Promise<KeyboardType[]> => {
