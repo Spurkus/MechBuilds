@@ -87,12 +87,7 @@ export const CheckBoxField = ({ name, checked, setChecked }: CheckBoxFieldProps)
         disabled={kitNoInput}
       >
         <span>{name}</span>
-        <input
-          type="checkbox"
-          checked={checked}
-          onChange={() => {}}
-          className="checkbox checkbox-sm"
-        />
+        <input type="checkbox" checked={checked} readOnly className="checkbox checkbox-sm" />
       </button>
     </div>
   );
@@ -175,9 +170,7 @@ export const InputNameDropdownField = ({
   nameChange,
   list = [],
 }: InputNameDropdownFieldProps) => {
-  const filteredList = list.filter((nameList) =>
-    nameList.toLowerCase().startsWith(name.toLowerCase()),
-  );
+  const filteredList = list.filter((nameList) => nameList.toLowerCase().startsWith(name.toLowerCase()));
   const nameListChange = (nameList: string) => {
     if (noInput) return;
     setName(nameList);
@@ -309,10 +302,7 @@ export const InputNameLinkField = ({
         disabled={noInput}
         onClick={selectLink}
       >
-        <FontAwesomeIcon
-          icon={faLink}
-          className={`ml-[0.1rem] mt-[0.1rem] ${buttonError && "text-error"}`}
-        />
+        <FontAwesomeIcon icon={faLink} className={`ml-[0.1rem] mt-[0.1rem] ${buttonError && "text-error"}`} />
       </button>
     </div>
   );
