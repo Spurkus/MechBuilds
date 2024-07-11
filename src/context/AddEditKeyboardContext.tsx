@@ -15,11 +15,12 @@ import useInputValidator from "@/src/hooks/useInputValidator";
 import useKeyboardItem from "@/src/hooks/useKeyboardItem";
 import {
   getDefaultKeyboardImage,
-  uploadKeyboardContent,
   createKeyboard,
   isKeyboardNameTaken,
+  handleUploadKeyboardContent,
 } from "@/src/helper/firestoreFunctions";
 import { useAuthContext } from "./Authentication";
+import useBooleanList from "@/src/hooks/useBooleanList";
 
 export interface AddEditKeyboardContextType {
   loading: boolean;
@@ -151,10 +152,15 @@ export interface AddEditKeyboardContextType {
 
   contentIndex: number;
   setContentIndex: React.Dispatch<React.SetStateAction<number>>;
-  imageVideoList: File[];
-  setImageVideoList: React.Dispatch<React.SetStateAction<File[]>>;
+  imageVideoList: (File | string)[];
+  setImageVideoList: React.Dispatch<React.SetStateAction<(File | string)[]>>;
   mediaURL: string;
   setMediaURL: React.Dispatch<React.SetStateAction<string>>;
+  isMediaVideo: boolean[];
+  setIsMediaVideo: React.Dispatch<React.SetStateAction<boolean[]>>;
+  addIsMediaVideo: (value?: boolean) => void;
+  toggleIsMediaVideo: (index: number) => void;
+  removeIsMediaVideo: (index: number) => void;
 
   status: KeyboardStatusType | null;
   setStatus: React.Dispatch<React.SetStateAction<KeyboardStatusType | null>>;
@@ -379,8 +385,11 @@ export const AddEditKeyboardContextProvider = ({
 
   // Check content
   const [contentIndex, setContentIndex] = useState(0);
-  const [imageVideoList, setImageVideoList] = useState<File[]>([]);
-  const [mediaURL, setMediaURL] = useState("");
+  const [imageVideoList, setImageVideoList] = useState<(File | string)[]>(edit ? edit.media : []);
+  const [mediaURL, setMediaURL] = useState(edit ? edit.media[0] : "");
+  const [isMediaVideo, setIsMediaVideo, addIsMediaVideo, toggleIsMediaVideo, removeIsMediaVideo] = useBooleanList(
+    edit ? edit.isMediaVideo : [],
+  );
 
   // Check status
   const statusValidation = (status: string | null) =>
@@ -458,10 +467,53 @@ export const AddEditKeyboardContextProvider = ({
     return validMods && validDescription && validStatus;
   }, [validDescription, validMods, validStatus]);
 
+  // Check if keyboard has changed if in edit mode
+  const changed = useMemo(() => {
+    if (!edit) return true;
+    return (
+      edit.name !== name ||
+      edit.description !== description ||
+      edit.kitName !== kitName ||
+      edit.kitLink !== kitLink ||
+      edit.case !== caseName ||
+      edit.caseLink !== caseLink ||
+      edit.pcb !== pcbName ||
+      edit.pcbLink !== pcbLink ||
+      edit.plate !== plateName ||
+      edit.plateLink !== plateLink ||
+      edit.size !== size ||
+      edit.switches.length !== switches.length ||
+      edit.stabilizers.length !== stabilizers.length ||
+      edit.keycaps.length !== keycaps.length ||
+      edit.mods.length !== mods.length ||
+      edit.media.length !== imageVideoList.length ||
+      edit.status !== status
+    );
+  }, [
+    name,
+    description,
+    kitName,
+    kitLink,
+    caseName,
+    caseLink,
+    pcbName,
+    pcbLink,
+    plateName,
+    plateLink,
+    size,
+    switches,
+    stabilizers,
+    keycaps,
+    mods,
+    imageVideoList,
+    status,
+    edit,
+  ]);
+
   // Check if the keyboard can be saved
   const isSavable = useMemo(() => {
-    return validScreenOne && validScreenTwo && validScreenThree && validScreenFour;
-  }, [validScreenFour, validScreenOne, validScreenThree, validScreenTwo]);
+    return validScreenOne && validScreenTwo && validScreenThree && validScreenFour && changed;
+  }, [validScreenFour, validScreenOne, validScreenThree, validScreenTwo, changed]);
 
   // Setting default states
   const setDefault = useCallback(() => {
@@ -519,8 +571,9 @@ export const AddEditKeyboardContextProvider = ({
 
     // Default content
     setContentIndex(0);
-    setImageVideoList([]);
-    setMediaURL("");
+    setImageVideoList(edit ? edit.media : []);
+    setMediaURL(edit ? edit.media[0] : "");
+    setIsMediaVideo(edit ? edit.isMediaVideo : []);
 
     // Default status
     setStatus(edit ? edit.status : null);
@@ -545,6 +598,7 @@ export const AddEditKeyboardContextProvider = ({
     setKeycapsSelectedLink,
     setMods,
     setCurrentMod,
+    setIsMediaVideo,
     setStatus,
   ]);
 
@@ -554,13 +608,12 @@ export const AddEditKeyboardContextProvider = ({
       closeModal("addeditkeyboardmodal");
       toggleAddEditKeyboard();
       setEdit(undefined);
-      setDefault();
     },
-    [setDefault, toggleAddEditKeyboard, toggleModal, setEdit],
+    [toggleAddEditKeyboard, toggleModal, setEdit],
   );
 
   const handleCancel = useCallback(() => {
-    if (validScreenOne) {
+    if (validScreenOne && changed) {
       handleModal("Discard Changes", "Are you sure you want to discard the changes?", "error", [
         { text: "Discard", type: "error", onClick: () => discardAndClose(false) },
         { text: "Cancel", type: "neutral", onClick: toggleModal },
@@ -568,20 +621,15 @@ export const AddEditKeyboardContextProvider = ({
     } else {
       discardAndClose();
     }
-  }, [discardAndClose, handleModal, validScreenOne, toggleModal]);
+  }, [discardAndClose, handleModal, validScreenOne, toggleModal, changed]);
 
   const handleSave = async () => {
-    if (!isSavable || loading || !userProfile || !status) return;
+    if (!isSavable || loading || !userProfile || !status || !changed) return;
     setLoading(true);
     try {
-      const isMediaVideo = !imageVideoList.length
-        ? [false]
-        : imageVideoList.map((file) => file.type.startsWith("video/"));
       const media = !imageVideoList.length
         ? [await getDefaultKeyboardImage()]
-        : imageVideoList.map(
-            async (file, index) => await uploadKeyboardContent(file, `${userProfile.uid}_${name}_${index}`),
-          );
+        : await handleUploadKeyboardContent(imageVideoList, `${userProfile.uid}_${name}`);
       const kitComponents: KitType = [];
       if (kitCase) kitComponents.push("case");
       if (kitPcb) kitComponents.push("pcb");
@@ -609,7 +657,7 @@ export const AddEditKeyboardContextProvider = ({
         keycaps: keycaps,
         mods: mods,
         media: await Promise.all(media),
-        isMediaVideo: isMediaVideo,
+        isMediaVideo: !imageVideoList.length ? [false] : isMediaVideo,
         createdAt: new Date(),
         status: status,
         visible: true,
@@ -630,7 +678,6 @@ export const AddEditKeyboardContextProvider = ({
       closeModal("addeditkeyboardmodal");
       toggleAddEditKeyboard();
       setEdit(undefined);
-      setDefault();
       setLoading(false);
     }
   };
@@ -775,6 +822,11 @@ export const AddEditKeyboardContextProvider = ({
         setImageVideoList,
         mediaURL,
         setMediaURL,
+        isMediaVideo,
+        setIsMediaVideo,
+        addIsMediaVideo,
+        toggleIsMediaVideo,
+        removeIsMediaVideo,
         status,
         setStatus,
         handleCancel,

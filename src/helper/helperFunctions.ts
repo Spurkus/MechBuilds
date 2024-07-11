@@ -101,3 +101,6 @@ export const triggerConfetti = () => {
 
 export const truncateString = (str: string, maxLength: number) =>
   str.length > maxLength ? `${str.substring(0, maxLength)}...` : str;
+
+export const isFileImage = (file: File) => file.type.startsWith("image/");
+export const isFileVideo = (file: File) => file.type.startsWith("video/");

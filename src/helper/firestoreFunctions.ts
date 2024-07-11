@@ -1,9 +1,9 @@
 import { db } from "@/firebase";
 import { collection, setDoc, doc, updateDoc, query, where, getDocs, deleteDoc } from "firebase/firestore";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import { UserProfileType, EditUserProfileType } from "@/src/types/user";
 import { KeyboardType } from "@/src/types/keyboard";
-import { ModalThemeType } from "../types/globalModal";
+import { ModalThemeType } from "@/src/types/globalModal";
 
 export const createUserProfile = async (
   userProfile: UserProfileType,
@@ -66,11 +66,29 @@ export const isKeyboardNameTaken = async (uid: string, keyboardName: string): Pr
   return !querySnapshot.empty; // Returns true if the keyboard name is taken, false otherwise
 };
 
-export const uploadKeyboardContent = async (file: File, keyboardId: string) => {
+export const uploadKeyboardContent = async (file: File, keyboardID: string) => {
   const storage = getStorage();
-  const storageRef = ref(storage, `keyboardContent/${keyboardId}`);
+  const storageRef = ref(storage, `keyboardContent/${keyboardID}`);
   const snapshot = await uploadBytes(storageRef, file);
   return await getDownloadURL(snapshot.ref);
+};
+
+export const deleteKeyboardContent = async (mediaID: string) => {
+  const storage = getStorage();
+  const storageRef = ref(storage, `keyboardContent/${mediaID}`);
+  await deleteObject(storageRef);
+};
+
+export const handleUploadKeyboardContent = async (mediaList: (File | string)[], keyboardID: string) => {
+  const mediaURLList = await Promise.all(
+    mediaList.map(async (media) => {
+      if (media instanceof File) {
+        return await uploadKeyboardContent(media, `${keyboardID}_${mediaList.indexOf(media)}`);
+      }
+      return media;
+    }),
+  );
+  return mediaURLList;
 };
 
 export const createKeyboard = async (
@@ -94,7 +112,14 @@ export const getAllKeyboardsFromUser = async (uid: string): Promise<KeyboardType
   return querySnapshot.docs.map((doc) => doc.data() as KeyboardType);
 };
 
-export const deleteKeyboard = async (keyboardID: string) => {
+export const deleteKeyboard = async (keyboardID: string, mediaNumber: number) => {
+  // Delete keyboard content
   const keyboardsCollectionRef = collection(db, "keyboards");
   await deleteDoc(doc(keyboardsCollectionRef, keyboardID));
+
+  // Delete keyboard media
+  const storage = getStorage();
+  for (let i = 0; i < mediaNumber; i++) {
+    await deleteKeyboardContent(`${keyboardID}_${i}`);
+  }
 };

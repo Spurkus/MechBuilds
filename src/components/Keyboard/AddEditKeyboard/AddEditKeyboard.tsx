@@ -54,6 +54,7 @@ export const AddKeyboardButton = () => {
 };
 
 const AddEditKeyboardForm = () => {
+  const { edit } = useAddEditKeyboardSelectContext();
   const {
     loading,
     screen,
@@ -129,7 +130,7 @@ const AddEditKeyboardForm = () => {
         )}
         {screen === 4 ? (
           <button className={`btn btn-success btn-sm ${!isSavable && "btn-disabled"}`} onClick={handleSaveButton}>
-            publish keyboard
+            {edit ? "save changes" : "publish keyboard"}
           </button>
         ) : (
           <button className={`btn btn-success btn-sm ${!canIncrement && "btn-disabled"}`} onClick={incrementScreen}>

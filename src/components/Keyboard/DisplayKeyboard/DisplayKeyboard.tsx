@@ -12,14 +12,14 @@ const DisplayKeyboard = ({ keyboard }: { keyboard: KeyboardType }) => {
   const [index, setIndex] = useState(0);
   const [hover, setHover] = useState(false);
 
-  const handleDelete = (id: string) => {
-    deleteKeyboard(id);
+  const handleDelete = (id: string, mediaNumber: number) => {
+    deleteKeyboard(id, mediaNumber);
     toggleModal();
   };
 
-  const handleDeleteKeyboard = async (name: string, id: string) => {
+  const handleDeleteKeyboard = async (name: string, id: string, mediaNumber: number) => {
     handleModal("Deleting Keyboard", `Are you sure you want to delete "${name}?"`, "error", [
-      { text: "Delete", type: "error", onClick: () => handleDelete(id) },
+      { text: "Delete", type: "error", onClick: () => handleDelete(id, mediaNumber) },
       { text: "Cancel", type: "neutral", onClick: toggleModal },
     ]);
   };
@@ -37,7 +37,7 @@ const DisplayKeyboard = ({ keyboard }: { keyboard: KeyboardType }) => {
             <EditKeyboardButton hover={hover} edit={keyboard} />
             <button
               className={`btn btn-outline btn-error btn-xs self-end pb-6 ${!hover && "hidden"}`}
-              onClick={() => handleDeleteKeyboard(keyboard.name, keyboard.id)}
+              onClick={() => handleDeleteKeyboard(keyboard.name, keyboard.id, keyboard.media.length)}
             >
               <span className="mt-1.5">Delete</span>
             </button>

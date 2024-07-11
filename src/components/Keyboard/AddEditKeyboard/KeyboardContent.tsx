@@ -2,8 +2,18 @@ import { useAddEditKeyboardContext } from "@/src/context/AddEditKeyboardContext"
 import SubmitImageVideo from "@/src/components/SubmitImageVideo";
 
 const KeyboardContent = () => {
-  const { contentIndex, setContentIndex, imageVideoList, setImageVideoList, mediaURL, setMediaURL } =
-    useAddEditKeyboardContext();
+  const {
+    contentIndex,
+    setContentIndex,
+    imageVideoList,
+    setImageVideoList,
+    mediaURL,
+    setMediaURL,
+    isMediaVideo,
+    setIsMediaVideo,
+    addIsMediaVideo,
+    removeIsMediaVideo,
+  } = useAddEditKeyboardContext();
   return (
     <SubmitImageVideo
       index={contentIndex}
@@ -12,6 +22,10 @@ const KeyboardContent = () => {
       setImageVideoList={setImageVideoList}
       mediaURL={mediaURL}
       setMediaURL={setMediaURL}
+      isMediaVideo={isMediaVideo}
+      setIsMediaVideo={setIsMediaVideo}
+      addIsMediaVideo={addIsMediaVideo}
+      removeIsMediaVideo={removeIsMediaVideo}
     />
   );
 };

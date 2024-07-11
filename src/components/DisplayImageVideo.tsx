@@ -31,7 +31,7 @@ const DisplayImageVideo = ({ index, setIndex, imageVideoList, isMediaVideo }: Di
     <div className="avatar mask flex w-full grow self-center py-1">
       {!firstIndex && (
         <button
-          className="btn btn-circle btn-sm absolute left-2 top-36 z-20 flex rounded-2xl border-0 bg-gray-800 bg-opacity-60 hover:bg-gray-800 hover:bg-opacity-75"
+          className="btn btn-circle btn-sm absolute left-2 top-[9.5rem] z-20 flex rounded-2xl border-0 bg-gray-800 bg-opacity-60 hover:bg-gray-800 hover:bg-opacity-75"
           onClick={moveLeft}
         >
           <FontAwesomeIcon icon={faChevronLeft} className="h-5 w-5 text-white" />
@@ -39,7 +39,7 @@ const DisplayImageVideo = ({ index, setIndex, imageVideoList, isMediaVideo }: Di
       )}
       {!lastIndex && (
         <button
-          className="btn btn-circle btn-sm absolute right-2 top-36 z-20 flex rounded-2xl border-0 bg-gray-800 bg-opacity-60 hover:bg-gray-800 hover:bg-opacity-75"
+          className="btn btn-circle btn-sm absolute right-2 top-[9.5rem] z-20 flex rounded-2xl border-0 bg-gray-800 bg-opacity-60 hover:bg-gray-800 hover:bg-opacity-75"
           onClick={moveRight}
         >
           <FontAwesomeIcon icon={faChevronRight} className="h-5 w-5 text-white" />
@@ -64,6 +64,7 @@ const DisplayImageVideo = ({ index, setIndex, imageVideoList, isMediaVideo }: Di
             pip={false}
             className="aspect-video rounded-[1rem] bg-gradient-to-b from-zinc-950 to-zinc-900"
             width="100%"
+            height="100%"
             style={{ objectFit: "contain", overflow: "hidden" }}
           />
         ) : (
