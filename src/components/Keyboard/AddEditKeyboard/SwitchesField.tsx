@@ -64,7 +64,6 @@ const SwitchField = ({ switchItem, index }: SwitchFieldProps) => {
 
 const SwitchesField = () => {
   const { switches, maxSwitches, addNewSwitch } = useAddEditKeyboardContext();
-
   return (
     <div className="flex flex-col">
       <div className="flex flex-row items-end justify-between">
