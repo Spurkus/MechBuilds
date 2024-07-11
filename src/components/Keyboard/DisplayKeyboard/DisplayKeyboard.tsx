@@ -26,12 +26,14 @@ const DisplayKeyboard = ({ keyboard }: { keyboard: KeyboardType }) => {
 
   return (
     <div
-      className="flex w-[40rem] grow flex-col rounded-[1.2rem] px-4 pb-3 hover:bg-base-300"
+      className="flex w-[40rem] grow flex-col rounded-[1.2rem] px-4 pb-1.5 hover:bg-base-300"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
       <div className="mx-1 flex grow flex-row justify-between">
-        <h2 className="self-end truncate pt-6 font-clashgrotesk text-4xl font-medium">{keyboard.name}</h2>
+        <h2 className="z-40 self-end truncate pt-5 font-clashgrotesk text-4xl font-medium leading-8">
+          {keyboard.name}
+        </h2>
         <div className="flex flex-col justify-end">
           <div className="flex grow justify-end space-x-1.5">
             <EditKeyboardButton hover={hover} edit={keyboard} />
@@ -42,7 +44,7 @@ const DisplayKeyboard = ({ keyboard }: { keyboard: KeyboardType }) => {
               <span className="mt-1.5">Delete</span>
             </button>
           </div>
-          <span className="self-end text-lg font-bold text-gray-500">{formatDate(keyboard.createdAt)}</span>
+          <span className="self-end text-lg font-bold leading-5 text-gray-500">{formatDate(keyboard.createdAt)}</span>
         </div>
       </div>
       <DisplayImageVideo
