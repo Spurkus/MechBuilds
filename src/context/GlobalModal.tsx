@@ -99,8 +99,7 @@ export const GlobalModalContextProvider = ({ children }: GlobalModalProps) => {
 
 export const useGlobalModalContext = () => {
   const context = useContext(GlobalModalContext);
-  if (!context) {
-    throw new Error("useGlobalModalContext must be used within a GlobalModalContextProvider");
-  }
+  if (!context) throw new Error("useGlobalModalContext must be used within a GlobalModalContextProvider");
+
   return context;
 };

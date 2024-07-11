@@ -788,8 +788,7 @@ export const AddEditKeyboardContextProvider = ({
 
 export const useAddEditKeyboardContext = () => {
   const context = useContext(AddEditKeyboardContext);
-  if (!context) {
-    throw new Error("useAddEditKeyboardContext must be used within an AddEditKeyboardProvider");
-  }
+  if (!context) throw new Error("useAddEditKeyboardContext must be used within an AddEditKeyboardProvider");
+
   return context;
 };

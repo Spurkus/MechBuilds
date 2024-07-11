@@ -30,8 +30,8 @@ export const AddEditKeyboardSelectContextProvider = ({ children }: AddEditKeyboa
 
 export const useAddEditKeyboardSelectContext = () => {
   const context = useContext(AddEditKeyboardSelectContext);
-  if (!context) {
+  if (!context)
     throw new Error("useAddEditKeyboardSelectContext must be used within a AddEditKeyboardSelectContextProvider");
-  }
+
   return context;
 };
