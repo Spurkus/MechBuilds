@@ -17,12 +17,14 @@ const DisplayImageVideo = ({ index, setIndex, imageVideoList, isMediaVideo }: Di
   const lastIndex = useMemo(() => index === imageVideoList.length - 1, [index, imageVideoList]);
   const isCurrentMediaVideo = useMemo(() => isMediaVideo[index], [isMediaVideo, index]);
 
-  const moveLeft = () => {
+  const moveLeft = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
     if (firstIndex) return;
     setIndex(index - 1);
   };
 
-  const moveRight = () => {
+  const moveRight = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
     if (lastIndex) return;
     setIndex(index + 1);
   };

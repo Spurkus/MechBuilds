@@ -22,15 +22,24 @@ interface EditKeyboardButtonProps {
   edit: KeyboardType;
 }
 
-export const EditKeyboardButton = ({ hover, edit }: EditKeyboardButtonProps) => {
+export const EditKeyboardButton = ({
+  hover,
+  edit,
+  ...rest
+}: EditKeyboardButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement>) => {
   const { setAddEditKeyboardModalOpen, setEdit } = useAddEditKeyboardSelectContext();
-  const handleClick = () => {
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    if (rest.onClick) rest.onClick(event);
     setEdit(edit);
     showModal("addeditkeyboardmodal");
     setAddEditKeyboardModalOpen(true);
   };
   return (
-    <button className={`btn btn-outline btn-info btn-xs self-end pb-6 ${!hover && "hidden"}`} onClick={handleClick}>
+    <button
+      {...rest}
+      className={`${rest.className} btn btn-outline btn-info btn-xs self-end pb-6 ${!hover && "hidden"} ${rest.className || ""}`}
+      onClick={handleClick}
+    >
       <span className="mt-1.5">Edit Keyboard</span>
     </button>
   );

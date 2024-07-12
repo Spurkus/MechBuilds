@@ -50,7 +50,7 @@ export const isUsernameTaken = async (username: string): Promise<boolean> => {
 export const getUser = async (username: string): Promise<UserProfileType | null> => {
   if (typeof username === "undefined" || username === "") return null;
   const userProfilesCollectionRef = collection(db, "userProfiles");
-  const q = query(userProfilesCollectionRef, where("username", "==", username));
+  const q = query(userProfilesCollectionRef, where("username", "==", username.toLowerCase()));
   const querySnapshot = await getDocs(q);
   if (querySnapshot.empty) return null;
   return querySnapshot.docs[0].data() as UserProfileType;
@@ -127,6 +127,24 @@ export const getAllKeyboardsFromUser = async (uid: string, view: boolean = false
   if (view) q = query(q, where("status", "==", "public"));
   const querySnapshot = await getDocs(q);
   return querySnapshot.docs.map((doc) => doc.data() as KeyboardType);
+};
+
+export const getKeyboard = async (
+  userID: string,
+  keyboardName: string,
+  view: boolean = false,
+): Promise<KeyboardType | null> => {
+  const keyboardsCollectionRef = collection(db, "keyboards");
+  let q = query(
+    keyboardsCollectionRef,
+    where("uid", "==", userID),
+    where("name", "==", keyboardName),
+    where("visible", "==", true),
+  );
+  if (view) q = query(q, where("status", "==", "public"));
+  const querySnapshot = await getDocs(q);
+  if (querySnapshot.empty) return null;
+  return querySnapshot.docs[0].data() as KeyboardType;
 };
 
 export const deleteKeyboard = async (keyboardID: string, mediaNumber: number) => {
