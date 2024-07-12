@@ -1,4 +1,3 @@
-"use client";
 import ProfileDetails from "@/src/components/ProfileDetails/ProfileDetails";
 import NeedsAuthentication from "@/src/context/NeedsAuthentication";
 import { AddKeyboardButton } from "@/src/components/Keyboard/AddEditKeyboard/AddEditKeyboard";
@@ -13,9 +12,9 @@ const Profile = () => {
         <div className="w-[20rem] p-2">
           <ProfileDetails />
         </div>
-        <div className="space-y-2">
+        <div className="w-[40rem] space-y-2">
           <AddEditKeyboardSelectContextProvider>
-            <div className="mt-2 flex w-[40rem] justify-between">
+            <div className="mt-2 flex justify-between">
               <h1 className="font-regular font-clashgrotesk text-5xl">Profile</h1>
               <AddKeyboardButton />
             </div>

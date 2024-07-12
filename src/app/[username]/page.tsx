@@ -38,8 +38,8 @@ const UserPage = ({ params }: UserPageProps) => {
       <div className="w-[20rem] p-2">
         <ProfileDetails userDetails={user} />
       </div>
-      <div className="space-y-2">
-        <div className="mt-2 flex w-[40rem] justify-between">
+      <div className="w-[40rem] space-y-2">
+        <div className="mt-2 flex justify-between">
           <h1 className="font-regular font-clashgrotesk text-5xl">Profile of {user.displayName}</h1>
         </div>
         <hr className="border-t border-gray-700" />

@@ -1,3 +1,4 @@
+"use client";
 import { AddEditKeyboardModal } from "@/src/components/Keyboard/AddEditKeyboard/AddEditKeyboard";
 import { useAddEditKeyboardSelectContext } from "@/src/context/AddEditKeyboardSelectContext";
 
