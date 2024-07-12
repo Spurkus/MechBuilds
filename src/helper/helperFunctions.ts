@@ -104,3 +104,5 @@ export const truncateString = (str: string, maxLength: number) =>
 
 export const isFileImage = (file: File) => file.type.startsWith("image/");
 export const isFileVideo = (file: File) => file.type.startsWith("video/");
+
+export const formatNamePossessive = (name: string): string => name + (name.endsWith("s") ? "'" : "'s");

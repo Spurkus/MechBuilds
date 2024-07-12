@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { useAuthContext } from "@/src/context/Authentication";
 import { useGlobalModalContext } from "@/src/context/GlobalModal";
-import { Timestamp } from "firebase/firestore";
 import {
   adjustImageURL,
   ensureHttpsLink,
@@ -18,9 +17,19 @@ import Loading from "@/src/components/Loading";
 import Image from "next/image";
 import Link from "next/link";
 import EditProfile from "./EditProfile";
+import { UserProfileType } from "@/src/types/user";
 
-const ProfileBaseDetails = () => {
+interface ProfileProps {
+  userDetails?: UserProfileType;
+}
+
+const ProfileBaseDetails = ({ userDetails }: ProfileProps) => {
   const { username, displayName, pronouns, profilePicture } = useAuthContext();
+  const usernameDetails = userDetails ? userDetails.username : (username as string);
+  const displayNameDetails = userDetails ? userDetails.displayName : (displayName as string);
+  const pronounsDetails = userDetails ? userDetails.pronouns : (pronouns as [string, string]);
+  const profilePictureDetails = userDetails ? userDetails.profilePicture : (profilePicture as string);
+
   const { handleModalError } = useGlobalModalContext();
   const [editProfile, setEditProfile] = useState(false);
 
@@ -35,7 +44,7 @@ const ProfileBaseDetails = () => {
     <div className="flex flex-col space-y-2">
       <div className="avatar mask flex w-full grow self-center">
         <Image
-          src={adjustImageURL(profilePicture, DEFAULT_IMAGE_SIZE)}
+          src={adjustImageURL(profilePictureDetails, DEFAULT_IMAGE_SIZE)}
           alt="Profile"
           className="aspect-square rounded-[2.5rem]"
           width={DEFAULT_IMAGE_SIZE}
@@ -45,39 +54,45 @@ const ProfileBaseDetails = () => {
       </div>
       <div className="flex flex-col">
         <h2 className="username text-left text-2xl font-bold">
-          {displayName}
-          <a className="pl-1 text-lg font-normal text-gray-600">{formatPronouns(pronouns, true)}</a>
+          {displayNameDetails}
+          <a className="pl-1 text-lg font-normal text-gray-600">{formatPronouns(pronounsDetails, true)}</a>
         </h2>
-        <h3 className="font-light text-gray-500">{username}</h3>
+        <h3 className="font-light text-gray-500">{usernameDetails}</h3>
       </div>
-      <button
-        className="btn btn-outline btn-info btn-sm rounded-xl"
-        onClick={() => showModal("editprofilemodal", toggleEditProfile)}
-      >
-        Edit Profile
-      </button>
-      <EditProfile open={editProfile} toggleEditProfile={toggleEditProfile} />
+      {!userDetails && (
+        <>
+          <button
+            className="btn btn-outline btn-info btn-sm rounded-xl"
+            onClick={() => showModal("editprofilemodal", toggleEditProfile)}
+          >
+            Edit Profile
+          </button>
+          <EditProfile open={editProfile} toggleEditProfile={toggleEditProfile} />
+        </>
+      )}
     </div>
   );
 };
 
-const ProfileExtraDetails = () => {
+const ProfileExtraDetails = ({ userDetails }: ProfileProps) => {
   const { userProfile } = useAuthContext();
-  if (!userProfile)
+
+  if (!userProfile && !userDetails)
     return (
       <div className="mt-0.5 flex grow flex-col items-center">
         <Loading />
       </div>
     );
 
+  const userProfileDetails = userDetails ? userDetails : (userProfile as UserProfileType);
   return (
     <div className="flex flex-col space-y-2">
-      {userProfile.bio && <p className="font-light leading-5">{userProfile.bio}</p>}
-      {userProfile.socialLinks.length !== 0 && (
+      {userProfileDetails.bio && <p className="font-light leading-5">{userProfileDetails.bio}</p>}
+      {userProfileDetails.socialLinks.length !== 0 && (
         <div className="flex flex-col space-y-1 font-light">
           <h3 className="font-bold">Social Links</h3>
           <div className="flex flex-col space-y-2">
-            {userProfile.socialLinks.map((link, index) => (
+            {userProfileDetails.socialLinks.map((link, index) => (
               <Link
                 key={index}
                 href={ensureHttpsLink(link)}
@@ -96,18 +111,18 @@ const ProfileExtraDetails = () => {
       )}
       <div className="flex w-full grow flex-col items-center">
         <h3 className="font-bold">User Joined</h3>
-        <span className="text-sm font-bold leading-3 text-gray-500">{formatDate(userProfile.joinedDate)}</span>
+        <span className="text-sm font-bold leading-3 text-gray-500">{formatDate(userProfileDetails.joinedDate)}</span>
       </div>
     </div>
   );
 };
 
-const ProfileDetails = () => {
+const ProfileDetails = ({ userDetails }: ProfileProps) => {
   return (
     <div className="flex w-full flex-col rounded-[3rem] bg-base-300 p-6">
-      <ProfileBaseDetails />
-      <hr className="my-4 border-t border-gray-400" />
-      <ProfileExtraDetails />
+      <ProfileBaseDetails userDetails={userDetails} />
+      <hr className={`border-t border-gray-400 ${userDetails ? "my-2" : "my-3"}`} />
+      <ProfileExtraDetails userDetails={userDetails} />
     </div>
   );
 };

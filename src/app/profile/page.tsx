@@ -2,9 +2,9 @@
 import ProfileDetails from "@/src/components/ProfileDetails/ProfileDetails";
 import NeedsAuthentication from "@/src/context/NeedsAuthentication";
 import { AddKeyboardButton } from "@/src/components/Keyboard/AddEditKeyboard/AddEditKeyboard";
-import DisplayUserKeyboards from "./DisplayUserKeyboards";
 import { AddEditKeyboardSelectContextProvider } from "@/src/context/AddEditKeyboardSelectContext";
 import KeyboardModal from "./KeyboardModal";
+import DisplayUserKeyboards from "@/src/components/Keyboard/DisplayKeyboard/DisplayUserKeyboards";
 
 const Profile = () => {
   return (

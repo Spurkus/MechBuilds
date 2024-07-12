@@ -1,5 +1,5 @@
 import { db } from "@/firebase";
-import { collection, setDoc, doc, updateDoc, query, where, getDocs, deleteDoc } from "firebase/firestore";
+import { collection, setDoc, doc, updateDoc, query, where, getDocs, deleteDoc, orderBy } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import { UserProfileType, EditUserProfileType } from "@/src/types/user";
 import { KeyboardType } from "@/src/types/keyboard";
@@ -45,6 +45,15 @@ export const isUsernameTaken = async (username: string): Promise<boolean> => {
   const q = query(userProfilesCollectionRef, where("username", "==", username));
   const querySnapshot = await getDocs(q);
   return !querySnapshot.empty; // Returns true if the username is taken, false otherwise
+};
+
+export const getUser = async (username: string): Promise<UserProfileType | null> => {
+  if (typeof username === "undefined" || username === "") return null;
+  const userProfilesCollectionRef = collection(db, "userProfiles");
+  const q = query(userProfilesCollectionRef, where("username", "==", username));
+  const querySnapshot = await getDocs(q);
+  if (querySnapshot.empty) return null;
+  return querySnapshot.docs[0].data() as UserProfileType;
 };
 
 export const getDefaultProfilePictureURL = async () => {
@@ -103,9 +112,15 @@ export const editKeyboard = async (keyboardID: string, fieldsToUpdate: Partial<K
   await updateDoc(doc(keyboardsCollectionRef, keyboardID), fieldsToUpdate);
 };
 
-export const getAllKeyboardsFromUser = async (uid: string): Promise<KeyboardType[]> => {
+export const getAllKeyboardsFromUser = async (uid: string, view: boolean = false): Promise<KeyboardType[]> => {
   const keyboardsCollectionRef = collection(db, "keyboards");
-  const q = query(keyboardsCollectionRef, where("uid", "==", uid));
+  let q = query(
+    keyboardsCollectionRef,
+    where("uid", "==", uid),
+    where("visible", "==", true),
+    orderBy("createdAt", "desc"),
+  );
+  if (view) q = query(q, where("status", "==", "public"));
   const querySnapshot = await getDocs(q);
   return querySnapshot.docs.map((doc) => doc.data() as KeyboardType);
 };

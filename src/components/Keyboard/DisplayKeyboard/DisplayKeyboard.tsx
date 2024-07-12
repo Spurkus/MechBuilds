@@ -6,8 +6,14 @@ import { deleteKeyboard } from "@/src/helper/firestoreFunctions";
 import { useGlobalModalContext } from "@/src/context/GlobalModal";
 import { EditKeyboardButton } from "@/src/components/Keyboard/AddEditKeyboard/AddEditKeyboard";
 import DisplayImageVideo from "@/src/components/DisplayImageVideo";
+import { DisplayKeyboardType } from "@/src/types/keyboard";
 
-const DisplayKeyboard = ({ keyboard }: { keyboard: KeyboardType }) => {
+interface DisplayKeyboardProps {
+  keyboard: KeyboardType;
+  type?: DisplayKeyboardType;
+}
+
+const DisplayKeyboard = ({ keyboard, type = "UserProfile" }: DisplayKeyboardProps) => {
   const { handleModal, toggleModal } = useGlobalModalContext();
   const [index, setIndex] = useState(0);
   const [hover, setHover] = useState(false);
@@ -35,15 +41,17 @@ const DisplayKeyboard = ({ keyboard }: { keyboard: KeyboardType }) => {
           {keyboard.name}
         </h2>
         <div className="flex flex-col justify-end">
-          <div className="flex grow justify-end space-x-1.5">
-            <EditKeyboardButton hover={hover} edit={keyboard} />
-            <button
-              className={`btn btn-outline btn-error btn-xs self-end pb-6 ${!hover && "hidden"}`}
-              onClick={() => handleDeleteKeyboard(keyboard.name, keyboard.id, keyboard.media.length)}
-            >
-              <span className="mt-1.5">Delete</span>
-            </button>
-          </div>
+          {type === "UserProfile" && (
+            <div className="flex grow justify-end space-x-1.5">
+              <EditKeyboardButton hover={hover} edit={keyboard} />
+              <button
+                className={`btn btn-outline btn-error btn-xs self-end pb-6 ${!hover && "hidden"}`}
+                onClick={() => handleDeleteKeyboard(keyboard.name, keyboard.id, keyboard.media.length)}
+              >
+                <span className="mt-1.5">Delete</span>
+              </button>
+            </div>
+          )}
           <span className="self-end text-lg font-bold leading-5 text-gray-500">{formatDate(keyboard.createdAt)}</span>
         </div>
       </div>
@@ -53,7 +61,7 @@ const DisplayKeyboard = ({ keyboard }: { keyboard: KeyboardType }) => {
         imageVideoList={keyboard.media}
         isMediaVideo={keyboard.isMediaVideo}
       />
-      <div className="flex w-full flex-row truncate pt-2">
+      <div className="flex w-full flex-row truncate pt-1">
         {keyboard.mods.length > 0 && (
           <div className="flex grow flex-row space-x-2 overflow-x-auto overflow-y-hidden">
             {keyboard.mods.map((mod: string, index: number) => (

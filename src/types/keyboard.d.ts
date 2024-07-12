@@ -32,3 +32,5 @@ export interface KeyboardType {
   status: KeyboardStatusType;
   visible: boolean;
 }
+
+export type DisplayKeyboardType = "UserProfile" | "KeyboardPage" | "ViewUserProfile";
