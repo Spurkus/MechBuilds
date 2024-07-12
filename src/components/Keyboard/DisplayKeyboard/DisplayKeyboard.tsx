@@ -61,8 +61,8 @@ const DisplayKeyboard = ({ keyboard, type = "UserProfile" }: DisplayKeyboardProp
         imageVideoList={keyboard.media}
         isMediaVideo={keyboard.isMediaVideo}
       />
-      <div className="flex w-full flex-row truncate pt-1">
-        {keyboard.mods.length > 0 && (
+      {keyboard.mods.length > 0 && (
+        <div className="flex w-full flex-row truncate pb-[0.075rem] pt-1">
           <div className="flex grow flex-row space-x-2 overflow-x-auto overflow-y-hidden">
             {keyboard.mods.map((mod: string, index: number) => (
               <div key={index} className="badge badge-neutral badge-lg space-x-1 py-3">
@@ -70,8 +70,8 @@ const DisplayKeyboard = ({ keyboard, type = "UserProfile" }: DisplayKeyboardProp
               </div>
             ))}
           </div>
-        )}
-      </div>
+        </div>
+      )}
       <div className="mx-1.5 flex grow flex-wrap justify-between gap-1 pt-2">
         {keyboard.kit.length === 0 ? (
           <div className="flex flex-col">
