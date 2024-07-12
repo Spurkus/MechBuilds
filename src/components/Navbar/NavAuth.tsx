@@ -57,7 +57,7 @@ const NavProfileMenu = ({ profilePicture = null, displayName = null }: NavProfil
 
   return (
     <div className="dropdown dropdown-end">
-      <div tabIndex={0} role="button" className="btn w-full grow rounded-xl px-3 text-base">
+      <div tabIndex={0} role="button" className="btn w-full grow rounded-xl px-2 text-base">
         <div className="avatar mask flex h-9 w-9">
           <Image
             src={adjustImageURL(profile, 300)}
