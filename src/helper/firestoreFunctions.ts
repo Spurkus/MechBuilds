@@ -69,6 +69,10 @@ export const getDefaultKeyboardImage = async () => {
 };
 
 export const isKeyboardNameTaken = async (uid: string, keyboardName: string): Promise<boolean> => {
+  // Name cannot be pages
+  if (["", "explore", "about", "profile", "settings"].includes(keyboardName)) return false;
+
+  // Check if name is taken
   const keyboardsCollectionRef = collection(db, "keyboards");
   const q = query(keyboardsCollectionRef, where("uid", "==", uid), where("name", "==", keyboardName));
   const querySnapshot = await getDocs(q);
