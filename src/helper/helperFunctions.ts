@@ -22,7 +22,7 @@ export const formatPronouns = (pronouns: [string, string] | null, includeParenth
   return includeParentheses ? `(${formattedPronouns})` : formattedPronouns;
 };
 
-export const formatSocialLink = (link: string) => {
+export const formatLink = (link: string) => {
   return link.replace(/^(https?:\/\/)?(www\.)?/, "");
 };
 

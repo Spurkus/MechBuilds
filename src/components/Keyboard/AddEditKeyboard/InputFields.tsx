@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAddEditKeyboardContext } from "@/src/context/AddEditKeyboardContext";
 import { useGlobalThemeContext } from "@/src/context/GlobalTheme";
-import { formatSocialLink, closeDropdown } from "@/src/helper/helperFunctions";
+import { formatLink, closeDropdown } from "@/src/helper/helperFunctions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLink } from "@fortawesome/free-solid-svg-icons";
 import Loading from "@/src/components/Loading";
@@ -272,7 +272,7 @@ export const InputNameLinkField = ({
           onFocus={() => setLinkFocused(true)}
           onBlur={() => setLinkFocused(false)}
           onChange={linkChange}
-          value={linkFocused ? link : formatSocialLink(link)}
+          value={linkFocused ? link : formatLink(link)}
         />
       ) : dropdown ? (
         <InputNameDropdownField

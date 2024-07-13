@@ -7,7 +7,7 @@ import {
   ensureHttpsLink,
   formatDate,
   formatPronouns,
-  formatSocialLink,
+  formatLink,
   showModal,
 } from "@/src/helper/helperFunctions";
 import { DEFAULT_IMAGE_SIZE } from "@/src/constants";
@@ -102,7 +102,7 @@ const ProfileExtraDetails = ({ userDetails }: ProfileProps) => {
               >
                 <div className="flex flex-row space-x-1">
                   <FontAwesomeIcon icon={faLink} className="mt-2" />
-                  <p className="max-w-[11rem] truncate py-2">{formatSocialLink(link)}</p>
+                  <p className="max-w-[11rem] truncate py-2">{formatLink(link)}</p>
                 </div>
               </Link>
             ))}

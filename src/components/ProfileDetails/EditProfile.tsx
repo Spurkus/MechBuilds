@@ -1,7 +1,7 @@
 import Loading from "@/src/components/Loading";
 import NextImage from "next/image";
 import { useState } from "react";
-import { formatSocialLink, closeDropdown } from "@/src/helper/helperFunctions";
+import { formatLink, closeDropdown } from "@/src/helper/helperFunctions";
 import { useAuthContext } from "@/src/context/Authentication";
 import { DEFAULT_IMAGE_SIZE, DEFAULT_PRONOUNS } from "@/src/constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -89,7 +89,7 @@ const SocialLinksField = () => {
             onFocus={() => setSocialLinkOneFocused(true)}
             onBlur={() => setSocialLinkOneFocused(false)}
             onChange={(e) => setSocialLinkOne(e.target.value)}
-            value={isSocialLinkOneFocused ? socialLinkOne : formatSocialLink(socialLinkOne)}
+            value={isSocialLinkOneFocused ? socialLinkOne : formatLink(socialLinkOne)}
           />
         </div>
         <div className="flex flex-row space-x-1.5">
@@ -106,7 +106,7 @@ const SocialLinksField = () => {
             onFocus={() => setSocialLinkTwoFocused(true)}
             onBlur={() => setSocialLinkTwoFocused(false)}
             onChange={(e) => setSocialLinkTwo(e.target.value)}
-            value={isSocialLinkTwoFocused ? socialLinkTwo : formatSocialLink(socialLinkTwo)}
+            value={isSocialLinkTwoFocused ? socialLinkTwo : formatLink(socialLinkTwo)}
           />
         </div>
         <div className="flex flex-row space-x-1.5">
@@ -123,7 +123,7 @@ const SocialLinksField = () => {
             onFocus={() => setSocialLinkThreeFocused(true)}
             onBlur={() => setSocialLinkThreeFocused(false)}
             onChange={(e) => setSocialLinkThree(e.target.value)}
-            value={isSocialLinkThreeFocused ? socialLinkThree : formatSocialLink(socialLinkThree)}
+            value={isSocialLinkThreeFocused ? socialLinkThree : formatLink(socialLinkThree)}
           />
         </div>
       </div>
