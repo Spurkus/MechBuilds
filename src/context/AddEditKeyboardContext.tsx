@@ -752,6 +752,7 @@ export const AddEditKeyboardContextProvider = ({
     setDefault();
   }, [open, setDefault, edit]);
 
+  // Show modal when opening or closing
   useEffect(() => {
     const modalAction = open ? showModal : closeModal;
     modalAction("addeditkeyboardmodal");
