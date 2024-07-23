@@ -738,9 +738,7 @@ export const AddEditKeyboardContextProvider = ({
   // Handle escape key
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape" && open) {
-        handleCancel();
-      }
+      if (event.key === "Escape" && open) handleCancel();
     };
 
     document.addEventListener("keydown", handleKeyDown); // Add event listener
