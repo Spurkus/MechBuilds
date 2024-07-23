@@ -12,7 +12,7 @@ import {
 } from "@/src/helper/cookiesFunctions";
 import { GlobalThemeContextProvider } from "@/src/context/GlobalTheme";
 import Navbar from "@/src/components/Navbar/Navbar";
-import Footer from "@/src/components/Footer";
+import Footer from "@/src/components/General/Footer";
 import { GlobalModalContextProvider } from "@/src/context/GlobalModal";
 import { AuthContextProvider } from "@/src/context/Authentication";
 

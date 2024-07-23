@@ -5,7 +5,7 @@ import { formatDate, truncateString } from "@/src/helper/helperFunctions";
 import { deleteKeyboard } from "@/src/helper/firestoreFunctions";
 import { useGlobalModalContext } from "@/src/context/GlobalModal";
 import { EditKeyboardButton } from "@/src/components/Keyboard/AddEditKeyboard/AddEditKeyboard";
-import DisplayImageVideo from "@/src/components/DisplayImageVideo";
+import DisplayImageVideo from "@/src/components/General/DisplayImageVideo";
 import { DisplayKeyboardType } from "@/src/types/keyboard";
 import Link from "next/link";
 

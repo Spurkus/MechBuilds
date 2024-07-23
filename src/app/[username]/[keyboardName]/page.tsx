@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { UserProfileType } from "@/src/types/user";
 import { ItemType, KeyboardType } from "@/src/types/keyboard";
-import Loading from "@/src/components/Loading";
+import Loading from "@/src/components/General/Loading";
 import { getUser, getKeyboard } from "@/src/helper/firestoreFunctions";
 import {
   formatNameForURL,
@@ -13,7 +13,7 @@ import {
 } from "@/src/helper/helperFunctions";
 import NotFound from "@/src/app/not-found";
 import { useAuthContext } from "@/src/context/Authentication";
-import DisplayImageVideo from "@/src/components/DisplayImageVideo";
+import DisplayImageVideo from "@/src/components/General/DisplayImageVideo";
 import ProfileKeyboardDetails from "@/src/components/ProfileDetails/ProfileKeyboardDetails";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLink } from "@fortawesome/free-solid-svg-icons";

@@ -3,7 +3,7 @@ import { createContext, useState, useContext } from "react";
 import { showModal, closeModal } from "@/src/helper/helperFunctions";
 import { ModalButtonType, ModalThemeType } from "@/src/types/globalModal";
 import { DEFAULT_MODAL_TEXT, DEFAULT_MODAL_THEME, DEFAULT_MODAL_BUTTONS } from "@/src/constants";
-import Modal from "@/src/components/Modal";
+import Modal from "@/src/components/General/Modal";
 
 export interface GlobalModalType {
   modalOpen: boolean;

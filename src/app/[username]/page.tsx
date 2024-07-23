@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { UserProfileType } from "@/src/types/user";
-import Loading from "@/src/components/Loading";
+import Loading from "@/src/components/General/Loading";
 import { getUser } from "@/src/helper/firestoreFunctions";
 import NotFound from "@/src/app/not-found";
 import ProfileDetails from "@/src/components/ProfileDetails/ProfileDetails";

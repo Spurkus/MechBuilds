@@ -1,5 +1,5 @@
 "use client";
-import Loading from "@/src/components/Loading";
+import Loading from "@/src/components/General/Loading";
 import { AddEditKeyboardContextProvider, useAddEditKeyboardContext } from "@/src/context/AddEditKeyboardContext";
 import { showModal } from "@/src/helper/helperFunctions";
 import { useMemo } from "react";

@@ -9,7 +9,7 @@ import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import SealSpinning from "@/src/public/images/Seal Spinning.gif";
-import Loading from "@/src/components/Loading";
+import Loading from "@/src/components/General/Loading";
 import DisplayKeyboard from "@/src/components/Keyboard/DisplayKeyboard/DisplayKeyboard";
 
 interface DisplayUserKeyboardsProps {

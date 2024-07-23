@@ -2,7 +2,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useAuthContext } from "@/src/context/Authentication";
-import Loading from "@/src/components/Loading";
+import Loading from "@/src/components/General/Loading";
 
 export interface NeedsAuthenticationProps {
   children: React.ReactNode;

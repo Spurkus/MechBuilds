@@ -1,5 +1,5 @@
 import { useAddEditKeyboardContext } from "@/src/context/AddEditKeyboardContext";
-import SubmitImageVideo from "@/src/components/SubmitImageVideo";
+import SubmitImageVideo from "@/src/components/General/SubmitImageVideo";
 
 const KeyboardContent = () => {
   const {

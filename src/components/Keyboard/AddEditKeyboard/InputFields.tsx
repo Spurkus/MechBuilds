@@ -4,7 +4,7 @@ import { useGlobalThemeContext } from "@/src/context/GlobalTheme";
 import { formatLink, closeDropdown } from "@/src/helper/helperFunctions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLink } from "@fortawesome/free-solid-svg-icons";
-import Loading from "@/src/components/Loading";
+import Loading from "@/src/components/General/Loading";
 
 interface CheckBoxFieldProps {
   name: string;

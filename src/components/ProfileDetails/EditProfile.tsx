@@ -1,4 +1,4 @@
-import Loading from "@/src/components/Loading";
+import Loading from "@/src/components/General/Loading";
 import NextImage from "next/image";
 import { useState } from "react";
 import { formatLink, closeDropdown } from "@/src/helper/helperFunctions";

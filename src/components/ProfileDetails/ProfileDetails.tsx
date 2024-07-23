@@ -13,7 +13,7 @@ import {
 import { DEFAULT_IMAGE_SIZE } from "@/src/constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLink } from "@fortawesome/free-solid-svg-icons";
-import Loading from "@/src/components/Loading";
+import Loading from "@/src/components/General/Loading";
 import Image from "next/image";
 import Link from "next/link";
 import EditProfile from "./EditProfile";

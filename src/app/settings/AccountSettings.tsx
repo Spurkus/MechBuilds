@@ -3,7 +3,7 @@ import useInputValidator from "@/src/hooks/useInputValidator";
 import { useState, useRef, useCallback } from "react";
 import { USERNAME_REGEX } from "@/src/constants";
 import { UserProfileType, EditUserProfileType } from "@/src/types/user";
-import Loading from "@/src/components/Loading";
+import Loading from "@/src/components/General/Loading";
 import { isUsernameTaken, editUserProfile } from "@/src/helper/firestoreFunctions";
 import { showModal } from "@/src/helper/helperFunctions";
 import { useGlobalModalContext } from "@/src/context/GlobalModal";
@@ -19,11 +19,7 @@ interface ChangeUsernameFormProps {
   editUserProfileState: (newUserProfile: EditUserProfileType) => void;
 }
 
-const ChangeUsernameForm = ({
-  toggleChangeUsername,
-  userProfile,
-  editUserProfileState,
-}: ChangeUsernameFormProps) => {
+const ChangeUsernameForm = ({ toggleChangeUsername, userProfile, editUserProfileState }: ChangeUsernameFormProps) => {
   const { handleModalError } = useGlobalModalContext();
   const [usernameTaken, setUsernameTaken] = useState(false);
   const [usernameLoading, setUsernameLoading] = useState(false);
@@ -69,10 +65,7 @@ const ChangeUsernameForm = ({
     [userProfile.username, handleModalError],
   );
 
-  const [username, setUsername, validUsername] = useInputValidator(
-    userProfile.username,
-    usernameValidity,
-  );
+  const [username, setUsername, validUsername] = useInputValidator(userProfile.username, usernameValidity);
 
   const closeProfileModal = () => {
     const element = document.getElementById("changeusernamemodal");
@@ -121,9 +114,7 @@ const ChangeUsernameForm = ({
         Your username must be unique and can only contain lowercase letters
       </span>
       {usernameTaken && (
-        <span className="mt-1 text-center text-sm font-semibold text-error">
-          Username already taken
-        </span>
+        <span className="mt-1 text-center text-sm font-semibold text-error">Username already taken</span>
       )}
       <div className={`form-control ${usernameTaken ? "mt-1" : "mt-2"}`}>
         <label
@@ -147,10 +138,7 @@ const ChangeUsernameForm = ({
           <button className="btn btn-neutral btn-sm" onClick={handleCancel}>
             cancel
           </button>
-          <button
-            className={`btn btn-success btn-sm ${isSavable ? "" : "btn-disabled"}`}
-            onClick={handleSave}
-          >
+          <button className={`btn btn-success btn-sm ${isSavable ? "" : "btn-disabled"}`} onClick={handleSave}>
             save profile
           </button>
         </div>
@@ -211,8 +199,8 @@ const DeleteAccount = () => {
   return (
     <div className="flex flex-col space-y-2">
       <span>
-        If you delete your account, it <span className="font-bold">cannot</span> be recovered. All
-        your information will be deleted.
+        If you delete your account, it <span className="font-bold">cannot</span> be recovered. All your information will
+        be deleted.
       </span>
       <button className="btn btn-outline btn-error btn-sm self-start rounded-xl pb-10">
         <span className="mt-[0.6rem] text-sm">Delete Account</span>
