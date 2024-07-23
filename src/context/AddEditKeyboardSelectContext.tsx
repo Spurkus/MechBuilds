@@ -1,6 +1,8 @@
 "use client";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { showModal } from "@/src/helper/helperFunctions";
 import { KeyboardType } from "@/src/types/keyboard";
+import { useSearchParams } from "next/navigation";
 
 interface AddEditKeyboardSelectContextType {
   addEditKeyboardModalOpen: boolean;
@@ -16,7 +18,9 @@ interface AddEditKeyboardSelectProviderProps {
 const AddEditKeyboardSelectContext = createContext<AddEditKeyboardSelectContextType | null>(null);
 
 export const AddEditKeyboardSelectContextProvider = ({ children }: AddEditKeyboardSelectProviderProps) => {
-  const [addEditKeyboardModalOpen, setAddEditKeyboardModalOpen] = useState(false);
+  const searchParams = useSearchParams();
+  const addKeyboard = searchParams.get("add") === "true";
+  const [addEditKeyboardModalOpen, setAddEditKeyboardModalOpen] = useState(addKeyboard);
   const [edit, setEdit] = useState<KeyboardType | undefined>(undefined);
 
   return (

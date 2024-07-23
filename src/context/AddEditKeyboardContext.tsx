@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useMemo, createContext, useContext, useCallback, useRef } from "react";
 import { ItemType, KeyboardStatusType, KeyboardType, KitType } from "@/src/types/keyboard";
-import { linkValidation, closeModal, triggerConfetti } from "@/src/helper/helperFunctions";
+import { linkValidation, closeModal, triggerConfetti, showModal } from "@/src/helper/helperFunctions";
 import {
   KEYBOARD_NAME_REGEX,
   KEYBOARD_DESCRIPTION_REGEX,
@@ -607,7 +607,6 @@ export const AddEditKeyboardContextProvider = ({
   const discardAndClose = useCallback(
     (globalModal?: boolean) => {
       if (globalModal) toggleModal();
-      closeModal("addeditkeyboardmodal");
       toggleAddEditKeyboard();
       setEdit(undefined);
     },
@@ -730,7 +729,6 @@ export const AddEditKeyboardContextProvider = ({
     } catch (error: any) {
       handleModalError(error);
     } finally {
-      closeModal("addeditkeyboardmodal");
       toggleAddEditKeyboard();
       setEdit(undefined);
       setLoading(false);
@@ -749,9 +747,15 @@ export const AddEditKeyboardContextProvider = ({
     return () => document.removeEventListener("keydown", handleKeyDown); // Remove on cleanup
   }, [handleCancel, open]);
 
+  // Set default states when opening or closing modal
   useEffect(() => {
     setDefault();
   }, [open, setDefault, edit]);
+
+  useEffect(() => {
+    const modalAction = open ? showModal : closeModal;
+    modalAction("addeditkeyboardmodal");
+  }, [open]);
 
   return (
     <AddEditKeyboardContext.Provider

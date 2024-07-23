@@ -29,9 +29,8 @@ export const EditKeyboardButton = ({
 }: EditKeyboardButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement>) => {
   const { setAddEditKeyboardModalOpen, setEdit } = useAddEditKeyboardSelectContext();
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    if (rest.onClick) rest.onClick(event);
+    if (rest.onClick) rest.onClick(event); // Call the onClick event if it exists
     setEdit(edit);
-    showModal("addeditkeyboardmodal");
     setAddEditKeyboardModalOpen(true);
   };
   return (
@@ -49,7 +48,6 @@ export const AddKeyboardButton = () => {
   const { setAddEditKeyboardModalOpen, setEdit } = useAddEditKeyboardSelectContext();
   const handleClick = () => {
     setEdit(undefined);
-    showModal("addeditkeyboardmodal");
     setAddEditKeyboardModalOpen(true);
   };
   return (
@@ -155,7 +153,7 @@ const AddEditKeyboardForm = () => {
 export const AddEditKeyboardModal = ({ open, setAddEditKeyboard, edit, setEdit }: AddEditKeyboardModalProps) => {
   const toggleAddEditKeyboard = () => setAddEditKeyboard(!open);
   return (
-    <dialog id="addeditkeyboardmodal" className="modal modal-middle" open={open}>
+    <dialog id="addeditkeyboardmodal" className="modal modal-middle">
       <div className="modal-box flex w-[36rem] max-w-none flex-col bg-base-200 pb-4 pt-4">
         <AddEditKeyboardContextProvider
           toggleAddEditKeyboard={toggleAddEditKeyboard}
