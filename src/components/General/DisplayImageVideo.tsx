@@ -13,6 +13,8 @@ interface DisplayImageVideoProps {
 }
 
 const DisplayImageVideo = ({ index, setIndex, imageVideoList, isMediaVideo }: DisplayImageVideoProps) => {
+  const buttonStyle: React.CSSProperties = { top: "calc(50% - 0.75rem)" };
+
   const firstIndex = useMemo(() => index === 0, [index]);
   const lastIndex = useMemo(() => index === imageVideoList.length - 1, [index, imageVideoList]);
   const isCurrentMediaVideo = useMemo(() => isMediaVideo[index], [isMediaVideo, index]);
@@ -30,10 +32,11 @@ const DisplayImageVideo = ({ index, setIndex, imageVideoList, isMediaVideo }: Di
   };
 
   return (
-    <div className="avatar mask flex w-full self-center py-1">
+    <div className="avatar mask my-1 flex w-full self-center">
       {!firstIndex && (
         <button
-          className="btn btn-circle btn-sm absolute left-3 top-[50%] z-20 flex rounded-2xl border-0 bg-gray-800 bg-opacity-60 hover:bg-gray-800 hover:bg-opacity-75"
+          style={buttonStyle}
+          className="btn btn-circle btn-sm absolute left-3 z-20 flex rounded-2xl border-0 bg-gray-800 bg-opacity-60 hover:bg-gray-800 hover:bg-opacity-75"
           onClick={moveLeft}
         >
           <FontAwesomeIcon icon={faChevronLeft} className="h-5 w-5 text-white" />
@@ -41,7 +44,8 @@ const DisplayImageVideo = ({ index, setIndex, imageVideoList, isMediaVideo }: Di
       )}
       {!lastIndex && (
         <button
-          className="btn btn-circle btn-sm absolute right-3 top-[50%] z-20 flex rounded-2xl border-0 bg-gray-800 bg-opacity-60 hover:bg-gray-800 hover:bg-opacity-75"
+          style={buttonStyle}
+          className="btn btn-circle btn-sm absolute right-3 z-20 flex rounded-2xl border-0 bg-gray-800 bg-opacity-60 hover:bg-gray-800 hover:bg-opacity-75"
           onClick={moveRight}
         >
           <FontAwesomeIcon icon={faChevronRight} className="h-5 w-5 text-white" />
