@@ -7,3 +7,20 @@
     text-wrap: balance;
   }
 }
+
+.collapse-title, .collapse-content {
+  transition: padding 0.3s ease, background-color 0.6s ease;
+}
+
+.collapse[open] > :where(.collapse-content), 
+.collapse-open > :where(.collapse-content), 
+.collapse:focus:not(.collapse-close) > :where(.collapse-content), 
+.collapse:not(.collapse-close) > :where(input[type="checkbox"]:checked ~ .collapse-content), 
+.collapse:not(.collapse-close) > :where(input[type="radio"]:checked ~ .collapse-content) {
+  padding-bottom: 0.3rem;
+  transition: background-color 0.6s ease;
+}
+
+.collapse-transition {
+  transition: margin 0.3s ease;
+}
