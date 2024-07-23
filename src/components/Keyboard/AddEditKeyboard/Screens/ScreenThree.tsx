@@ -1,6 +1,6 @@
-import SwitchesField from "../SwitchesField";
-import StabilizersField from "../StabilizersField";
-import KeycapsField from "../KeycapsField";
+import SwitchesField from "../Fields/SwitchesField";
+import StabilizersField from "../Fields/StabilizersField";
+import KeycapsField from "../Fields/KeycapsField";
 
 const ScreenThree = () => {
   return (

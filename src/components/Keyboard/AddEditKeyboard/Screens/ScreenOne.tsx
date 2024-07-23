@@ -1,5 +1,5 @@
-import NameField from "../NameField";
-import KeyboardContent from "../KeyboardContent";
+import NameField from "../Fields/NameField";
+import KeyboardContent from "../Fields/KeyboardContent";
 
 const ScreenOne = () => {
   return (

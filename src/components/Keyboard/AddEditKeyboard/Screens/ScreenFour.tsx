@@ -1,6 +1,6 @@
-import ModsField from "../ModsField";
-import DescriptionField from "../DescriptionField";
-import StatusField from "../StatusField";
+import ModsField from "../Fields/ModsField";
+import DescriptionField from "../Fields/DescriptionField";
+import StatusField from "../Fields/StatusField";
 
 const ScreenFour = () => {
   return (

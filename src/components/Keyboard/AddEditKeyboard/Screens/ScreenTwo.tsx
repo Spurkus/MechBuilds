@@ -1,8 +1,8 @@
-import KitField from "../KitField";
-import SizeField from "../SizeField";
-import PlateField from "../PlateField";
-import CaseField from "../CaseField";
-import PcbField from "../PcbField";
+import KitField from "../Fields/KitField";
+import SizeField from "../Fields/SizeField";
+import PlateField from "../Fields/PlateField";
+import CaseField from "../Fields/CaseField";
+import PcbField from "../Fields/PcbField";
 
 const ScreenTwo = () => {
   return (
