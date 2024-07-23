@@ -10,7 +10,7 @@ interface ProfileProps {
 
 const ProfileKeyboardDetails = ({ userProfile }: ProfileProps) => {
   return (
-    <div className="btn h-[6.5rem] w-fit rounded-2xl bg-base-300 p-3 hover:border-base-200 hover:bg-base-200">
+    <div className="btn h-[6.5rem] w-fit rounded-2xl border-0 bg-base-300 p-3 hover:bg-base-200">
       <Link href={`/${userProfile.username}`} className="flex flex-row">
         <Image
           src={adjustImageURL(userProfile.profilePicture, 300)}
