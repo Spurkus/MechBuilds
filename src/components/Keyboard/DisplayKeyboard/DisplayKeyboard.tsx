@@ -52,7 +52,13 @@ const DisplayKeyboard = ({ username, keyboard, type = "UserProfile" }: DisplayKe
           <div className="flex flex-col justify-end">
             {type === "UserProfile" && (
               <div className="flex grow justify-end space-x-1.5">
-                <EditKeyboardButton hover={hover} edit={keyboard} onClick={(e) => e.preventDefault()} />
+                <EditKeyboardButton
+                  className="pb-6"
+                  textClassName="mt-1.5"
+                  hover={hover}
+                  edit={keyboard}
+                  onClick={(e) => e.preventDefault()}
+                />
                 <button
                   className={`btn btn-outline btn-error btn-xs self-end pb-6 ${!hover && "hidden"}`}
                   onClick={(event) => handleDeleteKeyboard(event, keyboard.name, keyboard.id, keyboard.media.length)}

@@ -20,11 +20,15 @@ interface AddEditKeyboardModalProps {
 interface EditKeyboardButtonProps {
   hover: boolean;
   edit: KeyboardType;
+  textClassName?: string;
+  text?: string;
 }
 
 export const EditKeyboardButton = ({
   hover,
   edit,
+  textClassName = "",
+  text = "Edit Keyboard",
   ...rest
 }: EditKeyboardButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement>) => {
   const { setAddEditKeyboardModalOpen, setEdit } = useAddEditKeyboardSelectContext();
@@ -36,10 +40,10 @@ export const EditKeyboardButton = ({
   return (
     <button
       {...rest}
-      className={`${rest.className} btn btn-outline btn-info btn-xs self-end pb-6 ${!hover && "hidden"} ${rest.className || ""}`}
+      className={`${rest.className} btn btn-outline btn-info btn-xs self-end ${!hover && "hidden"} ${rest.className || ""}`}
       onClick={handleClick}
     >
-      <span className="mt-1.5">Edit Keyboard</span>
+      <span className={textClassName}>{text}</span>
     </button>
   );
 };
