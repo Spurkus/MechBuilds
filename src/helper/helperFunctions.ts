@@ -108,3 +108,5 @@ export const isFileVideo = (file: File) => file.type.startsWith("video/");
 export const formatNamePossessive = (name: string): string => name + (name.endsWith("s") ? "'" : "'s");
 
 export const formatNameForURL = (keyboardName: string) => keyboardName.replace("%20", " ");
+
+export const capitalizeFirstLetter = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
