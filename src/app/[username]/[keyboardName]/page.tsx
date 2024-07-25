@@ -10,14 +10,15 @@ import {
   capitalizeFirstLetter,
   formatLink,
   truncateString,
+  ensureHttpsLink,
 } from "@/src/helper/helperFunctions";
+import Link from "next/link";
 import NotFound from "@/src/app/not-found";
 import { useAuthContext } from "@/src/context/Authentication";
 import DisplayImageVideo from "@/src/components/General/DisplayImageVideo";
 import ProfileKeyboardDetails from "@/src/components/ProfileDetails/ProfileKeyboardDetails";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLink } from "@fortawesome/free-solid-svg-icons";
-import type { JSX } from "react";
 
 interface KeyboardPageProps {
   params: {
@@ -66,12 +67,19 @@ const NameLinkCollapse = ({ keyboardElement, extra, name, link, big = true, inde
       </div>
       <div className="collapse-content p-0 peer-checked:bg-base-200">
         {link && (
-          <div className="ml-3 flex flex-row">
-            <FontAwesomeIcon icon={faLink} className="h-3.5 w-3.5 rotate-90 text-gray-500" />
-            <p className="link ml-1 truncate pb-2 text-sm leading-[0.6rem] text-gray-500">
-              {truncateString(formatLink(link), 36)}
-            </p>
-          </div>
+          <Link
+            href={ensureHttpsLink(link)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-outline btn-sm justify-start rounded-xl"
+          >
+            <div className="ml-3 flex flex-row">
+              <FontAwesomeIcon icon={faLink} className="h-3.5 w-3.5 rotate-90 text-gray-500" />
+              <p className="link ml-1 truncate pb-2 text-sm leading-[0.6rem] text-gray-500">
+                {truncateString(formatLink(link), 36)}
+              </p>
+            </div>
+          </Link>
         )}
       </div>
     </div>
