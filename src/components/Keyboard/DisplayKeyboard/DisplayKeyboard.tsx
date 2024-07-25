@@ -39,7 +39,7 @@ const DisplayKeyboard = ({ username, keyboard, type = "UserProfile" }: DisplayKe
   };
 
   return (
-    <Link href={`/${username}/${keyboard.name}`}>
+    <Link href={`/${username}/${keyboard.name}`} target="_blank" rel="noopener noreferrer">
       <div
         className="flex w-[40rem] grow flex-col rounded-[1.2rem] px-4 pb-1.5 hover:bg-base-300"
         onMouseEnter={() => setHover(true)}

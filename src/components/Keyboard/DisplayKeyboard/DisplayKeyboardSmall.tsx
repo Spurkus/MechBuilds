@@ -39,7 +39,7 @@ const DisplayKeyboardSmall = ({ username, keyboard, type = "UserProfile" }: Disp
   };
 
   return (
-    <Link href={`/${username}/${keyboard.name}`}>
+    <Link href={`/${username}/${keyboard.name}`} target="_blank" rel="noopener noreferrer">
       <div
         className="flex w-[15rem] grow flex-col rounded-[1.2rem] px-4 pb-2 hover:bg-base-300"
         onMouseEnter={() => setHover(true)}
