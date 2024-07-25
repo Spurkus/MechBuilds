@@ -84,7 +84,7 @@ const NameLinkCollapse = ({ keyboardElement, extra, name, link, big = true, inde
       </div>
     </div>
   ) : (
-    <div>
+    <div className={big ? "ml-1.5" : ""}>
       {big && (
         <p className={`truncate ${big ? "text-2xl font-bold leading-6" : "mt-2 text-xl font-medium leading-5"}`}>
           {keyboardElement}
