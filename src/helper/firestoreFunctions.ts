@@ -148,7 +148,7 @@ export const getKeyboard = async (
 };
 
 export const deleteKeyboard = async (keyboardID: string, mediaNumber: number) => {
-  // Delete keyboard content
+  // Delete keyboard
   const keyboardsCollectionRef = collection(db, "keyboards");
   await deleteDoc(doc(keyboardsCollectionRef, keyboardID));
 
@@ -157,4 +157,23 @@ export const deleteKeyboard = async (keyboardID: string, mediaNumber: number) =>
   for (let i = 0; i < mediaNumber; i++) {
     await deleteKeyboardContent(`${keyboardID}_${i}`);
   }
+};
+
+export const deleteUser = async (uid: string) => {
+  const userProfilesCollectionRef = collection(db, "userProfiles");
+  const q = query(userProfilesCollectionRef, where("uid", "==", uid));
+  const querySnapshot = await getDocs(q);
+  if (!querySnapshot.empty) await deleteDoc(querySnapshot.docs[0].ref);
+};
+
+export const deleteUserAndUserKeyboard = async (uid: string) => {
+  await deleteUser(uid); // Delete user profile
+
+  // Delete user keyboards
+  const keyboardsCollectionRef = collection(db, "keyboards");
+  const keyboardQuery = query(keyboardsCollectionRef, where("uid", "==", uid));
+  const keyboardQuerySnapshot = await getDocs(keyboardQuery);
+  keyboardQuerySnapshot.docs.forEach(async (doc) => {
+    await deleteKeyboard(doc.id, (doc.data() as KeyboardType).media.length);
+  });
 };

@@ -4,9 +4,11 @@ import { useState, useRef, useCallback } from "react";
 import { USERNAME_REGEX } from "@/src/constants";
 import { UserProfileType, EditUserProfileType } from "@/src/types/user";
 import Loading from "@/src/components/General/Loading";
-import { isUsernameTaken, editUserProfile } from "@/src/helper/firestoreFunctions";
-import { showModal } from "@/src/helper/helperFunctions";
+import { isUsernameTaken, editUserProfile, deleteUserAndUserKeyboard } from "@/src/helper/firestoreFunctions";
+import { closeModal, showModal } from "@/src/helper/helperFunctions";
 import { useGlobalModalContext } from "@/src/context/GlobalModal";
+import { InputNameField } from "@/src/components/Keyboard/AddEditKeyboard/Fields/InputFields";
+import { useRouter } from "next/navigation";
 
 interface ChangeUsernameModalProps {
   open: boolean;
@@ -17,6 +19,16 @@ interface ChangeUsernameFormProps {
   toggleChangeUsername: () => void;
   userProfile: UserProfileType;
   editUserProfileState: (newUserProfile: EditUserProfileType) => void;
+}
+
+interface DeleteAccountModalProps {
+  open: boolean;
+  toggleDeleteAccount: () => void;
+}
+
+interface DeleteAccountFormProps {
+  toggleDeleteAccount: () => void;
+  username: string;
 }
 
 const ChangeUsernameForm = ({ toggleChangeUsername, userProfile, editUserProfileState }: ChangeUsernameFormProps) => {
@@ -67,17 +79,9 @@ const ChangeUsernameForm = ({ toggleChangeUsername, userProfile, editUserProfile
 
   const [username, setUsername, validUsername] = useInputValidator(userProfile.username, usernameValidity);
 
-  const closeProfileModal = () => {
-    const element = document.getElementById("changeusernamemodal");
-    if (element instanceof HTMLDialogElement) {
-      element.close();
-      toggleChangeUsername();
-    }
-  };
-
   const handleCancel = () => {
     setUsername(userProfile.username);
-    closeProfileModal();
+    closeModal("changeusernamemodal", toggleChangeUsername);
   };
 
   const handleSave = async () => {
@@ -94,7 +98,7 @@ const ChangeUsernameForm = ({ toggleChangeUsername, userProfile, editUserProfile
     } finally {
       setTimeout(() => {
         setSaveLoading(false);
-        closeProfileModal();
+        closeModal("changeusernamemodal", toggleChangeUsername);
       }, 1500);
     }
   };
@@ -195,16 +199,89 @@ const PremiumAccount = () => {
   );
 };
 
+const DeleteAccountForm = ({ toggleDeleteAccount, username }: DeleteAccountFormProps) => {
+  const router = useRouter();
+  const { logout, userProfile } = useAuthContext();
+  const [usernameInput, setUsernameInput, validUsernameInput] = useInputValidator("", (name) => name === username);
+
+  const handleCancel = () => {
+    setUsernameInput("");
+    closeModal("deleteaccountmodal", toggleDeleteAccount);
+  };
+
+  const handleDelete = async () => {
+    if (!validUsernameInput) return;
+    if (!userProfile) return;
+    await deleteUserAndUserKeyboard(userProfile.uid).then(async () => {
+      await logout();
+      router.push("/");
+    });
+  };
+
+  return (
+    <div className="flex w-full flex-grow flex-col">
+      <h2 className="text-center font-clashgrotesk text-2xl font-medium">Delete Account</h2>
+      <span className="text-sm leading-4">
+        If you delete your account, it <span className="font-bold">cannot</span> be recovered.
+      </span>
+      <span className="mt-1 text-sm leading-4">
+        If you do wish to delete you account, please enter your username below and click the delete button.
+      </span>
+      <div className="form-control mt-2">
+        <InputNameField
+          type="usernamedelete"
+          validName={validUsernameInput}
+          name={usernameInput}
+          nameChange={(e) => setUsernameInput(e.target.value)}
+          namePlaceholder="Username"
+          nameMaxLength={15}
+          noInput={false}
+        />
+        <div className="mt-3 flex grow flex-row justify-center space-x-8">
+          <button className="btn btn-neutral btn-sm" onClick={handleCancel}>
+            cancel
+          </button>
+          <button className={`btn btn-error btn-sm ${validUsernameInput ? "" : "btn-disabled"}`} onClick={handleDelete}>
+            delete user
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const DeleteAccountModal = ({ open, toggleDeleteAccount }: DeleteAccountModalProps) => {
+  const { userProfile } = useAuthContext();
+
+  return (
+    <dialog id="deleteaccountmodal" className="modal modal-middle" open={open}>
+      <div className="modal-box flex w-96 flex-col bg-base-200 pb-4 pt-4">
+        {userProfile ? (
+          <DeleteAccountForm toggleDeleteAccount={toggleDeleteAccount} username={userProfile.username} />
+        ) : (
+          <Loading />
+        )}
+      </div>
+    </dialog>
+  );
+};
+
 const DeleteAccount = () => {
+  const [deleteAccount, setDeleteAccount] = useState(false);
+  const toggleDeleteAccount = () => setDeleteAccount(!deleteAccount);
   return (
     <div className="flex flex-col space-y-2">
       <span>
         If you delete your account, it <span className="font-bold">cannot</span> be recovered. All your information will
         be deleted.
       </span>
-      <button className="btn btn-outline btn-error btn-sm self-start rounded-xl pb-10">
+      <button
+        className="btn btn-outline btn-error btn-sm self-start rounded-xl pb-10"
+        onClick={() => showModal("deleteaccountmodal", toggleDeleteAccount)}
+      >
         <span className="mt-[0.6rem] text-sm">Delete Account</span>
       </button>
+      <DeleteAccountModal open={deleteAccount} toggleDeleteAccount={() => setDeleteAccount(!deleteAccount)} />
     </div>
   );
 };
@@ -214,9 +291,7 @@ const AccountDetails = () => {
   const [changeUsername, setChangeUsername] = useState(false);
   if (!userProfile) return <Loading />;
 
-  const toggleChangeUsername = () => {
-    setChangeUsername(!changeUsername);
-  };
+  const toggleChangeUsername = () => setChangeUsername(!changeUsername);
 
   return (
     <div className="flex flex-col space-y-2">
