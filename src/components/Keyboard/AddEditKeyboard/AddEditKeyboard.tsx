@@ -1,7 +1,6 @@
 "use client";
 import Loading from "@/src/components/General/Loading";
 import { AddEditKeyboardContextProvider, useAddEditKeyboardContext } from "@/src/context/AddEditKeyboardContext";
-import { showModal } from "@/src/helper/helperFunctions";
 import { useMemo } from "react";
 import ScreenOne from "./Screens/ScreenOne";
 import ScreenTwo from "./Screens/ScreenTwo";
@@ -158,7 +157,7 @@ export const AddEditKeyboardModal = ({ open, setAddEditKeyboard, edit, setEdit }
   const toggleAddEditKeyboard = () => setAddEditKeyboard(!open);
   return (
     <dialog id="addeditkeyboardmodal" className="modal modal-middle">
-      <div className="modal-box flex w-[36rem] max-w-none flex-col bg-base-200 pb-4 pt-4">
+      <div className="modal-box flex w-[38rem] max-w-none flex-col bg-base-200 pb-4 pt-4">
         <AddEditKeyboardContextProvider
           toggleAddEditKeyboard={toggleAddEditKeyboard}
           open={open}
