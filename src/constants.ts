@@ -23,8 +23,7 @@ export const PRONOUNS_REGEX = /^[A-Za-zÀ-ÖØ-öø-ÿ]{1,6}$/;
 
 // Keyboard Regex
 export const KEYBOARD_NAME_REGEX = /^[A-Za-z0-9-_ ]{2,50}$/;
-export const KEYBOARD_DESCRIPTION_REGEX =
-  /^[A-Za-z0-9À-ÖØ-öø-ÿ'-.?!@#$%^&*()_+=\[\]{}|\\;:"<>,/ \n]{0,1000}$/;
+export const KEYBOARD_DESCRIPTION_REGEX = /^[A-Za-z0-9À-ÖØ-öø-ÿ'-.?!@#$%^&*()_+=\[\]{}|\\;:"<>,/ \n]{0,1000}$/;
 export const KEYBOARD_SIZE_REGEX = /^[A-Za-z0-9-_ \(\)%]{2,20}$/;
 export const KEYBOARD_PLATE_REGEX = /^[A-Za-z0-9-_ \(\)%]{2,50}$/;
 export const KEYBOARD_MOD_REGEX = /^[A-Za-z0-9-_ \(\)\[\]]{2,25}$/;
@@ -50,3 +49,6 @@ export const DEFAULT_PRONOUNS: [string, string][] = [
 export const DEFAULT_MODAL_TEXT = "";
 export const DEFAULT_MODAL_THEME = "base";
 export const DEFAULT_MODAL_BUTTONS = ["close"];
+
+// Home Page Constants
+export const HOME_PAGE_KEYBOARD_LIMIT = 15;

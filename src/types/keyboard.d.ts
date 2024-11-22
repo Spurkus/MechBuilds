@@ -34,3 +34,8 @@ export interface KeyboardType {
 }
 
 export type DisplayKeyboardType = "UserProfile" | "KeyboardPage" | "ViewUserProfile";
+
+export interface DisplayKeyboardProps {
+  username: string;
+  keyboard: KeyboardType;
+}

@@ -216,7 +216,7 @@ export const AddEditKeyboardContextProvider = ({
       }
 
       // Check if the name is taken
-      const nameTaken = await isKeyboardNameTaken(userProfile.uid, name)
+      const nameTaken = await isKeyboardNameTaken(userProfile.uid, name.trim())
         .then((result) => {
           if (currentNameRef !== nameRef.current) return false;
           setNameLoading(false);
@@ -627,6 +627,13 @@ export const AddEditKeyboardContextProvider = ({
   const handleSave = async () => {
     if (!isSavable || loading || !userProfile || !status || !changed) return;
     setLoading(true);
+
+    // Remove trailing white space from keyboard name.
+    // fuck you why would you have this anyway it took me like 2 hours to find
+    // out what the problem was and why some keyboards don't load properly its
+    // because url trailing spaces AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+    setName((name) => name.trim());
+
     try {
       if (edit) {
         const media = !imageVideoList.length
