@@ -147,7 +147,7 @@ export const InputNameField = ({
       type="text"
       placeholder={namePlaceholder}
       maxLength={nameMaxLength}
-      className={`grow truncate rounded-lg border border-gray-400 p-1 pl-2.5 text-sm ${
+      className={`w-full grow truncate rounded-lg border border-gray-400 p-1 pl-2.5 text-sm focus:border-white ${
         noInput && "input-disabled"
       } ${name && "font-medium"} ${validName || !name ? "bg-base-200" : "bg-input-error"}`}
       disabled={noInput}
@@ -264,9 +264,9 @@ export const InputNameLinkField = ({
           placeholder="www.example.com"
           id={`${type}link`}
           maxLength={100}
-          className={`mr-2 grow truncate rounded-lg border border-gray-400 p-1 pl-2.5 text-sm focus:border-white ${
+          className={`w-full grow truncate rounded-lg border border-gray-400 p-1 pl-2.5 text-sm focus:border-white ${
             noInput && "input-disabled"
-          } ${validLink || !link ? "bg-base-200" : "bg-input-error"}`}
+          } ${link && "font-medium"} ${validLink || !link ? "bg-base-200" : "bg-input-error"}`}
           disabled={noInput}
           autoComplete="off"
           onFocus={() => setLinkFocused(true)}
