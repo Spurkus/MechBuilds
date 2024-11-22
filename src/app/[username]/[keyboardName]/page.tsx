@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { UserProfileType } from "@/src/types/user";
 import { ItemType, KeyboardType } from "@/src/types/keyboard";
 import Loading from "@/src/components/General/Loading";
-import { getUser, getKeyboard } from "@/src/helper/firestoreFunctions";
+import { getUser, getKeyboardForKeyboardPage } from "@/src/helper/firestoreFunctions";
 import {
   formatNameForURL,
   formatDate,
@@ -71,11 +71,11 @@ const NameLinkCollapse = ({ keyboardElement, extra, name, link, big = true, inde
             href={ensureHttpsLink(link)}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn btn-outline btn-sm justify-start rounded-xl"
+            className="btn btn-outline btn-sm mx-3 my-1 justify-start rounded-xl"
           >
-            <div className="ml-3 flex flex-row">
-              <FontAwesomeIcon icon={faLink} className="h-3.5 w-3.5 rotate-90 text-gray-500" />
-              <p className="link ml-1 truncate pb-2 text-sm leading-[0.6rem] text-gray-500">
+            <div className="flex flex-row">
+              <FontAwesomeIcon icon={faLink} className="mr-1 h-3.5 w-3.5 rotate-90 text-gray-500" />
+              <p className="link truncate text-sm leading-[0.6rem] text-gray-500">
                 {truncateString(formatLink(link), 36)}
               </p>
             </div>
@@ -101,21 +101,23 @@ const KeyboardPage = ({ params }: KeyboardPageProps) => {
   const [user, setUser] = useState<UserProfileType | null>(null);
   const [keyboard, setKeyboard] = useState<KeyboardType | null>(null);
   const [index, setIndex] = useState(0);
-  const { username } = useAuthContext();
+  const { username, authenticated } = useAuthContext();
 
   useEffect(() => {
     getUser(params.username).then((user) => {
       setUser(user);
       if (!user) return setLoading(false);
-      if (!username) return setLoading(false);
-      getKeyboard(user.uid, formatNameForURL(params.keyboardName), username !== params.username.toLowerCase()).then(
-        (keyboard) => {
-          setLoading(false);
-          setKeyboard(keyboard);
-        },
-      );
+      getKeyboardForKeyboardPage(
+        user.uid,
+        formatNameForURL(params.keyboardName),
+        username === params.username.toLowerCase() && authenticated,
+      ).then((keyboard) => {
+        console.log(keyboard);
+        setLoading(false);
+        setKeyboard(keyboard);
+      });
     });
-  }, [params.keyboardName, params.username, username]);
+  }, [params.keyboardName, params.username, username, authenticated]);
 
   if (loading)
     return (

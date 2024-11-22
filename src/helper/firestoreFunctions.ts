@@ -1,5 +1,18 @@
 import { db } from "@/firebase";
-import { collection, setDoc, doc, updateDoc, query, where, getDocs, deleteDoc, orderBy } from "firebase/firestore";
+import {
+  collection,
+  setDoc,
+  doc,
+  updateDoc,
+  query,
+  where,
+  getDocs,
+  deleteDoc,
+  orderBy,
+  limit,
+  startAfter,
+  QueryDocumentSnapshot,
+} from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import { UserProfileType, EditUserProfileType } from "@/src/types/user";
 import { KeyboardType } from "@/src/types/keyboard";
@@ -129,10 +142,10 @@ export const getAllKeyboardsFromUser = async (uid: string, view: boolean = false
   return querySnapshot.docs.map((doc) => doc.data() as KeyboardType);
 };
 
-export const getKeyboard = async (
+export const getKeyboardForKeyboardPage = async (
   userID: string,
   keyboardName: string,
-  view: boolean = false,
+  userIsOwner: boolean,
 ): Promise<KeyboardType | null> => {
   const keyboardsCollectionRef = collection(db, "keyboards");
   let q = query(
@@ -141,7 +154,7 @@ export const getKeyboard = async (
     where("name", "==", keyboardName),
     where("visible", "==", true),
   );
-  if (view) q = query(q, where("status", "==", "public"));
+  if (!userIsOwner) q = query(q, where("status", "!=", "private"));
   const querySnapshot = await getDocs(q);
   if (querySnapshot.empty) return null;
   return querySnapshot.docs[0].data() as KeyboardType;
@@ -176,4 +189,43 @@ export const deleteUserAndUserKeyboard = async (uid: string) => {
   keyboardQuerySnapshot.docs.forEach(async (doc) => {
     await deleteKeyboard(doc.id, (doc.data() as KeyboardType).media.length);
   });
+};
+
+export const getUsernameFromUID = async (uid: string): Promise<string> => {
+  const userProfilesCollectionRef = collection(db, "userProfiles");
+  const q = query(userProfilesCollectionRef, where("uid", "==", uid));
+  const querySnapshot = await getDocs(q);
+  if (querySnapshot.empty) return "";
+  return querySnapshot.docs[0].data().username;
+};
+
+export const fetchKeyboardsWithPagination = async (
+  lastVisible: QueryDocumentSnapshot | null,
+  itemsPerPage: number,
+): Promise<{
+  keyboards: (KeyboardType & { username: string })[];
+  lastVisible: QueryDocumentSnapshot | null;
+  hasMore: boolean;
+}> => {
+  const keyboardsCollectionRef = collection(db, "keyboards");
+
+  let q = query(
+    keyboardsCollectionRef,
+    orderBy("createdAt", "desc"),
+    where("status", "==", "public"),
+    limit(itemsPerPage),
+  );
+  if (lastVisible) q = query(q, startAfter(lastVisible));
+  const querySnapshot = await getDocs(q);
+
+  const keyboards = await Promise.all(
+    querySnapshot.docs.map(async (doc) => {
+      const userID = doc.data().uid;
+      const username = await getUsernameFromUID(userID);
+      return { ...doc.data(), username } as KeyboardType & { username: string };
+    }),
+  );
+
+  const newLastVisible = querySnapshot.docs[querySnapshot.docs.length - 1] || null;
+  return { keyboards, lastVisible: newLastVisible, hasMore: querySnapshot.size === itemsPerPage };
 };
