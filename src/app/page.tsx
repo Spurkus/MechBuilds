@@ -4,10 +4,10 @@ import { fetchKeyboardsWithPagination } from "@/src/helper/firestoreFunctions";
 import { KeyboardType } from "@/src/types/keyboard";
 import { HOME_PAGE_KEYBOARD_LIMIT } from "@/src/constants";
 import { QueryDocumentSnapshot } from "firebase/firestore";
-import DisplayKeyboard from "../components/Keyboard/DisplayKeyboard/DisplayKeyboard";
+import DisplayKeyboard from "@/src/components/Keyboard/DisplayKeyboard/DisplayKeyboard";
 import Loading from "@/src/components/General/Loading";
 
-const Home = () => {
+const Explore = () => {
   const [keyboards, setKeyboards] = useState<(KeyboardType & { username: string })[]>([]);
   const [lastVisible, setLastVisible] = useState<QueryDocumentSnapshot | null>(null);
   const [loading, setLoading] = useState(false);
@@ -67,4 +67,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Explore;
