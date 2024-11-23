@@ -25,7 +25,7 @@ const Footer = () => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <FontAwesomeIcon icon={faLinkedin} className="h-7 w-7" />
+              <FontAwesomeIcon icon={faLinkedin} size="xl" />
             </Link>
             <Link
               href="https://github.com/Spurkus/MechBuilds"
@@ -33,7 +33,7 @@ const Footer = () => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <FontAwesomeIcon icon={faGithub} className="h-7 w-7" />
+              <FontAwesomeIcon icon={faGithub} size="xl" />
             </Link>
             <Link
               href="https://www.youtube.com/watch?v=HMTKMWHLbdQ"
@@ -41,7 +41,7 @@ const Footer = () => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <FontAwesomeIcon icon={faYoutube} className="h-7 w-7" />
+              <FontAwesomeIcon icon={faYoutube} size="xl" />
             </Link>
           </div>
         </nav>

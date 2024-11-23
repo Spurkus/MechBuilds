@@ -28,7 +28,7 @@ const Navbar = () => {
         </ul>
         <div className="dropdown dropdown-bottom z-30 min-[950px]:hidden">
           <label tabIndex={0} className="btn m-1">
-            <FontAwesomeIcon icon={faBars} className="h-7 w-7" />
+            <FontAwesomeIcon icon={faBars} size="xl" />
           </label>
           <ul tabIndex={0} className="menu dropdown-content z-10 w-56 rounded-box bg-base-200">
             <li>
