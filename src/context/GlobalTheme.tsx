@@ -26,7 +26,9 @@ export const GlobalThemeContextProvider = ({ children, initialTheme }: GlobalThe
 
   return (
     <GlobalThemeContext.Provider value={{ theme, setTheme, toggleMode }}>
-      <div data-theme={theme}>{children}</div>
+      <html lang="en" data-theme={theme}>
+        <body className="flex min-h-screen flex-col">{children}</body>
+      </html>
     </GlobalThemeContext.Provider>
   );
 };

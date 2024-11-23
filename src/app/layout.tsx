@@ -35,31 +35,25 @@ const RootLayout = async ({
   const pronouns = await getPronouns();
   const profilePicture = await getProfilePicture();
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <GlobalThemeContextProvider initialTheme={theme}>
-          <GlobalModalContextProvider>
-            <AuthContextProvider
-              initialAuthenticated={authenticated}
-              initialUsername={username}
-              initialDisplayName={displayName}
-              initialPronouns={pronouns}
-              initialProfilePicture={profilePicture}
-            >
-              <div className="flex min-h-screen flex-col">
-                <Navbar />
-                <main className="flex flex-grow">
-                  <div className="flex w-[6%] 2xl:w-1/6"></div>
-                  <div className="flex flex-grow">{children}</div>
-                  <div className="flex w-[6%] 2xl:w-1/6"></div>
-                </main>
-                <Footer />
-              </div>
-            </AuthContextProvider>
-          </GlobalModalContextProvider>
-        </GlobalThemeContextProvider>
-      </body>
-    </html>
+    <GlobalThemeContextProvider initialTheme={theme}>
+      <GlobalModalContextProvider>
+        <AuthContextProvider
+          initialAuthenticated={authenticated}
+          initialUsername={username}
+          initialDisplayName={displayName}
+          initialPronouns={pronouns}
+          initialProfilePicture={profilePicture}
+        >
+          <Navbar />
+          <main className="flex flex-grow">
+            <div className="flex w-[6%] 2xl:w-1/6"></div>
+            <div className="flex flex-grow">{children}</div>
+            <div className="flex w-[6%] 2xl:w-1/6"></div>
+          </main>
+          <Footer />
+        </AuthContextProvider>
+      </GlobalModalContextProvider>
+    </GlobalThemeContextProvider>
   );
 };
 
