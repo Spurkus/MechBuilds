@@ -52,3 +52,4 @@ export const DEFAULT_MODAL_BUTTONS = ["close"];
 
 // Home Page Constants
 export const HOME_PAGE_KEYBOARD_LIMIT = 15;
+export const EXPLORE_PAGE_KEYBOARD_LIMIT = 30;

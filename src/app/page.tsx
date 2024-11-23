@@ -7,7 +7,7 @@ import { QueryDocumentSnapshot } from "firebase/firestore";
 import DisplayKeyboard from "@/src/components/Keyboard/DisplayKeyboard/DisplayKeyboard";
 import Loading from "@/src/components/General/Loading";
 
-const Explore = () => {
+const Home = () => {
   const [keyboards, setKeyboards] = useState<(KeyboardType & { username: string })[]>([]);
   const [lastVisible, setLastVisible] = useState<QueryDocumentSnapshot | null>(null);
   const [loading, setLoading] = useState(false);
@@ -67,4 +67,4 @@ const Explore = () => {
   );
 };
 
-export default Explore;
+export default Home;

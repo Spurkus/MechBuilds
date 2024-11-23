@@ -46,7 +46,9 @@ const DisplayKeyboardSmall = ({ username, keyboard, type = "UserProfile" }: Disp
         onMouseLeave={() => setHover(false)}
       >
         <div className="mx-1 flex grow flex-row justify-between">
-          <h2 className="z-40 self-end truncate pt-7 font-clashgrotesk text-3xl font-medium leading-6">
+          <h2
+            className={`z-40 self-end truncate font-clashgrotesk text-3xl font-medium leading-6 ${type === "UserProfile" ? "pt-7" : "pt-2"}`}
+          >
             {keyboard.name}
           </h2>
           <div className="flex flex-col justify-end">
