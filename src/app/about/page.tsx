@@ -40,7 +40,7 @@ const About = () => {
           We hope you enjoy your stay! <span className="text-gray-500">meow</span>
         </p>
       </div>
-      <div>
+      <div id="support-area">
         <h1 className="font-regular font-clashgrotesk text-5xl">Support MechBuilds</h1>
         <p className="text-lg">
           The best way to support MechBuilds is to{" "}
@@ -109,7 +109,11 @@ const About = () => {
         <ul className="text-lg">
           <li>
             Also no one at the moment <span className="text-gray-500">(sadge)</span> but if you want to be a supporter,
-            go above to the <span className="underline">support area</span> and help out any way you can! ❤️
+            go above to the{" "}
+            <a href="#support-area" className="underline">
+              support area
+            </a>{" "}
+            and help out any way you can! ❤️
           </li>
         </ul>
       </div>
