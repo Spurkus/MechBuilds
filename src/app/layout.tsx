@@ -14,6 +14,7 @@ import Navbar from "@/src/components/Navbar/Navbar";
 import Footer from "@/src/components/General/Footer";
 import { GlobalModalContextProvider } from "@/src/context/GlobalModal";
 import { AuthContextProvider } from "@/src/context/Authentication";
+import dynamic from "next/dynamic";
 
 // The following import prevents a Font Awesome icon server-side rendering bug,
 // where the icons flash from a very large icon down to a properly sized one:
@@ -26,6 +27,10 @@ export const metadata: Metadata = {
   title: "MechBuilds",
   description: "A keyboard management app for custom mechanical keyboard enthusiasts :3",
 };
+
+const AdBanner = dynamic(() => import("@/src/components/General/AdBanner"), {
+  ssr: false,
+});
 
 const RootLayout = async ({
   children,
@@ -50,9 +55,23 @@ const RootLayout = async ({
         >
           <Navbar />
           <main className="flex flex-grow">
-            <div className="flex w-[6%] 2xl:w-1/6"></div>
+            <div className="flex w-[6%] xl:w-1/6">
+              <AdBanner
+                data-ad-slot="slotnumber"
+                data-full-width-responsive="true"
+                data-ad-layout="in-article"
+                data-ad-format="fluid"
+              />
+            </div>
             <div className="flex flex-grow">{children}</div>
-            <div className="flex w-[6%] 2xl:w-1/6"></div>
+            <div className="flex w-[6%] xl:w-1/6">
+              <AdBanner
+                data-ad-slot="slotnumber"
+                data-full-width-responsive="true"
+                data-ad-layout="in-article"
+                data-ad-format="fluid"
+              />
+            </div>
           </main>
           <Footer />
         </AuthContextProvider>
