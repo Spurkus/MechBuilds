@@ -55,8 +55,8 @@ const NavProfileMenu = ({ profilePicture = null, displayName = null }: NavProfil
   };
 
   return (
-    <div className="dropdown dropdown-end">
-      <div tabIndex={0} role="button" className="btn w-full grow rounded-xl px-2 text-base">
+    <div className="dropdown-auth dropdown dropdown-end">
+      <div tabIndex={0} role="button" className="btn w-full grow rounded-xl px-2 text-base" onClick={closeDropdown}>
         <div className="avatar mask flex h-9 w-9">
           <Image
             src={adjustImageURL(profile, 300)}
@@ -73,13 +73,13 @@ const NavProfileMenu = ({ profilePicture = null, displayName = null }: NavProfil
         </div>
       </div>
       <ul tabIndex={0} className="menu dropdown-content z-50 mt-2 w-52 rounded-box bg-base-200 p-2 shadow-xl">
-        <li onClick={closeDropdown}>
+        <li onClick={() => closeDropdown()}>
           <Link href="/profile">Profile</Link>
         </li>
-        <li onClick={closeDropdown}>
+        <li onClick={() => closeDropdown()}>
           <Link href="/settings">Settings</Link>
         </li>
-        <li onClick={closeDropdown}>
+        <li onClick={() => closeDropdown()}>
           <button onClick={handleSignOut}>Sign Out</button>
         </li>
       </ul>

@@ -1,9 +1,11 @@
+"use client";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import ThemeToggleButton from "../General/ThemeToggleButton";
 import NavAuth from "./NavAuth";
 import NavAddKeyboardButton from "./NavAddKeyboardButton";
+import { closeDropdown } from "@/src/helper/helperFunctions";
 
 const Navbar = () => {
   return (
@@ -26,25 +28,25 @@ const Navbar = () => {
             </Link>
           </li>
         </ul>
-        <div className="dropdown dropdown-bottom z-50 min-[950px]:hidden">
-          <label tabIndex={0} className="btn m-1">
+        <div className="dropdown-menu dropdown dropdown-bottom z-50 min-[950px]:hidden">
+          <label tabIndex={0} className="btn m-1" onClick={closeDropdown}>
             <FontAwesomeIcon icon={faBars} size="xl" />
           </label>
           <ul tabIndex={0} className="menu dropdown-content z-10 w-56 rounded-box bg-base-200">
-            <li>
+            <li onClick={() => closeDropdown()}>
               <Link href="/">Home</Link>
             </li>
-            <li>
+            <li onClick={() => closeDropdown()}>
               <Link href="/explore">Explore</Link>
             </li>
-            <li>
+            <li onClick={() => closeDropdown()}>
               <Link href="/about">About</Link>
             </li>
           </ul>
         </div>
       </div>
       <div className="navbar-center">
-        <Link href="/" className="btn-nav-link btn shadow-none">
+        <Link href="/" className="btn-nav-link btn shadow-none" onClick={closeDropdown}>
           <p className="font-clashgrotesk text-2xl font-medium shadow-nav-text-contour text-shadow-lg min-[400px]:text-3xl">
             MechBuilds
           </p>
