@@ -1,7 +1,7 @@
 "use client";
 import { createContext, useState, useContext } from "react";
 import { saveTheme } from "@/src/helper/cookiesFunctions";
-import Head from "next/head";
+import Script from "next/script";
 
 export interface GlobalThemeType {
   theme: string;
@@ -28,10 +28,8 @@ export const GlobalThemeContextProvider = ({ children, initialTheme }: GlobalThe
   return (
     <GlobalThemeContext.Provider value={{ theme, setTheme, toggleMode }}>
       <html lang="en" data-theme={theme}>
-        <Head>
-          <script async src={process.env.NEXT_PUBLIC_GOOGLE_ADS_SOURCE} crossorigin="anonymous" />
-          <meta name="google-adsense-account" content={process.env.NEXT_PUBLIC_GOOGLE_ADS_CONTENT} />
-        </Head>
+        <Script async src={process.env.NEXT_PUBLIC_GOOGLE_ADS_SOURCE} strategy="lazyOnload" crossOrigin="anonymous" />
+        <meta name="google-adsense-account" content={process.env.NEXT_PUBLIC_GOOGLE_ADS_CONTENT} />
         <body className="flex min-h-screen flex-col">{children}</body>
       </html>
     </GlobalThemeContext.Provider>
