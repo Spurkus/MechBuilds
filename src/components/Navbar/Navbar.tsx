@@ -7,7 +7,7 @@ import NavAddKeyboardButton from "./NavAddKeyboardButton";
 
 const Navbar = () => {
   return (
-    <div className="navbar bg-base-100 px-6 min-[1360px]:px-36">
+    <div className="navbar bg-base-100 px-2 min-[500px]:px-6 min-[1360px]:px-36">
       <div className="navbar-start">
         <ul className="menu menu-horizontal hidden space-x-8 px-4 min-[950px]:flex">
           <li>
@@ -45,16 +45,18 @@ const Navbar = () => {
       </div>
       <div className="navbar-center">
         <Link href="/" className="btn-nav-link btn shadow-none">
-          <p className="font-clashgrotesk text-3xl font-medium shadow-nav-text-contour text-shadow-lg">MechBuilds</p>
+          <p className="font-clashgrotesk text-2xl font-medium shadow-nav-text-contour text-shadow-lg min-[400px]:text-3xl">
+            MechBuilds
+          </p>
         </Link>
       </div>
       <div className="navbar-end flex">
         <ul className="menu menu-horizontal flex align-middle text-base shadow-nav-text-contour text-shadow-lg">
-          <li>
+          <li className="max-xl:hidden">
             <NavAddKeyboardButton />
           </li>
         </ul>
-        <div className="h-6 border-l border-gray-400 pr-6"></div>
+        <div className="h-6 border-l border-gray-400 pr-6 max-xl:hidden"></div>
         <div className="flex flex-row items-center space-x-5">
           <ThemeToggleButton />
           <NavAuth />

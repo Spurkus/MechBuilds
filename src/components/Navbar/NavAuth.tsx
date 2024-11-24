@@ -51,7 +51,6 @@ const NavProfileMenu = ({ profilePicture = null, displayName = null }: NavProfil
 
   // Sign out user and redirect to home page
   const handleSignOut = async () => {
-    await logout();
     router.push("/");
   };
 
@@ -68,10 +67,12 @@ const NavProfileMenu = ({ profilePicture = null, displayName = null }: NavProfil
             className="aspect-square rounded-xl"
           />
         </div>
-        <span>{name}</span>
-        <FontAwesomeIcon icon={faCaretDown} className="h-4 w-4" />
+        <span className="max-md:hidden">{name}</span>
+        <div className="max-md:hidden">
+          <FontAwesomeIcon icon={faCaretDown} />
+        </div>
       </div>
-      <ul tabIndex={0} className="menu dropdown-content z-[1] mt-2 w-52 rounded-box bg-base-200 p-2 shadow-xl">
+      <ul tabIndex={0} className="menu dropdown-content z-50 mt-2 w-52 rounded-box bg-base-200 p-2 shadow-xl">
         <li onClick={closeDropdown}>
           <Link href="/profile">Profile</Link>
         </li>
