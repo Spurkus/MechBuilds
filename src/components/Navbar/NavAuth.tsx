@@ -50,7 +50,8 @@ const NavProfileMenu = ({ profilePicture = null, displayName = null }: NavProfil
   }
 
   // Sign out user and redirect to home page
-  const handleSignOut = async () => {
+  const handleSignOut = () => {
+    logout();
     router.push("/");
   };
 
