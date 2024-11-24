@@ -28,7 +28,8 @@ const LoginRegisterButton = () => {
   const { signInWithGoogle } = useAuthContext();
   return (
     <button onClick={signInWithGoogle} className="btn btn-outline btn-info btn-sm pb-9">
-      <p className="mt-3">Login | Register</p>
+      <p className="mt-3 hidden max-md:flex">Login</p>
+      <p className="mt-3 max-md:hidden">Login | Register</p>
     </button>
   );
 };
