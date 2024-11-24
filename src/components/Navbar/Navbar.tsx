@@ -26,7 +26,7 @@ const Navbar = () => {
             </Link>
           </li>
         </ul>
-        <div className="dropdown dropdown-bottom z-30 min-[950px]:hidden">
+        <div className="dropdown dropdown-bottom z-50 min-[950px]:hidden">
           <label tabIndex={0} className="btn m-1">
             <FontAwesomeIcon icon={faBars} size="xl" />
           </label>
