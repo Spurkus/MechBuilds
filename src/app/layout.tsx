@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import "./fonts.css";
 import {
@@ -15,8 +14,6 @@ import Navbar from "@/src/components/Navbar/Navbar";
 import Footer from "@/src/components/General/Footer";
 import { GlobalModalContextProvider } from "@/src/context/GlobalModal";
 import { AuthContextProvider } from "@/src/context/Authentication";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "MechBuilds",
