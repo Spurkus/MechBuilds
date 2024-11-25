@@ -5,9 +5,16 @@ import { faBars } from "@fortawesome/free-solid-svg-icons";
 import ThemeToggleButton from "../General/ThemeToggleButton";
 import NavAuth from "./NavAuth";
 import NavAddKeyboardButton from "./NavAddKeyboardButton";
-import { closeDropdown } from "@/src/helper/helperFunctions";
 
 const Navbar = () => {
+  const closeDropdown = () => {
+    const dropdown = document.getElementById("dropdown-menu");
+    const isOpen = dropdown?.scrollHeight === 180;
+    if (isOpen) {
+      const elem = document.activeElement as HTMLElement;
+      elem?.blur();
+    }
+  };
   return (
     <div className="navbar bg-base-100 px-2 min-[500px]:px-6 min-[1360px]:px-36">
       <div className="navbar-start">
@@ -28,18 +35,18 @@ const Navbar = () => {
             </Link>
           </li>
         </ul>
-        <div className="dropdown-menu dropdown dropdown-bottom z-50 min-[950px]:hidden">
+        <div id="dropdown-menu" className="dropdown dropdown-bottom z-50 min-[950px]:hidden">
           <label tabIndex={0} className="btn m-1" onClick={closeDropdown}>
             <FontAwesomeIcon icon={faBars} size="xl" />
           </label>
           <ul tabIndex={0} className="menu dropdown-content z-10 w-56 rounded-box bg-base-200">
-            <li onClick={() => closeDropdown()}>
+            <li onClick={closeDropdown}>
               <Link href="/">Home</Link>
             </li>
-            <li onClick={() => closeDropdown()}>
+            <li onClick={closeDropdown}>
               <Link href="/explore">Explore</Link>
             </li>
-            <li onClick={() => closeDropdown()}>
+            <li onClick={closeDropdown}>
               <Link href="/about">About</Link>
             </li>
           </ul>
