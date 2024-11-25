@@ -89,7 +89,6 @@ const AddEditKeyboardForm = () => {
 
   const handleSaveButton = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    console.log(edit);
     handleSave();
   };
 
