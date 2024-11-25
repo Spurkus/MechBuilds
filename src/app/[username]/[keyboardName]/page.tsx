@@ -19,6 +19,7 @@ import DisplayImageVideo from "@/src/components/General/DisplayImageVideo";
 import ProfileKeyboardDetails from "@/src/components/ProfileDetails/ProfileKeyboardDetails";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLink } from "@fortawesome/free-solid-svg-icons";
+import ShareKeyboard from "./ShareKeyboard";
 
 interface KeyboardPageProps {
   params: {
@@ -128,12 +129,10 @@ const KeyboardPage = ({ params }: KeyboardPageProps) => {
   if (!user || !keyboard) return <NotFound />;
 
   return (
-    <div className="flex w-full flex-col items-center gap-3">
+    <div className="mt-6 flex w-full flex-col items-center gap-3">
       <div className="flex w-[45rem] flex-row justify-between gap-3">
         <ProfileKeyboardDetails userProfile={user} />
-        <div className="flex grow rounded-2xl bg-base-300 p-3">
-          <span className="ml-1 self-center text-4xl font-medium">Views and Likes or something</span>
-        </div>
+        <ShareKeyboard username={params.username} keyboard={keyboard} />
       </div>
       <div className="flex w-[45rem] flex-col rounded-[1.5rem] bg-base-300 px-5 py-4">
         <DisplayImageVideo
