@@ -14,6 +14,7 @@ import Navbar from "@/src/components/Navbar/Navbar";
 import Footer from "@/src/components/General/Footer";
 import { GlobalModalContextProvider } from "@/src/context/GlobalModal";
 import { AuthContextProvider } from "@/src/context/Authentication";
+import { Analytics } from "@vercel/analytics/next";
 
 // The following import prevents a Font Awesome icon server-side rendering bug,
 // where the icons flash from a very large icon down to a properly sized one:
@@ -53,6 +54,7 @@ const RootLayout = async ({
           <Footer />
         </AuthContextProvider>
       </GlobalModalContextProvider>
+      <Analytics />
     </GlobalThemeContextProvider>
   );
 };
