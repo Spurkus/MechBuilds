@@ -5,7 +5,7 @@ import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 
 const About = () => {
   return (
-    <div className="mx-auto mt-8 flex w-auto flex-col space-y-6 md:max-w-[80%]">
+    <div className="mt-8 flex flex-col justify-center space-y-6">
       <div className="flex w-full flex-col items-center">
         <h3 className="font-regular font-clashgrotesk text-xl">
           Brought to life by everyone&apos;s support, started with love by{" "}
@@ -64,7 +64,7 @@ const About = () => {
       <div>
         <h1 className="font-regular font-clashgrotesk text-5xl">Contact Us</h1>
         <p className="text-lg">If you have any questions, concerns, or feedback, please feel free to contact us at</p>
-        <div className="flex flex-row gap-x-4">
+        <div className="flex flex-wrap gap-x-4">
           <Link
             href="https://discord.gg/Sw6pHTp4yf"
             target="_blank"

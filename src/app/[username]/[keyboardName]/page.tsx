@@ -112,7 +112,6 @@ const KeyboardPage = ({ params }: KeyboardPageProps) => {
         formatNameForURL(params.keyboardName),
         username === params.username.toLowerCase() && authenticated,
       ).then((keyboard) => {
-        console.log(keyboard);
         setLoading(false);
         setKeyboard(keyboard);
       });
