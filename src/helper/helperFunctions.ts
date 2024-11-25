@@ -3,6 +3,11 @@ import { Timestamp } from "firebase/firestore";
 import { LINK_REGEX } from "@/src/constants";
 import confetti from "canvas-confetti";
 
+export const closeDropdown = () => {
+  const elem = document.activeElement as HTMLElement;
+  elem?.blur();
+};
+
 export const adjustImageURL = (url: string, desiredSize: number) => {
   return url.replace(/=s\d+-c/, `=s${desiredSize}-c`);
 };

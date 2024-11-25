@@ -2,7 +2,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { useAddEditKeyboardContext } from "@/src/context/AddEditKeyboardContext";
 import { CheckBoxField, InputNameLinkField } from "./InputFields";
-import { closeDropdown } from "@/src/helper/helperFunctions";
 
 const KitCheckBoxField = () => {
   const {
@@ -37,6 +36,15 @@ const KitDropdownField = () => {
       ? "Keyboard Kit Selected"
       : "No Keyboard Kit";
 
+  const closeDropdown = () => {
+    const dropdown = document.getElementById("dropdown-kit");
+    const isOpen = dropdown?.scrollHeight === 107;
+    if (isOpen) {
+      const elem = document.activeElement as HTMLElement;
+      elem?.blur();
+    }
+  };
+
   // Dropdown functions
   const kitSelectYes = () => {
     setKitSelected(true);
@@ -48,11 +56,12 @@ const KitDropdownField = () => {
   };
 
   return (
-    <div className="dropdown dropdown-end">
+    <div id="dropdown-kit" className="dropdown dropdown-end">
       <div
         tabIndex={0}
         role="button"
         className="btn btn-sm flex w-full grow flex-col items-center rounded-lg border border-gray-400 pl-2.5 text-sm hover:border-white focus:border-white"
+        onClick={closeDropdown}
       >
         <p className="self-start">{kitMenuMessage}</p>
         <FontAwesomeIcon icon={faCaretDown} className="h-4 w-4 self-end" />
