@@ -134,7 +134,7 @@ const KeyboardPage = ({ params }: KeyboardPageProps) => {
         <ProfileKeyboardDetails userProfile={user} />
         <ShareKeyboard username={params.username} keyboard={keyboard} />
       </div>
-      <div className="flex w-[45rem] flex-col rounded-[1.5rem] bg-base-300 px-5 py-4">
+      <div id="keyboard-container" className="flex w-[45rem] flex-col rounded-[1.5rem] bg-base-300 px-5 py-4">
         <DisplayImageVideo
           index={index}
           setIndex={setIndex}

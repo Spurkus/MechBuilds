@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLink, faShare, faImage, faStar } from "@fortawesome/free-solid-svg-icons";
 import { ItemType, KeyboardType } from "@/src/types/keyboard";
 import { capitalizeFirstLetter, formatDate } from "@/src/helper/helperFunctions";
+import html2canvas from "html2canvas-pro";
 
 type ToastType = "link" | "image" | "text";
 
@@ -20,6 +21,21 @@ const ShareKeyboard = ({ username, keyboard }: ShareKeyboardProps) => {
     setTimeout(() => {
       setToastMessages((prevMessages) => prevMessages.slice(1));
     }, 3000);
+  };
+
+  const handleImage = async () => {
+    const keyboardElement = document.getElementById("keyboard-container");
+    if (!keyboardElement) return;
+
+    const canvas = await html2canvas(keyboardElement);
+    const image = canvas.toDataURL("image/png");
+
+    // Download image
+    const link = document.createElement("a");
+    link.href = image;
+    link.download = `${username}-${keyboard.name}.png`;
+    link.click();
+    handleToast("image");
   };
 
   const handleLink = () => {
@@ -61,7 +77,7 @@ const ShareKeyboard = ({ username, keyboard }: ShareKeyboardProps) => {
 
   return (
     <div className="flex grow flex-col justify-between rounded-2xl bg-base-300 p-3">
-      <div className="toast toast-end">
+      <div className="toast toast-end z-[100]">
         {toastMessages.map((message, index) => (
           <div key={index} className="alert alert-info font-bold transition-opacity ease-in-out">
             {message === "link" && (
@@ -76,6 +92,12 @@ const ShareKeyboard = ({ username, keyboard }: ShareKeyboardProps) => {
                 <FontAwesomeIcon icon={faStar} />
               </>
             )}
+            {message === "image" && (
+              <>
+                Image downloaded
+                <FontAwesomeIcon icon={faImage} />
+              </>
+            )}
           </div>
         ))}
       </div>
@@ -87,7 +109,7 @@ const ShareKeyboard = ({ username, keyboard }: ShareKeyboardProps) => {
         <button className="btn btn-outline btn-sm grow text-lg font-medium" onClick={handleLink}>
           Link <FontAwesomeIcon icon={faLink} />
         </button>
-        <button className="btn btn-outline btn-sm grow text-lg font-medium">
+        <button className="btn btn-outline btn-sm grow text-lg font-medium" onClick={handleImage}>
           Image
           <FontAwesomeIcon icon={faImage} />
         </button>

@@ -19,6 +19,7 @@
     "daisyui": "^4.12.2",
     "firebase": "^10.12.2",
     "framer-motion": "^11.3.17",
+    "html2canvas-pro": "^1.5.8",
     "next": "14.2.3",
     "react": "^18",
     "react-dom": "^18",
