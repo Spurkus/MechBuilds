@@ -48,7 +48,7 @@ const Navbar = () => {
       <div className="navbar-center">
         <Link href="/" className="btn-nav-link btn shadow-none" onClick={closeDropdown}>
           <p className="font-clashgrotesk text-2xl font-medium shadow-nav-text-contour text-shadow-lg min-[400px]:text-3xl">
-            MechBuilds
+            MechBuilds [BETA]
           </p>
         </Link>
       </div>
