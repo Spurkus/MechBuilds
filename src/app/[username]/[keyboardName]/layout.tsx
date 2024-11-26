@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: KeyboardPageProps): Promise<M
       openGraph: {
         title: `${keyboard.name} - ${user.username} | MechBuilds`,
         description: `Check out the ${keyboard.name} build by ${user.displayName} on MechBuilds!`,
-        url: `https://mechbuilds.app/${params.username}/${params.keyboardName}`,
+        url: `https://www.mechbuilds.app/${params.username}/${params.keyboardName}`,
         type: "website",
         siteName: "MechBuilds",
       },
@@ -44,7 +44,7 @@ export async function generateMetadata({ params }: KeyboardPageProps): Promise<M
       openGraph: {
         title: `${keyboard.name} - ${user.displayName} | MechBuilds`,
         description: `Check out the ${keyboard.name} build by ${user.displayName} on MechBuilds!`,
-        url: `https://mechbuilds.app/${params.username}/${params.keyboardName}`,
+        url: `https://www.mechbuilds.app/${params.username}/${params.keyboardName}`,
         type: "website",
         siteName: "MechBuilds",
         images: [

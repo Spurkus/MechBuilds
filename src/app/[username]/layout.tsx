@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: { params: { username: string 
     openGraph: {
       title: `${user.displayName} | MechBuilds`,
       description: `Check out the keyboard builds of ${user.displayName} on MechBuilds!`,
-      url: `https://mechbuilds.app/${params.username}`,
+      url: `https://www.mechbuilds.app/${params.username}`,
       images: [{ url: user.profilePicture }],
       type: "profile",
       siteName: "MechBuilds",
