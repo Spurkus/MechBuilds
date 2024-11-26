@@ -15,7 +15,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           data-ad-format="fluid"
         />
       </div>
-      <div className="flex flex-grow xl:mx-6">{children}</div>
+      <div className="mx-2 flex flex-grow flex-col justify-center gap-6 sm:flex-row xl:mx-6">{children}</div>
       <div className="flex max-xl:h-24 xl:w-1/6">
         <AdBanner
           data-ad-slot="slotnumber"

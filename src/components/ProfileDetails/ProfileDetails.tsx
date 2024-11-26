@@ -41,35 +41,35 @@ const ProfileBaseDetails = ({ userDetails }: ProfileProps) => {
   const toggleEditProfile = () => setEditProfile(!editProfile);
 
   return (
-    <div className="flex flex-col space-y-2">
-      <div className="avatar mask flex w-full grow self-center">
+    <div className="flex flex-row gap-2 sm:flex-col">
+      <div className="avatar mask flex self-center max-sm:w-36 sm:grow">
         <Image
           src={adjustImageURL(profilePictureDetails, DEFAULT_IMAGE_SIZE)}
           alt="Profile"
-          className="aspect-square rounded-[2.5rem]"
+          className="aspect-square rounded-3xl sm:rounded-[2.5rem]"
           width={DEFAULT_IMAGE_SIZE}
           height={DEFAULT_IMAGE_SIZE}
           quality={100}
         />
       </div>
-      <div className="flex flex-col">
+      <div className="flex w-full flex-col justify-end">
         <h2 className="username text-left text-2xl font-bold">
           {displayNameDetails}
           <a className="pl-1 text-lg font-normal text-gray-600">{formatPronouns(pronounsDetails, true)}</a>
         </h2>
         <h3 className="font-light text-gray-500">{usernameDetails}</h3>
+        {!userDetails && (
+          <>
+            <button
+              className="btn btn-outline btn-info btn-sm mt-2 rounded-xl"
+              onClick={() => showModal("editprofilemodal", toggleEditProfile)}
+            >
+              Edit Profile
+            </button>
+            <EditProfile open={editProfile} toggleEditProfile={toggleEditProfile} />
+          </>
+        )}
       </div>
-      {!userDetails && (
-        <>
-          <button
-            className="btn btn-outline btn-info btn-sm rounded-xl"
-            onClick={() => showModal("editprofilemodal", toggleEditProfile)}
-          >
-            Edit Profile
-          </button>
-          <EditProfile open={editProfile} toggleEditProfile={toggleEditProfile} />
-        </>
-      )}
     </div>
   );
 };
@@ -119,7 +119,7 @@ const ProfileExtraDetails = ({ userDetails }: ProfileProps) => {
 
 const ProfileDetails = ({ userDetails }: ProfileProps) => {
   return (
-    <div className="flex w-full flex-col rounded-[3rem] bg-base-300 p-6">
+    <div className="flex w-full flex-col rounded-[3rem] bg-base-300 p-6 pb-3">
       <ProfileBaseDetails userDetails={userDetails} />
       <hr className={`border-t border-gray-400 ${userDetails ? "my-2" : "my-3"}`} />
       <ProfileExtraDetails userDetails={userDetails} />
