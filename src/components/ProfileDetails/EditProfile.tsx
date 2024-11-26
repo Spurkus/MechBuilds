@@ -35,9 +35,9 @@ const ProfilePictureField = () => {
             }}
           />
           <div
-            className={`${isHovering ? "flex" : "hidden"} absolute inset-0 items-center justify-center rounded-[2.5rem] bg-black bg-opacity-60`}
+            className={`${isHovering ? "flex" : "hidden"} absolute inset-0 items-center justify-center rounded-3xl bg-black bg-opacity-60 sm:rounded-[2.5rem]`}
           >
-            <span className="text font-bold text-white">Change Profile Picture</span>
+            <span className="text-center font-bold text-white">Change Profile Picture</span>
           </div>
           <NextImage
             src={imageSource}
