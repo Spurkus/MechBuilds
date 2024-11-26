@@ -17,14 +17,15 @@ export async function generateMetadata({ params }: { params: { username: string 
     title: `${user.displayName} | MechBuilds`,
     description: `Check out the keyboard builds of ${user.displayName} on MechBuilds!`,
     openGraph: {
-      title: `${user.displayName}'s Keyboard Profile`,
+      title: `${user.displayName} | MechBuilds`,
       description: `Check out the keyboard builds of ${user.displayName} on MechBuilds!`,
-      url: `https://mechbuilds.app/user/${params.username}`,
+      url: `https://mechbuilds.app/${params.username}`,
       images: [{ url: user.profilePicture }],
       type: "profile",
     },
   };
 }
+
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <main className="flex flex-grow flex-col xl:flex-row">
