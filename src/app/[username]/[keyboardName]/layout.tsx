@@ -34,6 +34,7 @@ export async function generateMetadata({ params }: KeyboardPageProps): Promise<M
         description: `Check out the ${keyboard.name} build by ${user.displayName} on MechBuilds!`,
         url: `https://mechbuilds.app/${params.username}/${params.keyboardName}`,
         type: "website",
+        siteName: "MechBuilds",
       },
     };
   } else {
@@ -45,6 +46,7 @@ export async function generateMetadata({ params }: KeyboardPageProps): Promise<M
         description: `Check out the ${keyboard.name} build by ${user.displayName} on MechBuilds!`,
         url: `https://mechbuilds.app/${params.username}/${params.keyboardName}`,
         type: "website",
+        siteName: "MechBuilds",
         images: [
           {
             url: keyboard.media[firstImage],

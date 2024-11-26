@@ -22,6 +22,7 @@ export async function generateMetadata({ params }: { params: { username: string 
       url: `https://mechbuilds.app/${params.username}`,
       images: [{ url: user.profilePicture }],
       type: "profile",
+      siteName: "MechBuilds",
     },
   };
 }
