@@ -24,8 +24,26 @@ import { config } from "@fortawesome/fontawesome-svg-core";
 config.autoAddCss = false; /* eslint-disable import/first */
 
 export const metadata: Metadata = {
-  title: "MechBuilds",
-  description: "A keyboard management app for custom mechanical keyboard enthusiasts :3",
+  title: "MechBuilds - Share & Organize Your Custom Keyboard Builds",
+  description:
+    "Discover and share custom mechanical keyboard builds with MechBuilds! A platform for enthusiasts to organize, showcase, and get inspired by amazing keyboards, switches, keycaps, and more.",
+  keywords: [
+    "custom keyboards",
+    "custom keyboard builds",
+    "mechanical keyboards",
+    "keyboard builds",
+    "switches",
+    "keycaps",
+    "keyboard enthusiasts",
+    "keyboard modding",
+    "keyboard organization",
+    "keyboard showcase",
+    "custom mechanical keyboards",
+  ],
+  authors: [{ name: "Spurkus", url: "https://github.com/Spurkus" }],
+  applicationName: "MechBuilds",
+  creator: "Spurkus",
+  publisher: "Spurkus",
 };
 
 const RootLayout = async ({
