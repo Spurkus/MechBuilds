@@ -41,7 +41,7 @@ const DisplayKeyboard = ({ username, keyboard, type = "UserProfile" }: DisplayKe
   return (
     <Link href={`/${username}/${keyboard.name}`} target="_blank" rel="noopener noreferrer">
       <div
-        className="flex w-[40rem] grow flex-col rounded-[1.2rem] px-4 pb-1.5 hover:bg-base-300"
+        className="flex max-w-[40rem] grow flex-col rounded-[1.2rem] px-4 pb-1.5 hover:bg-base-300"
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
       >
@@ -78,7 +78,7 @@ const DisplayKeyboard = ({ username, keyboard, type = "UserProfile" }: DisplayKe
         />
         {keyboard.mods.length > 0 && (
           <div className="flex w-full flex-row truncate pb-[0.075rem] pt-1">
-            <div className="flex grow flex-row space-x-2 overflow-x-auto overflow-y-hidden">
+            <div className="flex w-0 grow flex-row space-x-2 overflow-x-auto overflow-y-hidden">
               {keyboard.mods.map((mod: string, index: number) => (
                 <div key={index} className="badge badge-neutral badge-lg space-x-1 py-3">
                   <span className="mb-[0.1rem] truncate text-sm font-bold">{mod}</span>

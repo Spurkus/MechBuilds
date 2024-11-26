@@ -41,7 +41,7 @@ const DisplayKeyboardSmall = ({ username, keyboard, type = "UserProfile" }: Disp
   return (
     <Link href={`/${username}/${keyboard.name}`} target="_blank" rel="noopener noreferrer">
       <div
-        className="flex w-[15rem] grow flex-col rounded-[1.2rem] px-4 pb-2 hover:bg-base-300"
+        className="flex w-[11.5rem] grow flex-col rounded-[1.2rem] px-4 pb-2 hover:bg-base-300 sm:w-[15rem]"
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
       >
@@ -63,7 +63,7 @@ const DisplayKeyboardSmall = ({ username, keyboard, type = "UserProfile" }: Disp
                 </button>
               </div>
             )}
-            <span className="self-end text-base font-bold leading-5 text-gray-500">
+            <span className="self-end text-base font-bold leading-5 text-gray-500 max-sm:hidden">
               {formatDate(keyboard.createdAt)}
             </span>
           </div>

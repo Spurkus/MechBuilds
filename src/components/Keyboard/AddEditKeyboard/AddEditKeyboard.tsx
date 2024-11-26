@@ -122,13 +122,13 @@ const AddEditKeyboardForm = () => {
         <li className={`step ${screen >= 3 && "step-success"}`}>Components</li>
         <li className={`step ${screen >= 4 && "step-success"}`}>Mods and Extra</li>
       </ul>
-      <div className="form-control h-[23rem] w-full space-y-2 px-6 pb-2">
+      <div className="form-control min-h-[23rem] w-full space-y-2 px-6 pb-2">
         {screen === 1 && <ScreenOne />}
         {screen === 2 && <ScreenTwo />}
         {screen === 3 && <ScreenThree />}
         {screen === 4 && <ScreenFour />}
       </div>
-      <form method="dialog" className="flex w-full grow flex-row justify-between px-24 py-2">
+      <form method="dialog" className="flex w-full grow flex-row justify-center gap-20 py-2">
         {screen === 1 ? (
           <button className="btn btn-neutral btn-sm" onClick={handleCancelButton}>
             cancel
@@ -155,8 +155,8 @@ const AddEditKeyboardForm = () => {
 export const AddEditKeyboardModal = ({ open, setAddEditKeyboard, edit, setEdit }: AddEditKeyboardModalProps) => {
   const toggleAddEditKeyboard = () => setAddEditKeyboard(!open);
   return (
-    <dialog id="addeditkeyboardmodal" className="modal modal-middle">
-      <div className="modal-box flex w-[38rem] max-w-none flex-col bg-base-200 pb-4 pt-4">
+    <dialog id="addeditkeyboardmodal" className="modal modal-middle max-sm:modal-bottom">
+      <div className="modal-box flex max-w-none flex-col bg-base-200 pb-4 pt-4 sm:w-[38rem]">
         <AddEditKeyboardContextProvider
           toggleAddEditKeyboard={toggleAddEditKeyboard}
           open={open}

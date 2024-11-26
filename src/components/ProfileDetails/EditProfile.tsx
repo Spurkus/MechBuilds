@@ -18,9 +18,9 @@ const ProfilePictureField = () => {
   const { setSelectedProfilePicture, setRemovedProfilePicture, imageSource } = useEditProfileContext();
   const [isHovering, setIsHovering] = useState(false);
   return (
-    <div className="flex w-full grow flex-col space-y-2">
+    <div className="flex grow flex-col space-y-2">
       <div
-        className="avatar mask flex w-full grow self-center"
+        className="avatar mask flex w-[30%] self-center sm:w-full"
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
       >
@@ -35,14 +35,14 @@ const ProfilePictureField = () => {
             }}
           />
           <div
-            className={`${isHovering ? "flex" : "hidden"} absolute inset-0 items-center justify-center rounded-[2.5rem] bg-black bg-opacity-60`}
+            className={`${isHovering ? "flex" : "hidden"} absolute inset-0 items-center justify-center rounded-3xl bg-black bg-opacity-60 sm:rounded-[2.5rem]`}
           >
-            <span className="text font-bold text-white">Change Profile Picture</span>
+            <span className="text-center font-bold text-white">Change Profile Picture</span>
           </div>
           <NextImage
             src={imageSource}
             alt="Profile"
-            className="aspect-square rounded-[2.5rem]"
+            className="aspect-square rounded-3xl sm:rounded-[2.5rem]"
             width={DEFAULT_IMAGE_SIZE}
             height={DEFAULT_IMAGE_SIZE}
             quality={100}
@@ -307,8 +307,8 @@ const EditProfileForm = () => {
 const EditProfile = ({ open, toggleEditProfile }: EditProfileProps) => {
   const { userProfile } = useAuthContext();
   return (
-    <dialog id="editprofilemodal" className="modal modal-middle" open={open}>
-      <div className="modal-box flex w-80 flex-col bg-base-200 pb-4 pt-4">
+    <dialog id="editprofilemodal" className="modal modal-bottom sm:modal-middle" open={open}>
+      <div className="modal-box flex flex-col bg-base-200 pb-4 pt-4 sm:w-80">
         {userProfile ? (
           <EditProfileContextProvider userProfile={userProfile} toggleEditProfile={toggleEditProfile} open={open}>
             <EditProfileForm />

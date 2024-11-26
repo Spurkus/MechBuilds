@@ -6,8 +6,8 @@ const AdBanner = dynamic(() => import("@/src/components/General/AdBanner"), {
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <>
-      <div className="flex w-0 md:w-1/2">
+    <main className="flex flex-grow flex-col md:flex-row">
+      <div className="flex max-md:h-24 md:w-1/2">
         <AdBanner
           data-ad-slot="slotnumber"
           data-full-width-responsive="true"
@@ -16,7 +16,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         />
       </div>
       <div className="mx-8 flex flex-grow">{children}</div>
-      <div className="flex w-0 md:w-1/2">
+      <div className="flex max-md:h-24 md:w-1/2">
         <AdBanner
           data-ad-slot="slotnumber"
           data-full-width-responsive="true"
@@ -24,7 +24,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           data-ad-format="fluid"
         />
       </div>
-    </>
+    </main>
   );
 };
 

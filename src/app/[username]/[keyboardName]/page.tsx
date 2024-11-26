@@ -61,7 +61,7 @@ const NameLinkCollapse = ({ keyboardElement, extra, name, link, big = true, inde
                 {extra}
               </p>
             )}
-            <p className="truncate text-xl">{name}</p>
+            <p className="truncate text-wrap break-all text-xl">{name}</p>
           </div>
           <FontAwesomeIcon icon={faLink} className="absolute right-2" />
         </div>
@@ -76,7 +76,7 @@ const NameLinkCollapse = ({ keyboardElement, extra, name, link, big = true, inde
           >
             <div className="flex flex-row">
               <FontAwesomeIcon icon={faLink} className="mr-1 h-3.5 w-3.5 rotate-90 text-gray-500" />
-              <p className="link truncate text-sm leading-[0.6rem] text-gray-500">
+              <p className="link truncate text-wrap break-all text-sm leading-[0.6rem] text-gray-500">
                 {truncateString(formatLink(link), 36)}
               </p>
             </div>
@@ -87,12 +87,14 @@ const NameLinkCollapse = ({ keyboardElement, extra, name, link, big = true, inde
   ) : (
     <div className={big ? "ml-1.5" : ""}>
       {big && (
-        <p className={`truncate ${big ? "text-2xl font-bold leading-6" : "mt-2 text-xl font-medium leading-5"}`}>
+        <p
+          className={`truncate text-wrap break-all ${big ? "text-2xl font-bold leading-6" : "mt-2 text-xl font-medium leading-5"}`}
+        >
           {keyboardElement}
           {extra}
         </p>
       )}
-      <p className="truncate text-xl">{name}</p>
+      <p className="truncate text-wrap break-all text-xl">{name}</p>
     </div>
   );
 };
@@ -130,24 +132,24 @@ const KeyboardPage = ({ params }: KeyboardPageProps) => {
 
   return (
     <div className="mt-6 flex w-full flex-col items-center gap-3">
-      <div className="flex w-[45rem] flex-row justify-between gap-3">
+      <div className="flex w-full max-w-[45rem] flex-col justify-between gap-3 sm:flex-row">
         <ProfileKeyboardDetails userProfile={user} />
         <ShareKeyboard username={params.username} keyboard={keyboard} />
       </div>
-      <div id="keyboard-container" className="flex w-[45rem] flex-col rounded-[1.5rem] bg-base-300 px-5 py-4">
+      <div id="keyboard-container" className="flex max-w-[45rem] flex-col rounded-[1.5rem] bg-base-300 px-5 py-4">
         <DisplayImageVideo
           index={index}
           setIndex={setIndex}
           imageVideoList={keyboard.media}
           isMediaVideo={keyboard.isMediaVideo}
         />
-        <div className="mx-1 flex grow flex-row justify-between">
-          <h1 className="truncate pt-1 font-clashgrotesk text-6xl font-medium">{keyboard.name}</h1>
+        <div className="mx-1 flex grow flex-col justify-between sm:flex-row">
+          <h1 className="truncate text-wrap break-all pt-1 font-clashgrotesk text-6xl font-medium">{keyboard.name}</h1>
           <span className="text-3xl font-bold text-gray-500">{formatDate(keyboard.createdAt)}</span>
         </div>
         {keyboard.mods.length > 0 && (
           <div className="mb-3 flex w-full flex-row truncate">
-            <div className="flex grow flex-row space-x-2 overflow-x-auto overflow-y-hidden">
+            <div className="flex w-0 grow flex-row space-x-2 overflow-x-auto overflow-y-hidden">
               {keyboard.mods.map((mod: string, index: number) => (
                 <div key={index} className="badge badge-neutral badge-lg space-x-1 px-2.5 py-3.5">
                   <span className="text-md mb-[0.1rem] truncate font-bold">{mod}</span>
@@ -161,10 +163,10 @@ const KeyboardPage = ({ params }: KeyboardPageProps) => {
             <NameLinkCollapse
               keyboardElement="Kit"
               extra={
-                <span className="text-gray-500">
+                <span className="truncate text-wrap break-all text-gray-500">
                   {keyboard.kit.length > 0 && (
                     <>
-                      <span className="text-base-content">: </span>[
+                      <span className="truncate text-wrap break-all text-base-content">: </span>[
                       {keyboard.kit.map((kitItem: string) => capitalizeFirstLetter(kitItem)).join(", ")}]
                     </>
                   )}
@@ -176,7 +178,7 @@ const KeyboardPage = ({ params }: KeyboardPageProps) => {
           )}
           <div className="mb-1.5 ml-1.5">
             <p className="text-2xl font-bold leading-5">Size</p>
-            <p className="truncate text-xl">{keyboard.size}</p>
+            <p className="truncate text-wrap break-all text-xl">{keyboard.size}</p>
           </div>
           {!keyboard.kit.includes("case") && (
             <NameLinkCollapse keyboardElement="Case" name={keyboard.case} link={keyboard.caseLink} />

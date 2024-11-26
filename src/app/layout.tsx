@@ -50,7 +50,7 @@ const RootLayout = async ({
           initialProfilePicture={profilePicture}
         >
           <Navbar />
-          <main className="flex flex-grow">{children}</main>
+          {children}
           <Footer />
         </AuthContextProvider>
       </GlobalModalContextProvider>

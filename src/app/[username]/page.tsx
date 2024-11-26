@@ -34,18 +34,18 @@ const UserPage = ({ params }: UserPageProps) => {
   if (!user) return <NotFound />;
 
   return (
-    <div className="flex w-full justify-center space-x-6">
-      <div className="w-[20rem] p-2">
+    <>
+      <div className="p-2 sm:w-[20rem]">
         <ProfileDetails userDetails={user} />
       </div>
-      <div className="w-[40rem] space-y-2">
+      <div className="space-y-2 sm:w-[40rem]">
         <div className="mt-2 flex justify-between">
           <h1 className="font-regular font-clashgrotesk text-5xl">Profile of {user.displayName}</h1>
         </div>
         <hr className="border-t border-gray-700" />
         <DisplayUserKeyboards userProfile={user} visibility="ViewUserProfile" />
       </div>
-    </div>
+    </>
   );
 };
 

@@ -56,7 +56,7 @@ const Home = () => {
       {keyboards.map((keyboard, index) => (
         <Fragment key={index}>
           <DisplayKeyboard username={keyboard.username} keyboard={keyboard} type={"KeyboardPage"} />
-          {index < keyboards.length - 1 && <hr className="w-[40rem] border-t border-gray-700" />}
+          {index < keyboards.length - 1 && <hr className="max-w-[40rem] border-t border-gray-700" />}
         </Fragment>
       ))}
       {loading && <Loading height={70} width={70} />}
