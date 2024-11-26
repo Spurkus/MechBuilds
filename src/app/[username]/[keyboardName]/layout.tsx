@@ -21,17 +21,17 @@ export async function generateMetadata({ params }: KeyboardPageProps): Promise<M
   if (!keyboard)
     return {
       title: `Keyboard Not Found | MechBuilds`,
-      description: `The keyboard ${params.keyboardName} from user ${user.username} does not exist on MechBuilds!`,
+      description: `The keyboard ${params.keyboardName} from user ${user.username} does not exist on MechBuilds! MechBuilds is a keyboard management app for custom mechanical keyboard enthusiasts. It was created to help users organize their keyboard builds and share them with the community.`,
     };
 
   const firstImage = keyboard.isMediaVideo.findIndex((isVideo) => !isVideo);
   if (firstImage === -1) {
     return {
       title: `${keyboard.name} - ${user.displayName} | MechBuilds`,
-      description: `Check out the ${keyboard.name} build by ${user.displayName} on MechBuilds!`,
+      description: `Check out the ${keyboard.name} build by ${user.displayName} on MechBuilds! MechBuilds is a keyboard management app for custom mechanical keyboard enthusiasts. It was created to help users organize their keyboard builds and share them with the community.`,
       openGraph: {
         title: `${keyboard.name} - ${user.username} | MechBuilds`,
-        description: `Check out the ${keyboard.name} build by ${user.displayName} on MechBuilds!`,
+        description: `Check out the ${keyboard.name} build by ${user.displayName} on MechBuilds! MechBuilds is a keyboard management app for custom mechanical keyboard enthusiasts. It was created to help users organize their keyboard builds and share them with the community.`,
         url: `https://www.mechbuilds.app/${params.username}/${params.keyboardName}`,
         type: "website",
         siteName: "MechBuilds",
@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: KeyboardPageProps): Promise<M
       description: `Check out the ${keyboard.name} build by ${user.displayName} on MechBuilds!`,
       openGraph: {
         title: `${keyboard.name} - ${user.displayName} | MechBuilds`,
-        description: `Check out the ${keyboard.name} build by ${user.displayName} on MechBuilds!`,
+        description: `Check out the ${keyboard.name} build by ${user.displayName} on MechBuilds! MechBuilds is a keyboard management app for custom mechanical keyboard enthusiasts. It was created to help users organize their keyboard builds and share them with the community.`,
         url: `https://www.mechbuilds.app/${params.username}/${params.keyboardName}`,
         type: "website",
         siteName: "MechBuilds",

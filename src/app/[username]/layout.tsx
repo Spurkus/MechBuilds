@@ -11,14 +11,14 @@ export async function generateMetadata({ params }: { params: { username: string 
   if (!user)
     return {
       title: `User Not Found | MechBuilds`,
-      description: `The user ${params.username} does not exist on MechBuilds!`,
+      description: `The user ${params.username} does not exist on MechBuilds! MechBuilds is a keyboard management app for custom mechanical keyboard enthusiasts. It was created to help users organize their keyboard builds and share them with the community.`,
     };
   return {
     title: `${user.displayName} | MechBuilds`,
-    description: `Check out the keyboard builds of ${user.displayName} on MechBuilds!`,
+    description: `Check out the keyboard builds of ${user.displayName} on MechBuilds! MechBuilds is a keyboard management app for custom mechanical keyboard enthusiasts. It was created to help users organize their keyboard builds and share them with the community.`,
     openGraph: {
       title: `${user.displayName} | MechBuilds`,
-      description: `Check out the keyboard builds of ${user.displayName} on MechBuilds!`,
+      description: `Check out the keyboard builds of ${user.displayName} on MechBuilds! MechBuilds is a keyboard management app for custom mechanical keyboard enthusiasts. It was created to help users organize their keyboard builds and share them with the community.`,
       url: `https://www.mechbuilds.app/${params.username}`,
       images: [{ url: user.profilePicture }],
       type: "profile",

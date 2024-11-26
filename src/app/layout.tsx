@@ -26,7 +26,7 @@ config.autoAddCss = false; /* eslint-disable import/first */
 export const metadata: Metadata = {
   title: "MechBuilds - Share & Organize Your Custom Keyboard Builds",
   description:
-    "Discover and share custom mechanical keyboard builds with MechBuilds! A platform for enthusiasts to organize, showcase, and get inspired by amazing keyboards, switches, keycaps, and more.",
+    "MechBuilds is a keyboard management app for custom mechanical keyboard enthusiasts. It was created to help users organize their keyboard builds and share them with the community. Discover and share custom mechanical keyboard builds with MechBuilds! A platform for enthusiasts to organize, showcase, and get inspired by amazing keyboards, switches, keycaps, and more. Join the community today!",
   keywords: [
     "custom keyboards",
     "custom keyboard builds",
