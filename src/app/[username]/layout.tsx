@@ -1,9 +1,30 @@
 import dynamic from "next/dynamic";
+import { Metadata } from "next";
+import { getUser } from "@/src/helper/firestoreFunctions";
 
 const AdBanner = dynamic(() => import("@/src/components/General/AdBanner"), {
   ssr: false,
 });
 
+export async function generateMetadata({ params }: { params: { username: string } }): Promise<Metadata> {
+  const user = await getUser(params.username);
+  if (!user)
+    return {
+      title: `User Not Found | MechBuilds`,
+      description: `The user ${params.username} does not exist on MechBuilds!`,
+    };
+  return {
+    title: `${user.displayName} | MechBuilds`,
+    description: `Check out the keyboard builds of ${user.displayName} on MechBuilds!`,
+    openGraph: {
+      title: `${user.displayName}'s Keyboard Profile`,
+      description: `Check out the keyboard builds of ${user.displayName} on MechBuilds!`,
+      url: `https://mechbuilds.app/user/${params.username}`,
+      images: [{ url: user.profilePicture }],
+      type: "profile",
+    },
+  };
+}
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <main className="flex flex-grow flex-col xl:flex-row">

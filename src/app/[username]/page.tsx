@@ -6,7 +6,6 @@ import { getUser } from "@/src/helper/firestoreFunctions";
 import NotFound from "@/src/app/not-found";
 import ProfileDetails from "@/src/components/ProfileDetails/ProfileDetails";
 import DisplayUserKeyboards from "@/src/components/Keyboard/DisplayKeyboard/DisplayUserKeyboards";
-import Head from "next/head";
 
 interface UserPageProps {
   params: {
@@ -36,18 +35,6 @@ const UserPage = ({ params }: UserPageProps) => {
 
   return (
     <>
-      <Head>
-        <title>{user.displayName} | MechBuilds</title>
-        <meta property="og:title" content={`${user.displayName}'s Keyboard Profile`} />
-        <meta
-          property="og:description"
-          content={`Check out the keyboard builds of ${user.displayName} on MechBuilds!`}
-        />
-        <meta property="og:image" content={user.profilePicture} />
-        <meta property="og:url" content={`https://mechbuilds.app/${params.username}`} />
-        <meta property="og:type" content="profile" />
-        <meta property="og:site_name" content="MechBuilds" />
-      </Head>
       <div className="p-2 sm:w-[20rem]">
         <ProfileDetails userDetails={user} />
       </div>
