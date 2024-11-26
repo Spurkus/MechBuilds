@@ -62,6 +62,9 @@ importers:
       sharp:
         specifier: ^0.33.4
         version: 0.33.5
+      undici:
+        specifier: 5.28.4
+        version: 5.28.4
     devDependencies:
       '@types/canvas-confetti':
         specifier: ^1.6.4

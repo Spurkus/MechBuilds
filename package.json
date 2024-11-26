@@ -25,7 +25,8 @@
     "react": "^18",
     "react-dom": "^18",
     "react-player": "^2.16.0",
-    "sharp": "^0.33.4"
+    "sharp": "^0.33.4",
+    "undici": "5.28.4"
   },
   "devDependencies": {
     "@types/canvas-confetti": "^1.6.4",
