@@ -29,28 +29,21 @@ const Settings = () => {
 
   return (
     <NeedsAuthentication>
-      <div className="flex w-full">
-        <div className="w-[15rem] p-2">
-          <SettingsMenu setSettings={setSettings} />
-        </div>
-        <div
-          className={classNames(
-            "flex",
-            "grow",
-            "p-2",
-            settings === "Account" ? "w-[25rem]" : "w-[45rem]",
-          )}
-        >
+      <div className="p-2 lg:w-[15rem]">
+        <SettingsMenu setSettings={setSettings} />
+      </div>
+      <div className="flex grow flex-col sm:flex-row">
+        {settings === "Account" && (
+          <div className="p-2 sm:order-last sm:w-[17.5rem]">
+            <ProfileDetails />
+          </div>
+        )}
+        <div className={classNames("flex", "grow", "p-2", settings === "Account" ? "lg:w-[25rem]" : "lg:w-[45rem]")}>
           <div className="flex grow flex-col space-y-2 rounded-[2rem] bg-base-300 p-6">
             {settings === "Account" && <AccountSettings />}
             {settings === "Billing and Plans" && <BillingAndPlansSettings />}
           </div>
         </div>
-        {settings === "Account" && (
-          <div className="w-[17.5rem] p-2">
-            <ProfileDetails />
-          </div>
-        )}
       </div>
     </NeedsAuthentication>
   );

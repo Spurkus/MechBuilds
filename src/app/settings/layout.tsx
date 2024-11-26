@@ -1,7 +1,7 @@
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <main className="flex flex-grow">
-      <div className="mx-4 flex flex-grow lg:mx-12 xl:mx-28">{children}</div>;
+      <div className="mx-4 flex w-full flex-col lg:mx-12 lg:flex-row xl:mx-28">{children}</div>;
     </main>
   );
 };
