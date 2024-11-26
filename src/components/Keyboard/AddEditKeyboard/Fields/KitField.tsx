@@ -17,7 +17,7 @@ const KitCheckBoxField = () => {
     setKitKeycaps,
   } = useAddEditKeyboardContext();
   return (
-    <div className="flex flex-row justify-between space-x-1.5 py-0.5">
+    <div className="flex flex-wrap justify-center gap-x-2 py-0.5 sm:justify-between">
       <CheckBoxField name="Case" checked={kitCase} setChecked={setKitCase} />
       <CheckBoxField name="PCB" checked={kitPcb} setChecked={setKitPcb} />
       <CheckBoxField name="Plate" checked={kitPlate} setChecked={setKitPlate} />
@@ -97,30 +97,28 @@ const KitField = () => {
   const kitNoInput = !kitSelected || kitInitial;
   return (
     <>
-      <div className="flex flex-row">
-        <div className="flex w-[47.5%] flex-col">
+      <div className="flex flex-col gap-x-2 sm:flex-row">
+        <div className="flex flex-col sm:w-[47.5%]">
           <label className="label pb-0 font-bold">Keyboard Kit</label>
           <KitDropdownField />
         </div>
         <div className="flex grow flex-col">
-          <label className="label ml-3 pb-0 font-bold">Kit {kitSelectedLink ? "Link (Optional)" : "Name"}</label>
-          <div className="ml-3">
-            <InputNameLinkField
-              type="kit"
-              selectedLink={kitSelectedLink}
-              setSelectedLink={setKitSelectedLink}
-              name={kitName}
-              setName={setKitName}
-              namePlaceholder="Chosfox CF81"
-              nameMaxLength={50}
-              validName={validKitName}
-              link={kitLink}
-              setLink={setKitLink}
-              validLink={validKitLink}
-              noInput={kitNoInput}
-              fieldSelect={false}
-            />
-          </div>
+          <label className="label pb-0 font-bold">Kit {kitSelectedLink ? "Link (Optional)" : "Name"}</label>
+          <InputNameLinkField
+            type="kit"
+            selectedLink={kitSelectedLink}
+            setSelectedLink={setKitSelectedLink}
+            name={kitName}
+            setName={setKitName}
+            namePlaceholder="Chosfox CF81"
+            nameMaxLength={50}
+            validName={validKitName}
+            link={kitLink}
+            setLink={setKitLink}
+            validLink={validKitLink}
+            noInput={kitNoInput}
+            fieldSelect={false}
+          />
         </div>
       </div>
       <KitCheckBoxField />
