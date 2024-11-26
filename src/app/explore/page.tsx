@@ -6,7 +6,6 @@ import { EXPLORE_PAGE_KEYBOARD_LIMIT } from "@/src/constants";
 import { QueryDocumentSnapshot } from "firebase/firestore";
 import DisplayKeyboardSmall from "@/src/components/Keyboard/DisplayKeyboard/DisplayKeyboardSmall";
 import Loading from "@/src/components/General/Loading";
-
 const Explore = () => {
   const [keyboards, setKeyboards] = useState<(KeyboardType & { username: string })[]>([]);
   const [lastVisible, setLastVisible] = useState<QueryDocumentSnapshot | null>(null);
@@ -53,7 +52,7 @@ const Explore = () => {
   );
   return (
     <>
-      <div className="flex w-full flex-wrap justify-center gap-4 self-center">
+      <div className="flex w-full flex-wrap justify-center self-center sm:gap-4">
         {keyboards.map((keyboard, index) => (
           <DisplayKeyboardSmall key={index} username={keyboard.username} keyboard={keyboard} type={"KeyboardPage"} />
         ))}
