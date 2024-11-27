@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: { params: { username: string 
     description: `Check out the keyboard builds of ${user.displayName} on MechBuilds! MechBuilds is a keyboard management app for custom mechanical keyboard enthusiasts. It was created to help users organize their keyboard builds and share them with the community.`,
     openGraph: {
       title: `${user.displayName} | MechBuilds`,
-      description: `Check out the keyboard builds of ${user.displayName} on MechBuilds! MechBuilds is a keyboard management app for custom mechanical keyboard enthusiasts. It was created to help users organize their keyboard builds and share them with the community.`,
+      description: `Check out the keyboard builds of ${user.displayName} on MechBuilds! MechBuilds is a keyboard management app for custom mechanical keyboard enthusiasts.`,
       url: `https://www.mechbuilds.app/${params.username}`,
       username: user.username,
       images: [{ url: user.profilePicture, width: 460, height: 460 }],
