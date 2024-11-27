@@ -56,6 +56,9 @@ export async function generateMetadata({ params }: KeyboardPageProps): Promise<M
           },
         ],
       },
+      twitter: {
+        card: "summary_large_image",
+      },
     };
   }
 }
