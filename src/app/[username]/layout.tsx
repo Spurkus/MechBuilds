@@ -20,9 +20,13 @@ export async function generateMetadata({ params }: { params: { username: string 
       title: `${user.displayName} | MechBuilds`,
       description: `Check out the keyboard builds of ${user.displayName} on MechBuilds! MechBuilds is a keyboard management app for custom mechanical keyboard enthusiasts. It was created to help users organize their keyboard builds and share them with the community.`,
       url: `https://www.mechbuilds.app/${params.username}`,
-      images: [{ url: user.profilePicture }],
-      type: "website",
+      username: user.username,
+      images: [{ url: user.profilePicture, width: 460, height: 460 }],
+      type: "profile",
       siteName: "MechBuilds",
+    },
+    twitter: {
+      card: "summary",
     },
   };
 }
