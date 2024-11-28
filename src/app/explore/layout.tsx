@@ -13,9 +13,24 @@ export const metadata: Metadata = {
 };
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    url: "https://www.mechbuilds.app/explore",
+    name: "Explore | MechBuilds",
+    description:
+      "Explore custom keyboard builds shared by the community. Discover new keyboards, switches, keycaps, and more. Get inspired by the amazing builds shared on MechBuilds!",
+    isPartOf: {
+      "@type": "WebSite",
+      name: "MechBuilds",
+      url: "https://www.mechbuilds.app",
+    },
+  };
+
   return (
     <main className="flex flex-grow flex-col md:flex-row">
       <Head>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
         <link rel="canonical" href="https://www.mechbuilds.com/explore" />
       </Head>
       <div className="flex max-md:h-24 md:w-[15%]">

@@ -60,6 +60,14 @@ const RootLayout = async ({
   const displayName = await getDisplayName();
   const pronouns = await getPronouns();
   const profilePicture = await getProfilePicture();
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    url: "https://www.mechbuilds.app",
+    name: "MechBuilds",
+  };
+
   return (
     <GlobalThemeContextProvider initialTheme={theme}>
       <head>
@@ -70,6 +78,7 @@ const RootLayout = async ({
           crossOrigin="anonymous"
         />
         <meta name="google-adsense-account" content={process.env.NEXT_PUBLIC_GOOGLE_ADS_CLIENT_ID} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       </head>
       <body className="flex min-h-screen flex-col">
         <GlobalModalContextProvider>
