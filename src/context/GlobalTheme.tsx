@@ -27,16 +27,7 @@ export const GlobalThemeContextProvider = ({ children, initialTheme }: GlobalThe
   return (
     <GlobalThemeContext.Provider value={{ theme, setTheme, toggleMode }}>
       <html lang="en" data-theme={theme}>
-        <head>
-          <script
-            async
-            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_GOOGLE_ADS_CLIENT_ID}`}
-            data-nscript="lazyOnload"
-            crossOrigin="anonymous"
-          />
-          <meta name="google-adsense-account" content={process.env.NEXT_PUBLIC_GOOGLE_ADS_CLIENT_ID} />
-        </head>
-        <body className="flex min-h-screen flex-col">{children}</body>
+        {children}
       </html>
     </GlobalThemeContext.Provider>
   );

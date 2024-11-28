@@ -62,19 +62,30 @@ const RootLayout = async ({
   const profilePicture = await getProfilePicture();
   return (
     <GlobalThemeContextProvider initialTheme={theme}>
-      <GlobalModalContextProvider>
-        <AuthContextProvider
-          initialAuthenticated={authenticated}
-          initialUsername={username}
-          initialDisplayName={displayName}
-          initialPronouns={pronouns}
-          initialProfilePicture={profilePicture}
-        >
-          <Navbar />
-          {children}
-          <Footer />
-        </AuthContextProvider>
-      </GlobalModalContextProvider>
+      <head>
+        <script
+          async
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_GOOGLE_ADS_CLIENT_ID}`}
+          data-nscript="lazyOnload"
+          crossOrigin="anonymous"
+        />
+        <meta name="google-adsense-account" content={process.env.NEXT_PUBLIC_GOOGLE_ADS_CLIENT_ID} />
+      </head>
+      <body className="flex min-h-screen flex-col">
+        <GlobalModalContextProvider>
+          <AuthContextProvider
+            initialAuthenticated={authenticated}
+            initialUsername={username}
+            initialDisplayName={displayName}
+            initialPronouns={pronouns}
+            initialProfilePicture={profilePicture}
+          >
+            <Navbar />
+            {children}
+            <Footer />
+          </AuthContextProvider>
+        </GlobalModalContextProvider>
+      </body>
       <Analytics />
     </GlobalThemeContextProvider>
   );
