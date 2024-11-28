@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import dynamic from "next/dynamic";
-import Head from "next/head";
+import Script from "next/script";
 
 const AdBanner = dynamic(() => import("@/src/components/General/AdBanner"), {
   ssr: false,
@@ -26,9 +26,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <main className="flex flex-grow flex-col xl:flex-row">
-      <Head>
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      </Head>
+      <Script id="json-ld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="flex max-xl:h-24 xl:w-1/6">
         <AdBanner
           data-ad-slot="slotnumber"
