@@ -1,3 +1,4 @@
+import Head from "next/head";
 import dynamic from "next/dynamic";
 
 const AdBanner = dynamic(() => import("@/src/components/General/AdBanner"), {
@@ -7,6 +8,9 @@ const AdBanner = dynamic(() => import("@/src/components/General/AdBanner"), {
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <main className="flex flex-grow flex-col md:flex-row">
+      <Head>
+        <link rel="canonical" href="https://www.mechbuilds.com/" />
+      </Head>
       <div className="flex max-md:h-24 md:w-1/6">
         <AdBanner
           data-ad-slot="slotnumber"
