@@ -1,8 +1,13 @@
+import { Metadata } from "next";
 import dynamic from "next/dynamic";
 
 const AdBanner = dynamic(() => import("@/src/components/General/AdBanner"), {
   ssr: false,
 });
+
+export const metadata: Metadata = {
+  title: "Profile",
+};
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (

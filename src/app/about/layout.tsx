@@ -1,8 +1,15 @@
+import { Metadata } from "next";
 import dynamic from "next/dynamic";
 
 const AdBanner = dynamic(() => import("@/src/components/General/AdBanner"), {
   ssr: false,
 });
+
+export const metadata: Metadata = {
+  title: "About",
+  description:
+    "Learn more about MechBuilds and its creators. Contact us for any questions or feedback. Support us by donating or becoming a supporter!",
+};
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
