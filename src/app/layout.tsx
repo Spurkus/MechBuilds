@@ -94,8 +94,8 @@ const RootLayout = async ({
             <Footer />
           </AuthContextProvider>
         </GlobalModalContextProvider>
+        <Analytics />
       </body>
-      <Analytics />
     </GlobalThemeContextProvider>
   );
 };
