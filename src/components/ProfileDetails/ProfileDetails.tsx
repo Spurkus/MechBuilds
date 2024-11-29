@@ -30,11 +30,9 @@ const ProfileBaseDetails = ({ userDetails }: ProfileProps) => {
   const pronounsDetails = userDetails ? userDetails.pronouns : (pronouns as [string, string]);
   const profilePictureDetails = userDetails ? userDetails.profilePicture : (profilePicture as string);
 
-  const { handleModalError } = useGlobalModalContext();
   const [editProfile, setEditProfile] = useState(false);
 
-  if (!profilePicture) {
-    handleModalError("User is invalid");
+  if (!userDetails && !(username && displayName && pronouns && profilePicture)) {
     return <Loading />;
   }
 
