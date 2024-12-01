@@ -80,9 +80,9 @@ export const CheckBoxField = ({ name, checked, setChecked }: CheckBoxFieldProps)
   }, [kitSelected, setChecked]);
 
   return (
-    <div className="flex flex-row justify-between space-x-1.5 pb-1">
+    <div className="flex flex-row justify-between space-x-1.5 pb-1 max-sm:grow">
       <button
-        className={`btn ${isLight ? "btn-active" : "btn-neutral"} ${kitNoInput && "btn-disabled"} btn-sm gap-1.5 px-2.5`}
+        className={`btn flex grow ${isLight ? "btn-active" : "btn-neutral"} ${kitNoInput && "btn-disabled"} btn-sm gap-1.5 px-2.5`}
         onClick={toggleChecked}
         disabled={kitNoInput}
       >

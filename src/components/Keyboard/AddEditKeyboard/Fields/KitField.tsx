@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
+import { closeDropdown } from "@/src/helper/helperFunctions";
 import { useAddEditKeyboardContext } from "@/src/context/AddEditKeyboardContext";
 import { CheckBoxField, InputNameLinkField } from "./InputFields";
 
@@ -17,12 +18,15 @@ const KitCheckBoxField = () => {
     setKitKeycaps,
   } = useAddEditKeyboardContext();
   return (
-    <div className="flex flex-wrap justify-center gap-x-2 py-0.5 sm:justify-between">
-      <CheckBoxField name="Case" checked={kitCase} setChecked={setKitCase} />
-      <CheckBoxField name="PCB" checked={kitPcb} setChecked={setKitPcb} />
-      <CheckBoxField name="Plate" checked={kitPlate} setChecked={setKitPlate} />
-      <CheckBoxField name="Stabilizers" checked={kitStabilizers} setChecked={setKitStabilizers} />
-      <CheckBoxField name="Keycaps" checked={kitKeycaps} setChecked={setKitKeycaps} />
+    <div>
+      <label className="label py-0">Click to select what is included in kit</label>
+      <div className="flex flex-wrap justify-center gap-x-2 py-0.5 sm:justify-between">
+        <CheckBoxField name="Case" checked={kitCase} setChecked={setKitCase} />
+        <CheckBoxField name="PCB" checked={kitPcb} setChecked={setKitPcb} />
+        <CheckBoxField name="Plate" checked={kitPlate} setChecked={setKitPlate} />
+        <CheckBoxField name="Stabilizers" checked={kitStabilizers} setChecked={setKitStabilizers} />
+        <CheckBoxField name="Keycaps" checked={kitKeycaps} setChecked={setKitKeycaps} />
+      </div>
     </div>
   );
 };
@@ -35,15 +39,6 @@ const KitDropdownField = () => {
     : kitSelected
       ? "Keyboard Kit Selected"
       : "No Keyboard Kit";
-
-  const closeDropdown = () => {
-    const dropdown = document.getElementById("dropdown-kit");
-    const isOpen = dropdown?.scrollHeight === 107;
-    if (isOpen) {
-      const elem = document.activeElement as HTMLElement;
-      elem?.blur();
-    }
-  };
 
   // Dropdown functions
   const kitSelectYes = () => {
@@ -61,7 +56,6 @@ const KitDropdownField = () => {
         tabIndex={0}
         role="button"
         className="btn btn-sm flex w-full grow flex-col items-center rounded-lg border border-gray-400 pl-2.5 text-sm hover:border-white focus:border-white"
-        onClick={closeDropdown}
       >
         <p className="self-start">{kitMenuMessage}</p>
         <FontAwesomeIcon icon={faCaretDown} className="h-4 w-4 self-end" />
@@ -98,30 +92,32 @@ const KitField = () => {
   return (
     <>
       <div className="flex flex-col gap-x-2 sm:flex-row">
-        <div className="flex flex-col sm:w-[47.5%]">
+        <div className={`flex flex-col ${kitSelected && "sm:w-[47.5%]"} w-full`}>
           <label className="label pb-0 font-bold">Keyboard Kit</label>
           <KitDropdownField />
         </div>
-        <div className="flex grow flex-col">
-          <label className="label pb-0 font-bold">Kit {kitSelectedLink ? "Link (Optional)" : "Name"}</label>
-          <InputNameLinkField
-            type="kit"
-            selectedLink={kitSelectedLink}
-            setSelectedLink={setKitSelectedLink}
-            name={kitName}
-            setName={setKitName}
-            namePlaceholder="Chosfox CF81"
-            nameMaxLength={50}
-            validName={validKitName}
-            link={kitLink}
-            setLink={setKitLink}
-            validLink={validKitLink}
-            noInput={kitNoInput}
-            fieldSelect={false}
-          />
-        </div>
+        {kitSelected && (
+          <div className="flex grow flex-col">
+            <label className="label pb-0 font-bold">Kit {kitSelectedLink ? "Link (Optional)" : "Name"}</label>
+            <InputNameLinkField
+              type="kit"
+              selectedLink={kitSelectedLink}
+              setSelectedLink={setKitSelectedLink}
+              name={kitName}
+              setName={setKitName}
+              namePlaceholder="Chosfox CF81"
+              nameMaxLength={50}
+              validName={validKitName}
+              link={kitLink}
+              setLink={setKitLink}
+              validLink={validKitLink}
+              noInput={kitNoInput}
+              fieldSelect={false}
+            />
+          </div>
+        )}
       </div>
-      <KitCheckBoxField />
+      {kitSelected && <KitCheckBoxField />}
     </>
   );
 };

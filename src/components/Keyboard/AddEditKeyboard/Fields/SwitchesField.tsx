@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { InputNameLinkField } from "./InputFields";
 import { useAddEditKeyboardContext } from "@/src/context/AddEditKeyboardContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -19,25 +18,19 @@ const SwitchField = ({ switchItem, index }: SwitchFieldProps) => {
     removeSwitch,
     oneSwitch,
   } = useAddEditKeyboardContext();
-  const [hover, setHover] = useState(false);
-
   // Change the name and link of the switch
   const nameChange = (newName: string) => updateSwitches(index, { name: newName, link: switchItem.link });
   const linkChange = (newLink: string) => updateSwitches(index, { name: switchItem.name, link: newLink });
 
   return (
-    <div
-      className="mt-1.5 w-full min-w-24 grow rounded-xl px-2 pb-3 hover:bg-base-300"
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-    >
+    <div className="w-full min-w-24 grow rounded-xl px-2 pb-1 hover:bg-base-300">
       <div className="flex flex-row items-end justify-between">
         <label className="label justify-normal pb-0 pt-1 text-sm font-bold">
           <span className="mr-1 text-gray-500">{index + 1}</span>
           {switchesSelectedLink[index] ? "Link (optional)" : "Switch Name"}
         </label>
         <button
-          className={`btn btn-outline btn-error btn-xs mr-0.5 max-h-4 min-h-0 w-7 self-center ${oneSwitch && "btn-disabled"} ${!hover && "hidden"}`}
+          className={`btn btn-outline btn-error btn-xs mr-0.5 max-h-4 min-h-0 w-7 self-center ${oneSwitch && "btn-disabled"}`}
           onClick={() => removeSwitch(index)}
         >
           <FontAwesomeIcon icon={faTimes} className="h-3 w-3" />
@@ -76,7 +69,7 @@ const SwitchesField = () => {
           <span className="mt-1.5">add more switch</span>
         </button>
       </div>
-      <div className="flex w-full grow flex-row justify-between">
+      <div className="my-1.5 flex w-full grow flex-col sm:flex-row sm:justify-between">
         {switches.map((switchItem, index) => (
           <SwitchField key={index} switchItem={switchItem} index={index} />
         ))}

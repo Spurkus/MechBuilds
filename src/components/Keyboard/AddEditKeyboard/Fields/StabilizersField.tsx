@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { InputNameLinkField } from "./InputFields";
 import { useAddEditKeyboardContext } from "@/src/context/AddEditKeyboardContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -21,7 +21,6 @@ const StabilizerField = ({ stabilizer, index }: StabilizerFieldProps) => {
     oneStabilizer,
   } = useAddEditKeyboardContext();
   const isKit = useMemo(() => kitStabilizers && index === 0, [kitStabilizers, index]);
-  const [hover, setHover] = useState(false);
 
   // Change the name and link of the stab
   const nameChange = (newName: string) => {
@@ -34,18 +33,14 @@ const StabilizerField = ({ stabilizer, index }: StabilizerFieldProps) => {
   };
 
   return (
-    <div
-      className="mt-1.5 w-full min-w-24 grow rounded-xl px-2 pb-3 hover:bg-base-300"
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-    >
+    <div className="w-full min-w-24 grow rounded-xl px-2 pb-1 hover:bg-base-300">
       <div className="flex flex-row items-end justify-between">
         <label className={`label justify-normal truncate pb-0 pt-1 text-sm font-bold ${isKit && "text-gray-500"}`}>
           <span className="mr-1 text-gray-500">{index + 1}</span>
           {stabilizersSelectedLink[index] ? "Link (optional)" : "Stabilizer Name"}
         </label>
         <button
-          className={`btn btn-outline btn-error btn-xs mr-0.5 max-h-4 min-h-0 w-7 self-center ${(oneStabilizer || isKit) && "btn-disabled"} ${!hover && "hidden"}`}
+          className={`btn btn-outline btn-error btn-xs mr-0.5 max-h-4 min-h-0 w-7 self-center ${(oneStabilizer || isKit) && "btn-disabled"}`}
           onClick={() => removeStabilizer(index)}
         >
           <FontAwesomeIcon icon={faTimes} className="h-3 w-3" />
@@ -85,7 +80,7 @@ const StabilizersField = () => {
           <span className="mt-1.5">add more stabilizers</span>
         </button>
       </div>
-      <div className="flex w-full grow flex-row justify-between">
+      <div className="my-1.5 flex w-full grow flex-col sm:flex-row sm:justify-between">
         {stabilizers.map((stabilizer, index) => (
           <StabilizerField key={index} stabilizer={stabilizer} index={index} />
         ))}
