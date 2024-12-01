@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef } from "react";
+import { useMemo, useRef } from "react";
 import {
   DEFAULT_KEYBOARD_IMAGE,
   DEFAULT_KEYBOARD_IMAGE_WIDTH,
@@ -39,7 +39,6 @@ const SubmitImageVideo = ({
   removeIsMediaVideo,
 }: SubmitImagesVideoProps) => {
   const { handleModal } = useGlobalModalContext();
-  const [isHovering, setIsHovering] = useState(false);
   const isUploaded = useMemo(() => imageVideoList.length !== 0, [imageVideoList]);
   const firstIndex = useMemo(() => index === 0, [index]);
   const lastIndex = useMemo(() => index === imageVideoList.length - 1, [index, imageVideoList]);
@@ -174,12 +173,8 @@ const SubmitImageVideo = ({
   return (
     <>
       <InputImageVideo />
-      <div
-        className="avatar mask flex w-full grow self-center py-1"
-        onClick={() => !isUploaded && openFileInput()}
-        onMouseEnter={() => setIsHovering(true)}
-      >
-        {isUploaded && isHovering && (
+      <div className="avatar mask flex w-full grow self-center py-1" onClick={() => !isUploaded && openFileInput()}>
+        {isUploaded && (
           <>
             <button
               className="btn btn-sm absolute left-3 top-3.5 z-10 flex rounded-2xl border-0 bg-gray-800 bg-opacity-60 hover:bg-gray-800 hover:bg-opacity-75"
@@ -219,7 +214,7 @@ const SubmitImageVideo = ({
         )}
         <label className={`absolute w-full grow ${!isUploaded && "cursor-pointer"}`}>
           <div
-            className={`${isHovering && !isUploaded ? "flex" : "hidden"} absolute inset-0 items-center justify-center rounded-[1.5rem] bg-black bg-opacity-60`}
+            className={`${!isUploaded ? "flex" : "hidden"} absolute inset-0 items-center justify-center rounded-[1.5rem] bg-black bg-opacity-60`}
           >
             <span className="text font-bold text-white">Add Image or Video</span>
           </div>
