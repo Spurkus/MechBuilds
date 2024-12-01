@@ -5,8 +5,8 @@ import defaultKeyboardImage from "@/src/public/images/Default Keyboard Image.png
 // General Constants
 export const MEGABYTES = 1048 * 1048;
 export const DEFAULT_IMAGE_SIZE = 1000;
-export const DEFAULT_KEYBOARD_IMAGE_WIDTH = 1600;
-export const DEFAULT_KEYBOARD_IMAGE_HEIGHT = 900;
+export const DEFAULT_KEYBOARD_IMAGE_WIDTH = 1920;
+export const DEFAULT_KEYBOARD_IMAGE_HEIGHT = 1080;
 export const MAXIMUM_IMAGE_SIZE = 5 * MEGABYTES;
 export const MAXIMUM_KEYBOARD_IMAGE_SIZE = 10 * MEGABYTES;
 export const MAXIMUM_KEYBOARD_VIDEO_SIZE = 30 * MEGABYTES;
