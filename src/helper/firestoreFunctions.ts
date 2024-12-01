@@ -120,8 +120,9 @@ export const handleUploadKeyboardContent = async (mediaList: (File | string)[], 
 export const createKeyboard = async (keyboard: KeyboardType) => {
   const keyboardsCollectionRef = collection(db, "keyboards");
   const newKeyboardRef = doc(keyboardsCollectionRef);
-  await setDoc(newKeyboardRef, keyboard);
-  return newKeyboardRef.id;
+  const id = newKeyboardRef.id;
+  await setDoc(newKeyboardRef, { ...keyboard, id });
+  return id;
 };
 
 export const editKeyboard = async (keyboardID: string, fieldsToUpdate: Partial<KeyboardType>) => {

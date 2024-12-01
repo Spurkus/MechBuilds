@@ -717,6 +717,8 @@ export const AddEditKeyboardContextProvider = ({
           visible: true,
         };
         await createKeyboard(keyboard).then(async (id) => {
+          if (!id) throw new Error("Failed to create keyboard");
+
           // Upload media and id fields after creating keyboard to get ID
           const media = !imageVideoList.length
             ? [await getDefaultKeyboardImage()]
