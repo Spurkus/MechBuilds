@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
-import { ItemType, KeyboardType } from "@/src/types/keyboard";
-import { formatDate, truncateString } from "@/src/helper/helperFunctions";
+import { KeyboardType } from "@/src/types/keyboard";
+import { formatDate } from "@/src/helper/helperFunctions";
 import { deleteKeyboard } from "@/src/helper/firestoreFunctions";
 import { useGlobalModalContext } from "@/src/context/GlobalModal";
 import { EditKeyboardButton } from "@/src/components/Keyboard/AddEditKeyboard/AddEditKeyboard";
@@ -18,7 +18,6 @@ interface DisplayKeyboardProps {
 const DisplayKeyboardSmall = ({ username, keyboard, type = "UserProfile" }: DisplayKeyboardProps) => {
   const { handleModal, toggleModal } = useGlobalModalContext();
   const [index, setIndex] = useState(0);
-  const [hover, setHover] = useState(false);
 
   const handleDelete = (id: string, mediaNumber: number) => {
     deleteKeyboard(id, mediaNumber);
@@ -40,11 +39,7 @@ const DisplayKeyboardSmall = ({ username, keyboard, type = "UserProfile" }: Disp
 
   return (
     <Link href={`/${username}/${keyboard.name}`} target="_blank" rel="noopener noreferrer">
-      <div
-        className="flex w-[11.5rem] grow flex-col rounded-[1.2rem] px-4 pb-2 hover:bg-base-300 sm:w-[15rem]"
-        onMouseEnter={() => setHover(true)}
-        onMouseLeave={() => setHover(false)}
-      >
+      <div className="flex w-[11.5rem] grow flex-col rounded-[1.2rem] px-4 pb-2 hover:bg-base-300 sm:w-[15rem]">
         <div className="mx-1 flex grow flex-row justify-between">
           <h2
             className={`z-40 self-end truncate font-clashgrotesk text-3xl font-medium leading-6 ${type === "UserProfile" ? "pt-7" : "pt-2"}`}
@@ -54,9 +49,9 @@ const DisplayKeyboardSmall = ({ username, keyboard, type = "UserProfile" }: Disp
           <div className="flex flex-col justify-end">
             {type === "UserProfile" && (
               <div className="flex grow justify-end space-x-1.5">
-                <EditKeyboardButton text="Edit" hover={hover} edit={keyboard} onClick={(e) => e.preventDefault()} />
+                <EditKeyboardButton text="Edit" edit={keyboard} onClick={(e) => e.preventDefault()} />
                 <button
-                  className={`btn btn-outline btn-error btn-xs self-end ${!hover && "hidden"}`}
+                  className="btn btn-outline btn-error btn-xs self-end"
                   onClick={(event) => handleDeleteKeyboard(event, keyboard.name, keyboard.id, keyboard.media.length)}
                 >
                   <span>Delete</span>
