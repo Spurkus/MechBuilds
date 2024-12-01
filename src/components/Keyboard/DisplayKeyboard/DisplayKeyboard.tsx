@@ -18,7 +18,6 @@ interface DisplayKeyboardProps {
 const DisplayKeyboard = ({ username, keyboard, type = "UserProfile" }: DisplayKeyboardProps) => {
   const { handleModal, toggleModal } = useGlobalModalContext();
   const [index, setIndex] = useState(0);
-  const [hover, setHover] = useState(false);
 
   const handleDelete = (id: string, mediaNumber: number) => {
     deleteKeyboard(id, mediaNumber);
@@ -40,11 +39,7 @@ const DisplayKeyboard = ({ username, keyboard, type = "UserProfile" }: DisplayKe
 
   return (
     <Link href={`/${username}/${keyboard.name}`} target="_blank" rel="noopener noreferrer">
-      <div
-        className="flex max-w-[40rem] grow flex-col rounded-[1.2rem] px-4 pb-1.5 hover:bg-base-300"
-        onMouseEnter={() => setHover(true)}
-        onMouseLeave={() => setHover(false)}
-      >
+      <div className="flex max-w-[40rem] grow flex-col rounded-[1.2rem] px-4 pb-1.5 hover:bg-base-300">
         <div className="mx-1 flex grow flex-row justify-between">
           <h2 className="z-40 self-end truncate pt-5 font-clashgrotesk text-4xl font-medium leading-8">
             {keyboard.name}
@@ -55,12 +50,11 @@ const DisplayKeyboard = ({ username, keyboard, type = "UserProfile" }: DisplayKe
                 <EditKeyboardButton
                   className="pb-6"
                   textClassName="mt-1.5"
-                  hover={hover}
                   edit={keyboard}
                   onClick={(e) => e.preventDefault()}
                 />
                 <button
-                  className={`btn btn-outline btn-error btn-xs self-end pb-6 ${!hover && "hidden"}`}
+                  className="btn btn-outline btn-error btn-xs self-end pb-6"
                   onClick={(event) => handleDeleteKeyboard(event, keyboard.name, keyboard.id, keyboard.media.length)}
                 >
                   <span className="mt-1.5">Delete</span>

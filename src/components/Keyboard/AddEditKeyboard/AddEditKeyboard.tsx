@@ -17,14 +17,12 @@ interface AddEditKeyboardModalProps {
 }
 
 interface EditKeyboardButtonProps {
-  hover: boolean;
   edit: KeyboardType;
   textClassName?: string;
   text?: string;
 }
 
 export const EditKeyboardButton = ({
-  hover,
   edit,
   textClassName = "",
   text = "Edit Keyboard",
@@ -39,7 +37,7 @@ export const EditKeyboardButton = ({
   return (
     <button
       {...rest}
-      className={`${rest.className} btn btn-outline btn-info btn-xs self-end ${!hover && "hidden"} ${rest.className || ""}`}
+      className={`${rest.className} btn btn-outline btn-info btn-xs self-end ${rest.className || ""}`}
       onClick={handleClick}
     >
       <span className={textClassName}>{text}</span>
