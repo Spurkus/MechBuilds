@@ -38,7 +38,12 @@ const DisplayKeyboard = ({ username, keyboard, type = "UserProfile" }: DisplayKe
   };
 
   return (
-    <Link href={`/${username}/${keyboard.name}`} target="_blank" rel="noopener noreferrer">
+    <Link
+      href={`/${username}/${keyboard.name}`}
+      className="flex w-full justify-center"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
       <div className="flex max-w-[40rem] grow flex-col rounded-[1.2rem] px-4 pb-1.5 hover:bg-base-300">
         <div className="mx-1 flex grow flex-row justify-between">
           <h2 className="z-40 self-end truncate text-wrap break-words pt-5 font-clashgrotesk text-4xl font-medium leading-8">
