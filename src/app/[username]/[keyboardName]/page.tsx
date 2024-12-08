@@ -272,7 +272,7 @@ const KeyboardPage = ({ params }: KeyboardPageProps) => {
               <p className="text-2xl font-bold leading-5">Description</p>
             </div>
             <div className="mx-0.5 my-2 rounded-2xl bg-base-200 px-2 py-1.5">
-              <p className="break-words text-xl">{keyboard.description}</p>
+              <p className="truncate text-wrap break-all text-xl">{keyboard.description}</p>
             </div>
           </>
         )}
