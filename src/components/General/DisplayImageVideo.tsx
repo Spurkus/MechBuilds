@@ -63,7 +63,7 @@ const DisplayImageVideo = ({ index, setIndex, imageVideoList, isMediaVideo }: Di
           </div>
         )}
         <div
-          className={`flex transition-transform duration-500`}
+          className={`flex flex-row transition-transform duration-500`}
           style={{
             transform: `translateX(-${index * (100 / 2 ** (imageVideoList.length - 1))}%)`,
             width: `${imageVideoList.length * 100.1}%`,
@@ -88,7 +88,7 @@ const DisplayImageVideo = ({ index, setIndex, imageVideoList, isMediaVideo }: Di
                 fill={false}
                 alt="Profile"
                 className="aspect-video bg-gradient-to-b from-zinc-950 to-zinc-900"
-                style={{ objectFit: "contain" }}
+                style={{ objectFit: "contain", overflow: "hidden" }}
                 width={DEFAULT_KEYBOARD_IMAGE_WIDTH}
                 height={DEFAULT_KEYBOARD_IMAGE_HEIGHT}
                 quality={100}
