@@ -9,7 +9,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <main className="flex flex-grow flex-col md:flex-row">
       <Head>
-        <link rel="canonical" href="https://www.mechbuilds.com/" />
+        <link rel="canonical" href="https://www.mechbuilds.app/" />
       </Head>
       <div className="flex max-md:h-24 md:w-1/6">
         <AdBanner

@@ -30,7 +30,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <main className="flex flex-grow flex-col md:flex-row">
       <Script id="json-ld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <link rel="canonical" href="https://www.mechbuilds.com/explore" />
+      <link rel="canonical" href="https://www.mechbuilds.app/explore" />
       <div className="flex max-md:h-24 md:w-[15%]">
         <AdBanner
           data-ad-slot="slotnumber"
