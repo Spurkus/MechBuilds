@@ -5,6 +5,8 @@ import { faBars } from "@fortawesome/free-solid-svg-icons";
 import ThemeToggleButton from "../General/ThemeToggleButton";
 import NavAuth from "./NavAuth";
 import NavAddKeyboardButton from "./NavAddKeyboardButton";
+import icon from "@/src/public/images/mechbuilds-logo.svg";
+import Image from "next/image";
 
 const Navbar = () => {
   const closeDropdown = () => {
@@ -15,6 +17,7 @@ const Navbar = () => {
       elem?.blur();
     }
   };
+
   return (
     <div className="navbar bg-base-100 px-2 min-[500px]:px-6 min-[1360px]:px-36">
       <div className="navbar-start">
@@ -54,10 +57,9 @@ const Navbar = () => {
       </div>
       <div className="navbar-center">
         <Link href="/" className="btn-nav-link btn shadow-none" onClick={closeDropdown}>
+          <Image className="max-[500px]:hidden" src={icon.src} alt="MechBuilds Logo" width={50} height={50} />
           <p className="font-clashgrotesk text-2xl font-medium shadow-nav-text-contour text-shadow-lg min-[400px]:text-3xl">
             MechBuilds
-            <br />
-            [BETA]
           </p>
         </Link>
       </div>

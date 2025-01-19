@@ -15,6 +15,7 @@ import Footer from "@/src/components/General/Footer";
 import { GlobalModalContextProvider } from "@/src/context/GlobalModal";
 import { AuthContextProvider } from "@/src/context/Authentication";
 import { Analytics } from "@vercel/analytics/next";
+import icon from "@/src/public/images/mechbuilds-logo.svg";
 
 // The following import prevents a Font Awesome icon server-side rendering bug,
 // where the icons flash from a very large icon down to a properly sized one:
@@ -47,6 +48,12 @@ export const metadata: Metadata = {
   applicationName: "MechBuilds",
   creator: "Spurkus",
   publisher: "Spurkus",
+  icons: [
+    {
+      url: icon.src,
+      type: "image/svg+xml",
+    },
+  ],
 };
 
 const RootLayout = async ({
