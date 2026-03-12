@@ -1,6 +1,6 @@
 # ✨ MechBuilds ⌨️
 
-[MechBuilds](https://www.mechbuilds.app/) is a **keyboard management app** for custom mechanical keyboard enthusiasts. It was created to help users organize their keyboard builds and share them with the community. Please note that trading or selling keyboards is NOT encouraged on this platform, as MechBuilds is not designed for such activities. We are not responsible for any trades, sales, or potential scams that may occur outside the intended use of the platform.
+[MechBuilds](https://mechbuilds.vercel.app/) is a **keyboard management app** for custom mechanical keyboard enthusiasts. It was created to help users organize their keyboard builds and share them with the community. Please note that trading or selling keyboards is NOT encouraged on this platform, as MechBuilds is not designed for such activities. We are not responsible for any trades, sales, or potential scams that may occur outside the intended use of the platform.
 
 # Support
 
